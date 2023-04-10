@@ -1,0 +1,96 @@
+﻿@page "/"
+@layout UserLayout
+@inherits HomeComponentBase
+<div class="position-relative">
+    <img src="/purple.jpg" class="w-100 h-auto" alt="...">
+    <div class="position-absolute w-50 top-50 start-50 translate-middle">
+        <p class="text-center text-white fs-1">
+      Wolcom In This Space 
+    </p>
+    <br />
+    <br />
+        <form class="d-flex">
+            <input @bind="@Entry" @oninput="OnSearch" class="form-control me-2" style="border-radius: 25px;" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-success" style="border-radius: 25px;" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+   <br />
+
+  @if(IsLoading ==true){
+      <WaitComponent></WaitComponent>
+  }
+
+
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+       @foreach(var item in ListDoctorsAvailble){
+        <div class="col " style=" max-width: 18rem;">
+        <div class="card h-100">
+            <img src="/ecout.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title border-bottom"> Dr : @item.LastName @item.FirstName</h5>
+                <p class="card-text border-bottom">Sexe:@item.Sexe</p>
+                <p class="card-text border-bottom"> Specialities  :
+                @foreach(var specialite in item.Specialities){
+                    @specialite<a> </a>
+                }
+                </p>
+                    <button @onclick="()=>OnOpenInformation(item.Id)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="">Open modal for </button>
+               
+            </div>
+        </div>
+    </div>
+       }
+
+   
+    </div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (DoctorsAvailble !=null)
+                {
+                    @foreach (var Item in DoctorsAvailble.cabinetSearchDtos)
+                    {
+                    
+                        <div class="card mb-3">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="@($"data:image/png;base64,{Convert.ToBase64String(@Item.Image)}")" class="card-img" alt="...">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Name Of Cabinet:@Item.Name</h5>
+                                        <p class="card-text">Services:@Item.Services</p>
+                                        <p class="card-text">Adress:@Item.Adress</p>
+                                        <p class="card-text">Number Patien Accepted  :@Item.JobSearchDto.NumberPatientAvailble</p>
+
+                                        <p class="card-text"><small class="text-muted">Le Début De Travaille Il est : @Item.JobSearchDto.ReadyTime.TimeOfDay : et le fin de travaille il est : @Item.JobSearchDto.EndTime.TimeOfDay</small></p>
+                                        <button @onclick="()=>OnSelctionReservation(DoctorsAvailble.Id,Item.Id,Item.JobSearchDto.Id)" class="btn btn-primary  float-right">Reservation</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                
+             
+                   
+            
+              
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               
+            </div>
+        </div>
+    </div>
+</div>

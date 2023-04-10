@@ -1,0 +1,73 @@
+﻿@page "/InvitationWork"
+@inherits InvitationWorkComponentBase
+
+@if (ErrorMessage != null)
+{
+    <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}
+
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+<table class="table caption-top">
+    <caption>List of users</caption>
+    <thead>
+        <tr>
+            <th scope="col">Name Cabinet</th>
+            <th scope="col">Date Invitation</th>
+            <th scope="col">Adress</th>
+            <th scope="col">Services</th>
+            <th scope="col">Accept Invitation</th>
+            <th scope="col">Refuse Invitation</th>
+          
+
+        </tr>
+    </thead>
+   
+    <tbody>
+        @foreach(var item in invitationsDoctorDtos){
+
+       
+         <tr>
+            <td>@item.NameCabinet</td>
+       
+            <td>@item.DateInvitation</td>
+       
+            <td>@item.adress</td>
+       
+            <td>@item.Services</td>
+      
+                <td>
+                    <button @onclick="() => OnRefuse(item.Id)" class="btn btn-danger">
+                        Refuse
+                        @if (IndexRefuse == item.Id)
+                        {
+
+
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                    </button>
+                </td>
+      
+                <td>
+                    <button @onclick="() => OnAccept(item.Id)" class="btn btn-success">
+                        Accepted
+                        @if (IndexAccepte == item.Id)
+                        {
+
+
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                    </button>
+                </td>
+        </tr>
+        }
+    </tbody>
+   </table>
+   </div>
+ 
+@if (IsLoding)
+{
+    <WaitComponent></WaitComponent>
+
+}

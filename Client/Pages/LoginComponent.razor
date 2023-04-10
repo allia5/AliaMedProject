@@ -1,0 +1,43 @@
+﻿@page "/Login/{ReturnUrl}"
+@inherits LoginComponentBase
+@layout EmptyLayout
+
+@if (ErrorMessage != null)
+{
+    <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}
+
+
+
+
+    
+    <div class=" vertical-center text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                   <EditForm Model="loginAccount" OnValidSubmit="OnValid" >
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+                        <img class="mb-4" src="/Logo.png" width="200">
+                        
+
+                        <div class="form-floating">
+                            <InputText type="email" class="form-control" id="floatingInput" @bind-Value="loginAccount.Email" placeholder="name@example.com"></InputText>
+                            <label for="floatingInput">Email</label>
+                        </div>
+                        <div class="form-floating">
+                            <InputText type="password" class="form-control" @bind-Value="loginAccount.Password" id="floatingPassword" placeholder="Password"></InputText>
+                            <label for="floatingPassword">Password</label>
+                        </div>
+
+                       
+                        
+                        <button class=" w-100 btn btn-primary mb-3">Login</button>
+                        <p class="mt-5 mb-3 text-muted">
+                        <p class="fw-light fs-6">if you not have account <a href="https://localhost:7286/SignIn">sign up</a></p>
+                        </p>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>

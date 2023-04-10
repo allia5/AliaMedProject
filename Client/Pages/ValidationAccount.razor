@@ -1,0 +1,9 @@
+﻿@page "/Validate/{Id}/{Token}"
+@inherits ValidationAccountBase
+@layout EmptyLayout
+
+@if(ErrorMessage != null){
+    <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}else if(messageResult.Message !=null){
+    <CorrectRoutingMessage Message="@messageResult.Message"></CorrectRoutingMessage>   
+}

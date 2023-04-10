@@ -1,0 +1,57 @@
+﻿@page "/AddDoctor"
+@inherits AddDoctorComponentBase
+
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+<table class="table caption-top">
+    <caption>List of users</caption>
+    <thead>
+        <tr>
+            <th scope="col">first Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Sexe</th>
+            <th scope="col">Date Of Birdth</th>
+            <th scope="col">Number Phone</th>
+            <th scope="col">Specialities</th>
+            <th scope="col">Send Invitation</th>
+
+        </tr>
+    </thead>
+   
+    <tbody>
+        
+
+        @foreach(var item in Informations){
+
+       
+        <tr>
+            <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.Email</td>
+                <td>@item.Sexe</td>
+                <td>@item.DateOfBirth</td>
+                <td>@item.NumberPhone</td>
+                <td>@foreach (var Sp in @item.Specialities)
+                    {
+                         <a>@Sp</a><br />
+
+                       
+                    }   
+                    </td>
+                <td><button @onclick="() =>SendInvitation(item.IdUser)"  class="btn btn-success">Send
+                    @if(Index==item.IdUser){
+
+                    
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only">Loading...</span>
+                    }
+                </button></td>
+        </tr>
+        }
+    </tbody>
+</table>
+</div>
+@if (IsLoading == true)
+{
+    <WaitComponent></WaitComponent>
+}

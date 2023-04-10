@@ -1,0 +1,80 @@
+﻿@page "/SignIn"
+@inherits SignInBase
+@layout EmptyLayout
+
+@if(MessageError != null){
+    <ErrorRoutingMessage Message="@MessageError"></ErrorRoutingMessage>
+
+}else if(messageResult.Message != null){
+
+    <CorrectRoutingMessage Message="@messageResult.Message"></CorrectRoutingMessage>
+}
+
+<div class="login-container">
+    
+    <div class=" vertical-center text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+    <EditForm Model="RegistreAccountDto" OnValidSubmit="SignIn">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+            <img class="mb-4" src="/Logo.png" width="200">
+    <div class="container m-auto  ">
+        <div class="form-floating  ">
+                <InputText type="texte" class="form-control" @bind-Value="RegistreAccountDto.LastName" id="LastName" placeholder="LastName"></InputText>
+            <label for="floatingPassword">LastName</label>
+        </div>
+        <div class="form-floating  ">
+                <InputText type="text" class="form-control" @bind-Value="RegistreAccountDto.FirstName" id="FirstName" placeholder="FirstName"></InputText>
+            <label for="floatingPassword">FirstName</label>
+        </div>
+            <div class="form-floating">
+                <InputSelect class="form-control" @bind-Value="@RegistreAccountDto.Sexe">
+
+                    <option value="1">Male </option>
+
+                    <option value="2"> Famme </option>
+
+                </InputSelect>
+                <label for="floatingPassword">Sexe</label>
+            </div>
+            <div class="form-floating">
+                <InputDate  class="form-control" @bind-Value="RegistreAccountDto.DateOfBirth"></InputDate>
+                <label for="floatingPassword">Date Of Birth</label>
+            </div>
+          
+
+        <div class="form-floating  ">
+                <InputText type="text" class="form-control" @bind-Value="RegistreAccountDto.NationalNumber" id="NumberNationel" placeholder="NumberNationel"></InputText>
+            <label for="floatingPassword">Nationel Number</label>
+        </div>
+        <div class="form-floating ">
+                <InputText type="text" class="form-control" @bind-Value="RegistreAccountDto.PhoneNumber" id="PhoneNumber" placeholder="Phone Number"></InputText>
+            <label for="floatingPassword">Phone Number</label>
+        </div>
+    </div>
+   
+            <div class="container m-auto  ">
+                <div class="form-floating mb-3  ">
+                    <InputText type="email" class="form-control" id="floatingInput" @bind-Value="RegistreAccountDto.Email" placeholder="name@example.com"></InputText>
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating">
+                    <InputText type="password" class="form-control" @bind-Value="RegistreAccountDto.Password" id="floatingPassword" placeholder="Password"></InputText>
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-floating ">
+                    <InputText type="password" @bind-Value="RegistreAccountDto.ConfirmePassword" class="form-control" id="floatingConfirmPassword" placeholder="Confirm Password"></InputText>
+                    <label for="floatingPassword">Confirm Password</label>
+                </div>
+                <button  class="btn btn-light mb-3">Create Account</button>
+                
+            </div>
+        </EditForm>
+        </div>
+        </div>
+        </div>
+    </div>
+    </div>
+

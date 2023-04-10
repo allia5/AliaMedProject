@@ -1,0 +1,65 @@
+﻿@page "/InformationCabinetMedical"
+@inherits InformationCabinetMedicalComponentBase
+
+@if(ErrorMessage != null){
+   <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}else if(SuccessMessage != null){
+     <CorrectRoutingMessage Message="@SuccessMessage"></CorrectRoutingMessage>
+}
+@if(IsLoding ==true){
+    <WaitComponent />
+}
+
+
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+
+<EditForm Model="CabinetMedicalInformation" OnValidSubmit="Update">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container m-auto w-50 ">
+        <div class="form-floating mb-3  ">
+            <InputText type="text" class="form-control" id="floatingInput" @bind-Value="CabinetMedicalInformation.name" ></InputText>
+            <label for="floatingInput">Name Of Cabinet Medical</label>
+        </div>
+        <div class="form-floating mb-3 ">
+            <InputText type="text" class="form-control" @bind-Value="CabinetMedicalInformation.Adress" id="Adress" ></InputText>
+            <label for="floatingPassword">Adress Cabinet Medical</label>
+        </div>
+        <div class="form-floating mb-3 ">
+            <InputText type="text" class="form-control" @bind-Value="CabinetMedicalInformation.phoneNumber" id="PhoneNumber"></InputText>
+            <label for="floatingPassword">Number Phone</label>
+        </div>
+        <div class="form-floating mb-3 ">
+            <InputText type="text" class="form-control" @bind-Value="CabinetMedicalInformation.JobTime" id="JobTime" ></InputText>
+            <label for="floatingPassword">Job Time</label>
+        </div>
+        <div class="form-floating mb-3 ">
+            <InputTextArea type="text" class="form-control" @bind-Value="CabinetMedicalInformation.mapAdress" id="floatingPassword" ></InputTextArea>
+            <label for="floatingPassword">Adress Map</label>
+        </div>
+        <div class="form-floating mb-3 ">
+            
+            <InputFile class="form-control" type="file"  OnChange="HandleFileSelected" />
+          
+        </div>
+        <div class="form-floating mb-3 ">
+            <InputText type="text" class="form-control" id="floatingPassword" @bind-Value="CabinetMedicalInformation.Services" ></InputText>
+            <label for="floatingPassword">Services</label>
+        </div>
+        <p>Status Of Clinic Is: @CabinetMedicalInformation.Status.ToString()</p>
+
+        <InputSelect class="form-control" @bind-Value="@CabinetMedicalInformation.Status" >
+
+            <option value="1">Open </option>
+
+            <option value="0"> Close </option>
+
+        </InputSelect>
+        
+
+        <button class="btn btn-light mb-3">Update</button>
+       
+    </div>
+
+</EditForm>
+</div>

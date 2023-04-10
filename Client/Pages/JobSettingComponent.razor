@@ -1,0 +1,69 @@
+﻿@page "/JobSetting/{JobId}"
+@inherits JobSettingComponentBase
+@if (ErrorMessage != null)
+{
+    <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}
+else if (SuccessMessage != null)
+{
+    <CorrectRoutingMessage Message="@SuccessMessage"></CorrectRoutingMessage>
+}
+@if (IsLoding == true)
+{
+    <WaitComponent />
+}
+
+
+
+
+
+<EditForm Model="JobSettingModel" OnValidSubmit="OnUpdate">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container m-auto w-50 ">
+        <div class="form-floating mb-3  ">
+            <input type="time" class="form-control" id="floatingInput" @bind="JobSettingModel.startTime" />
+
+            <label for="floatingInput">Start Time</label>
+        </div>
+        <div class="form-floating mb-3 ">
+            <input type="time" class="form-control" id="floatingInput" @bind="JobSettingModel.EndTime" />
+
+            <label for="floatingPassword">End Time</label>
+        </div>
+
+
+        <div class="form-floating mb-3 ">
+            <InputNumber type="text" class="form-control" @bind-Value="JobSettingModel.processingMinutes" id="PhoneNumber"></InputNumber>
+            <label for="floatingPassword">Processing Minutes</label>
+        </div>
+
+        <div class="form-floating mb-3 ">
+            <InputNumber type="text" class="form-control" @bind-Value="JobSettingModel.NumberPatientAccepted" id="floatingPassword"></InputNumber>
+            <label for="floatingPassword">number patient Accepted</label>
+        </div>
+
+        <p>Status Reservation: You selected @JobSettingModel.StatusReservation.ToString()</p>
+        <InputSelect class="form-select" @bind-Value="@JobSettingModel.StatusReservation" aria-label="Default select example">
+           
+            <option value="1">Ready</option>
+
+            <option value="0"> Not Ready </option>
+
+        </InputSelect>
+       
+        <p>Status Service: You Selected  @JobSettingModel.statusService.ToString()</p>
+        <InputSelect class="form-select" @bind-Value="@JobSettingModel.statusService" aria-label="Default select example">
+          
+            <option value="1">InService </option>
+
+            <option value="0"> outService</option>
+
+        </InputSelect>
+       
+
+        <button class="btn btn-light mb-3">Update</button>
+
+    </div>
+   
+</EditForm>
