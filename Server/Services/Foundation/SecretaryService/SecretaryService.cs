@@ -116,9 +116,9 @@ namespace Server.Services.Foundation.SecretaryService
                 else
                 {
                     newSecretary = MapperSecretary(Secretary);
-                    await this.secretaryManager.UpdateSecretary(newSecretary);
+                   await this.secretaryManager.UpdateSecretary(newSecretary);
                 }
-                var mailRequest = MapperToMailRequest(SecretaryUser, Cabinet);
+                var mailRequest = MapperToMailRequest(SecretaryUser, Cabinet, newSecretary);
                 await this.mailService.SendEmailNotification(mailRequest);
                 return MapperToSecretaryDto(SecretaryUser, newSecretary);
 
@@ -159,8 +159,8 @@ namespace Server.Services.Foundation.SecretaryService
                 var SecretaryUser = await this._userManager.FindByIdAsync(Secretary.IdUser);
                 ValidateUserIsNull(SecretaryUser);
                 var newSecretary = MapperToNewSecretary(updateStatusSecretaryDto, Secretary);
-                await this.secretaryManager.UpdateSecretary(newSecretary);
-                var mailRequest = MapperToMailRequest(SecretaryUser, Cabinet);
+                var SecretaryUpdated =  await this.secretaryManager.UpdateSecretary(newSecretary);
+                var mailRequest = MapperToMailRequest(SecretaryUser, Cabinet,SecretaryUpdated);
                 await this.mailService.SendEmailNotification(mailRequest);
             });
 

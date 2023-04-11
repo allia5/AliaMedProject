@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Server.Data;
+using Server.Hubs.PlanningAppoimentHub;
 using Server.Managers.Storages.CabinetMedicalManager;
 using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.PlanningAppoimentManager;
@@ -95,6 +96,7 @@ builder.Services.AddScoped<ISecretaryService, SecretaryService>();
 builder.Services.AddScoped<IPlanningAppoimentManager, PlanningAppoimentManager>();
 builder.Services.AddScoped<IPlanningAppoimentService, PlanningAppoimentService>();
 
+builder.Services.AddSignalR();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -134,5 +136,6 @@ app.UseCors(policy =>
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PlanningAppoimentHub>("/PlanningAppoimentHub");
 
 app.Run();

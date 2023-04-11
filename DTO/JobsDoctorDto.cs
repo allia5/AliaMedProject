@@ -10,6 +10,7 @@ namespace DTO
     {
         public string nameCabinet { get; set; }
         public string Adress { get; set; }
+        public string CabinetId { get; set; }
         public byte[] Image { get; set; }
         public string NumberPhone { get; set; }
         public string timeJob { get; set; }

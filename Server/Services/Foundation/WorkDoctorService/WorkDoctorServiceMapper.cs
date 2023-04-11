@@ -109,7 +109,8 @@ namespace Server.Services.Foundation.WorkDoctorService
                 NumberPhone = cabinetMedical.numberPhone,
                 Services = cabinetMedical.Services,
                 timeJob = cabinetMedical.JobTime,
-                StatusServiceDoctor = (StatusWorkDoctor)JobId.StatusWork
+                StatusServiceDoctor = (StatusWorkDoctor)JobId.StatusWork,
+                CabinetId =EncryptGuid(cabinetMedical.Id)
             };
         }
         public static JobSettingDto MapperToJobSetting(WorkDoctors workDoctors)

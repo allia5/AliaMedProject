@@ -68,14 +68,14 @@ namespace Server.Services.Foundation.SecretaryService
 
             };
         }
-        public static MailRequest MapperToMailRequest(User SecretaryUser, CabinetMedical cabinetMedical)
+        public static MailRequest MapperToMailRequest(User SecretaryUser, CabinetMedical cabinetMedical,Secretarys secretarys)
         {
             return new MailRequest
             {
                 ToEmail = SecretaryUser.Email,
                 Subject = "Notification",
                 Body = " <h3> AliaMed.Com </h3> " +
-                                           $"<a> You Are {SecretaryUser.Status.ToString()} to the role Secretary In Cabinet:{cabinetMedical.NameCabinet}</a>" + "<br/>"
+                                           $"<a> You Are {secretarys.Status} to the role Secretary In Cabinet:{cabinetMedical.NameCabinet}</a>" + "<br/>"
             };
         }
 

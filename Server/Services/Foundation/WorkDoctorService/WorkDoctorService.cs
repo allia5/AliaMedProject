@@ -117,9 +117,13 @@ namespace Server.Services.Foundation.WorkDoctorService
                 foreach (var item in ListJobsDoctor)
                 {
                     var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalById(item.IdCabinet);
-                    ValidateCabinetMedicalIsNull(Cabinet);
-                    var JobDoctorDto = MapperToJobsDoctorDto(item, Cabinet);
-                    jobsDoctorDtos.Add(JobDoctorDto);
+                   // ValidateCabinetMedicalIsNull(Cabinet);
+                   if(Cabinet != null)
+                    {
+                        var JobDoctorDto = MapperToJobsDoctorDto(item, Cabinet);
+                        jobsDoctorDtos.Add(JobDoctorDto);
+                    }
+            
                 }
                 return jobsDoctorDtos;
 

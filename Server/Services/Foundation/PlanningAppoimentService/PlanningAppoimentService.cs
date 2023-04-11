@@ -200,7 +200,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var AppoimentsMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Doctor.Id, Cabinet.Id);
                 foreach (var item in AppoimentsMedical)
                 {
-                    var UserAppoiment = await this._userManager.FindByIdAsync(User.Id);
+                    var UserAppoiment = await this._userManager.FindByIdAsync(item.IdUser);
                     if (UserAppoiment != null)
                     {
                         var PatientInformation = MppperToPatientInformationDto(UserAppoiment);

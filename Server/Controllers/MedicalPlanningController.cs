@@ -3,7 +3,9 @@ using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using OtripleS.Web.Api.Models.Users.Exceptions;
+using Server.Hubs.PlanningAppoimentHub;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Services.Foundation.PlanningAppoimentService;
@@ -18,9 +20,11 @@ namespace Server.Controllers
     public class MedicalPlanningController : ControllerBase
     {
         public readonly IPlanningAppoimentService planningAppoimentService;
-        public MedicalPlanningController(IPlanningAppoimentService planningAppoimentService)
+        public readonly IHubContext<PlanningAppoimentHub> hubContext;
+        public MedicalPlanningController(IPlanningAppoimentService planningAppoimentService, IHubContext<PlanningAppoimentHub> hubContext)
         {
             this.planningAppoimentService = planningAppoimentService;
+            this.hubContext = hubContext;
         }
 
         [HttpGet("ListAppoimentSecretaryPatient/{CabinetId}/{DoctorId}/{DateAppoiment}")]
