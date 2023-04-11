@@ -14,7 +14,30 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 {
     public partial class PlanningAppoimentService
     {
-       
+        public void ValidateEntryOnGetAllAppoimentPatientDoctor(string Email ,KeysAppoimentInformationDoctor keysAppoimentInformationDoctor)
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                throw new NullException(nameof(Email));
+            }
+            if (keysAppoimentInformationDoctor != null)
+            {
+                if (keysAppoimentInformationDoctor.CabinetId == null)
+                {
+                    throw new NullException(nameof(keysAppoimentInformationDoctor.CabinetId));
+                }
+                else if (keysAppoimentInformationDoctor.DateAppoiment == null)
+                {
+                    throw new NullException(nameof(keysAppoimentInformationDoctor.DateAppoiment));
+                }
+            }
+            else
+            {
+                throw new NullException(nameof(keysAppoimentInformationDoctor));
+            }
+        }
+
+
         public void ValidationSecretaryListIsEmpty(List<Secretarys> secretarys)
         {
             if(secretarys.Count == 0)

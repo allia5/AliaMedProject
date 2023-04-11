@@ -181,7 +181,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 }
             });
 
-        public async Task<List<PlanningDto>> GetPatientAppoimentMedical(string Email, KeysAppoimentInformationSecretary keysAppoimentInformationSecretary) =>
+        public async Task<List<PlanningDto>> GetPatientAppoimentMedicalSecretary(string Email, KeysAppoimentInformationSecretary keysAppoimentInformationSecretary) =>
             await _TryCatch(async () =>
             {
                 List<PlanningDto> listAppoiments = new List<PlanningDto>();
@@ -211,9 +211,37 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 }
                 return listAppoiments;
             });
-        
-          
 
-        
+        public async Task<List<PlanningDto>> GetPatientAppoimentMedicalDoctor(string Email, KeysAppoimentInformationDoctor keysAppoimentInformationDoctor) =>
+            await _TryCatch(async () =>
+            {
+                List<PlanningDto> listAppoiments = new List<PlanningDto>();
+                ValidateEntryOnGetAllAppoimentPatientDoctor(Email, keysAppoimentInformationDoctor);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                ValidateStatusUser(User);
+           
+                var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(User.Id);
+                ValidationDoctorIsNull(Doctor);
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(DecryptGuid(keysAppoimentInformationDoctor.CabinetId));
+                ValidateCabinetMedicalIsNull(Cabinet);
+                var workDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(Doctor.Id, Cabinet.Id);
+                ValidateWorkDoctorIsNull(workDoctor);
+                var AppoimentsMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Doctor.Id, Cabinet.Id);
+                foreach (var item in AppoimentsMedical)
+                {
+                    var UserAppoiment = await this._userManager.FindByIdAsync(item.IdUser);
+                    if (UserAppoiment != null)
+                    {
+                        var PatientInformation = MppperToPatientInformationDto(UserAppoiment);
+                        var AppoimentInformation = MapperToPatientAppoimentInformationDto(item);
+                        var AppoimentMedical = MapperToPlanningDto(PatientInformation, AppoimentInformation);
+                        listAppoiments.Add(AppoimentMedical);
+                    }
+                }
+                return listAppoiments;
+            });
+
+
     }
 }

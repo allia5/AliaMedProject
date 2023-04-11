@@ -8,5 +8,6 @@ namespace Client.Services.Foundations.MedicalPlanningService
         public Task<List<AppointmentInformationDto>> GetAppointmentInformationDto();
         public Task DeleteMedecalAppoiment(string IdMedicalAppoiment);
         public Task<List<PlanningDto>> GetAppointmentInformationPatientSecretaryDto(KeysAppoimentInformationSecretary keysAppoimentInformationSecretary);
+        public Task<List<PlanningDto>> GetAppointmentInformationPatientDoctorDto(KeysAppoimentInformationDoctor keysAppoimentInformationDoctor);
     }
 }
