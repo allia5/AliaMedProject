@@ -9,6 +9,25 @@ namespace Server.Services.Foundation.PlanningAppoimentService
     {
         public delegate Task<List<AppointmentInformationDto>> AppointmentInformationFunction();
         public delegate Task UpdateAppoimentFunction();
+        public delegate Task<List<PlanningDto>> AppoimentsPatientFunction();
+
+        public async Task<List<PlanningDto>> _TryCatch(AppoimentsPatientFunction appoimentsPatientFunction)
+        {
+            try 
+            {
+                return await appoimentsPatientFunction();
+            }
+            catch(NullException ex)
+            {
+                throw new ValidationException(ex);
+            }catch(NullDataStorageException ex)
+            {
+                throw new ValidationException(ex);
+            }catch(StatusValidationException ex)
+            {
+                throw new ServiceException(ex);
+            }
+        }
 
         public async Task<List<AppointmentInformationDto>> TryCatch(AppointmentInformationFunction appointmentInformationFunction)
         {

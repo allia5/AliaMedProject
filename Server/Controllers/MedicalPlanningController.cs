@@ -23,6 +23,32 @@ namespace Server.Controllers
             this.planningAppoimentService = planningAppoimentService;
         }
 
+        [HttpGet("ListAppoimentSecretaryPatient/{CabinetId}/{DoctorId}/{DateAppoiment}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE")]
+        public async Task<ActionResult<List<PlanningDto>>> GetListAppoimentPlanningPatientSecretary(string CabinetId ,string DoctorId,string DateAppoiment)
+        {
+            try
+            {
+                CabinetId = CabinetId.Replace("-", "/");
+                DoctorId = DoctorId.Replace("-", "/");
+                DateAppoiment = System.Web.HttpUtility.UrlDecode(DateAppoiment);
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.planningAppoimentService.GetPatientAppoimentMedical(email, new KeysAppoimentInformationSecretary { CabinetId = CabinetId, DateAppoiment = DateTime.Parse(DateAppoiment), IdDoctor = DoctorId });
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch(ServiceException Ex)
+            {
+
+                return StatusCode(412);
+            }catch (Exception Ex) 
+            {
+                return Problem(Ex.Message); 
+            }
+        }
+
         [HttpPost]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
         public async Task<ActionResult<List<AppointmentInformationDto>>> PostMedicalPlanningAppoiment(KeysReservationMedicalDto keysReservationMedicalDto)

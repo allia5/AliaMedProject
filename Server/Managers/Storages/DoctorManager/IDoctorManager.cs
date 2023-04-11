@@ -8,5 +8,6 @@ namespace Server.Managers.Storages.DoctorManager
         public Task<List<User>> SelectDoctor();
         public Task<Doctors> SelectDoctorByIdUser(string IdUser);
         public Task<Doctors> SelectDoctorById(Guid IdDoctor);
+        public Task<Doctors> SelectDoctorByIdUserWithStatusActive(string IdUser);
     }
 }

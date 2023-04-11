@@ -5,6 +5,7 @@ using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.MedicalPlannings;
+using Server.Models.secretary;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 using System.ComponentModel;
@@ -13,6 +14,35 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 {
     public partial class PlanningAppoimentService
     {
+       
+        public void ValidationSecretaryListIsEmpty(List<Secretarys> secretarys)
+        {
+            if(secretarys.Count == 0)
+            {
+                throw new NullDataStorageException(nameof(secretarys));
+            }
+        }
+        public void ValidateEntryOnGetAllAppoimentPatientSecretary(string Email, KeysAppoimentInformationSecretary keysAppoimentInformationSecretary)
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                throw new NullException(nameof(Email));
+            }
+            if( keysAppoimentInformationSecretary != null )
+            {
+                if(keysAppoimentInformationSecretary.CabinetId == null) 
+                {
+                    throw new NullException(nameof(keysAppoimentInformationSecretary.CabinetId));
+                }else if ( keysAppoimentInformationSecretary.IdDoctor == null)
+                {
+                    throw new NullException(nameof(keysAppoimentInformationSecretary.IdDoctor));
+                }
+            }
+            else
+            {
+                throw new NullException(nameof(keysAppoimentInformationSecretary));
+            }
+        }
         public void ValidateEntryOnDelete(string Email, string IdPlanning)
         {
             if (IsInvalid(Email))

@@ -9,6 +9,7 @@ namespace Client.Pages
     {
         protected string ErrorMessage = null;
         protected bool IsLoading = true;
+        protected string CabinetId { get; set; }
         protected List<SecretaryCabinetInformationDto> secretaryCabinetInformationDtos = new List<SecretaryCabinetInformationDto>();
         protected List<DoctorInformationAppointmentDto> ListDoctorInformation = new List<DoctorInformationAppointmentDto>();
         [Inject]
@@ -40,10 +41,16 @@ namespace Client.Pages
 
         protected async Task ShowListDoctor(string IdCabinet)
         {
+            this.CabinetId = IdCabinet;
             var CabinetInformation = this.secretaryCabinetInformationDtos.Where(e => e.CabinetInformation.Id == IdCabinet).FirstOrDefault();
             this.ListDoctorInformation = CabinetInformation.ListDoctorInformation;
 
 
+        }
+
+        protected async Task OnNavigatTo(string DoctorId)
+        {
+            this.NavigationManager.NavigateTo($"/AppoimentPatientSecretary/{CabinetId.Replace("/","-")}/{DoctorId.Replace("/","-")}",forceLoad:true);
         }
     }
 }

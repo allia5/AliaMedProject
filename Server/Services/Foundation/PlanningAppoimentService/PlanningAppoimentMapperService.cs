@@ -13,6 +13,40 @@ namespace Server.Services.Foundation.PlanningAppoimentService
     public static class PlanningAppoimentMapperService
     {
 
+
+        public static PatientAppoimentInformationDto MapperToPatientAppoimentInformationDto(MedicalPlanning medicalPlanning)
+        {
+            return new PatientAppoimentInformationDto
+            {
+AppoimentCount=medicalPlanning.AppointmentCount,
+DateAppoiment=medicalPlanning.AppointmentDate,
+Id=EncryptGuid( medicalPlanning.Id),
+Status= (StatusPlaningDto)medicalPlanning.Status
+            };
+        }
+        public static PatientInformationDto MppperToPatientInformationDto(User userAccount)
+        {
+            return new PatientInformationDto
+            {
+DateOfBirth = userAccount.DateOfBirth,
+FirstName =userAccount.Firstname,
+LastName =userAccount.LastName,
+Id =EncryptGuid(Guid.Parse(userAccount.Id) ).ToString(),
+NationalNumber = userAccount.NationalNumber,
+NumberPhone=userAccount.PhoneNumber,
+Sexe= (Sexe)userAccount.Sexe
+            };
+        }
+        public static PlanningDto MapperToPlanningDto(PatientInformationDto patientInformationDto,PatientAppoimentInformationDto patientAppoimentInformationDto)
+        {
+            return new PlanningDto
+            {
+                PatientAppoimentInformation = patientAppoimentInformationDto,
+                PatientInformation = patientInformationDto
+            };
+            
+        }
+
         public static MailRequest MapperMailRequestDeleteMedicalAppoiment(User user, User DoctorUserAccount, int k)
         {
             return new MailRequest

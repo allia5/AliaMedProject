@@ -18,6 +18,7 @@ using Server.Services.Foundation.MailService;
 using System.Runtime.CompilerServices;
 using static Server.Utility.Utility;
 using static Server.Services.Foundation.PlanningAppoimentService.PlanningAppoimentMapperService;
+using Server.Managers.Storages.SecretaryManager;
 
 namespace Server.Services.Foundation.PlanningAppoimentService
 {
@@ -32,7 +33,8 @@ namespace Server.Services.Foundation.PlanningAppoimentService
         public readonly IDoctorManager doctorManager;
         public readonly ISpecialitiesManager specialitiesManager;
         public readonly IPlanningAppoimentManager planningAppoimentManager;
-        public PlanningAppoimentService(IUserManager userManager, IMailService mailService, UserManager<User> _userManager, ICabinetMedicalManager cabinetMedicalManager, IWorkDoctorManager workDoctorManager, IDoctorManager doctorManager, ISpecialitiesManager specialitiesManager, IPlanningAppoimentManager planningAppoimentManager)
+        public readonly ISecretaryManager secretaryManager;
+        public PlanningAppoimentService(ISecretaryManager secretaryManager, IUserManager userManager, IMailService mailService, UserManager<User> _userManager, ICabinetMedicalManager cabinetMedicalManager, IWorkDoctorManager workDoctorManager, IDoctorManager doctorManager, ISpecialitiesManager specialitiesManager, IPlanningAppoimentManager planningAppoimentManager)
         {
             this.doctorManager = doctorManager;
             this.mailService = mailService;
@@ -42,6 +44,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             this.cabinetMedicalManager = cabinetMedicalManager;
             this.specialitiesManager = specialitiesManager;
             this.planningAppoimentManager = planningAppoimentManager;
+            this.secretaryManager = secretaryManager;
         }
         public async Task<List<AppointmentInformationDto>> PostNewPlanningAppoimentMedical(string Email, KeysReservationMedicalDto keysReservationMedicalDto) =>
             await TryCatch(async () =>
@@ -178,5 +181,39 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 }
             });
 
+        public async Task<List<PlanningDto>> GetPatientAppoimentMedical(string Email, KeysAppoimentInformationSecretary keysAppoimentInformationSecretary) =>
+            await _TryCatch(async () =>
+            {
+                List<PlanningDto> listAppoiments = new List<PlanningDto>();
+                ValidateEntryOnGetAllAppoimentPatientSecretary(Email, keysAppoimentInformationSecretary);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                ValidateStatusUser(User);
+                var Seecretary = await this.secretaryManager.SelectAllSecretaryByIdUser(User.Id);
+                ValidationSecretaryListIsEmpty(Seecretary);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(DecryptGuid(keysAppoimentInformationSecretary.IdDoctor).ToString());
+                ValidationDoctorIsNull(Doctor);
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(DecryptGuid(keysAppoimentInformationSecretary.CabinetId));
+                ValidateCabinetMedicalIsNull(Cabinet);
+                var workDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(Doctor.Id, Cabinet.Id);
+                ValidateWorkDoctorIsNull(workDoctor);
+                var AppoimentsMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Doctor.Id, Cabinet.Id);
+                foreach (var item in AppoimentsMedical)
+                {
+                    var UserAppoiment = await this._userManager.FindByIdAsync(User.Id);
+                    if (UserAppoiment != null)
+                    {
+                        var PatientInformation = MppperToPatientInformationDto(UserAppoiment);
+                        var AppoimentInformation = MapperToPatientAppoimentInformationDto(item);
+                        var AppoimentMedical = MapperToPlanningDto(PatientInformation, AppoimentInformation);
+                        listAppoiments.Add(AppoimentMedical);
+                    }
+                }
+                return listAppoiments;
+            });
+        
+          
+
+        
     }
 }
