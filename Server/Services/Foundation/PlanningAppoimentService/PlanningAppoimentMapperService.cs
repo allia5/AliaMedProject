@@ -12,8 +12,21 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 {
     public static class PlanningAppoimentMapperService
     {
-
-
+        public static MailRequest MapperMailRequestUpdateStatusAppoiment(UpdateStatusAppoimentDto updateStatusAppoiment , User user ,User UserDoctor)
+        {
+            return new MailRequest
+            {
+                ToEmail = user.Email,
+                Subject = "Notification",
+                Body = " <h3> AliaMed.Com </h3> " +
+                                $"<a>status your appoiment has been chaged to  {updateStatusAppoiment.statusPlaningDto} By Doctor : {UserDoctor.Firstname} {UserDoctor.LastName} </a>" + "<br/>"
+            };
+        }
+        public static MedicalPlanning MapperToNewMedicalPlanning(UpdateStatusAppoimentDto updateStatusAppoiment,MedicalPlanning medicalPlanning)
+        {
+            medicalPlanning.Status = (StatusPlaning)updateStatusAppoiment.statusPlaningDto;
+            return medicalPlanning;
+        }
         public static PatientAppoimentInformationDto MapperToPatientAppoimentInformationDto(MedicalPlanning medicalPlanning)
         {
             return new PatientAppoimentInformationDto

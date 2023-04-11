@@ -189,8 +189,6 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var User = await this._userManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(User);
                 ValidateStatusUser(User);
-                var Seecretary = await this.secretaryManager.SelectAllSecretaryByIdUser(User.Id);
-                ValidationSecretaryListIsEmpty(Seecretary);
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(DecryptGuid(keysAppoimentInformationSecretary.IdDoctor).ToString());
                 ValidationDoctorIsNull(Doctor);
                 var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(DecryptGuid(keysAppoimentInformationSecretary.CabinetId));
@@ -242,6 +240,42 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 return listAppoiments;
             });
 
+        public async Task UpdateStatusAppoimentMedical(string Email, UpdateStatusAppoimentDto updateStatusAppoiment,string Role) =>
+            await _TryCatch_(async () =>
+            {
+                ValidateEntryOnUpdateStatusAppoiment(Email, updateStatusAppoiment);
+                var UserAccount = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccount);
+                
+                if (Role == "SECRITAIRE")
+                {
+                    ValidateStatusSecretaryOnUpdate(updateStatusAppoiment);
+                    
+                }
+                else if(Role == "MEDECIN")
+                {
+                    var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAccount.Id);
+                    ValidationDoctorIsNull(Doctor);
+                }
+                var Appoiment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(updateStatusAppoiment.Id));
+                if(Appoiment != null)
+                {
+                    var newAppoiment =MapperToNewMedicalPlanning(updateStatusAppoiment, Appoiment);
+                    await this.planningAppoimentManager.UpdatePlanningMedical(newAppoiment);
+
+                }
+                if(updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.absent)
+                {
+                    var UserOfAppoiment = await this._userManager.FindByIdAsync(Appoiment.IdUser);
+                    var UserAccountDoctor = await this.userManager.SelectUserByIdDoctor(Appoiment.IdDoctor);
+                    if(UserOfAppoiment != null && UserAccountDoctor != null)
+                    {
+                        var mailRequest = MapperMailRequestUpdateStatusAppoiment(updateStatusAppoiment, UserOfAppoiment, UserAccountDoctor);
+                        await this.mailService.SendEmailNotification(mailRequest);
+
+                    }
+                }
+            });
 
     }
 }

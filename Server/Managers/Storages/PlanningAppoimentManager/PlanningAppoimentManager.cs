@@ -62,5 +62,10 @@ namespace Server.Managers.Storages.PlanningAppoimentManager
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task<MedicalPlanning> SelectMedicalPlannigById(Guid Id)
+        {
+            return await this.ServerDbContext.medicalPlannings.FirstOrDefaultAsync(e=>e.Id == Id);
+        }
     }
 }

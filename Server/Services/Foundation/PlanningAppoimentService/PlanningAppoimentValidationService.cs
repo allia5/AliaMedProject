@@ -14,6 +14,33 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 {
     public partial class PlanningAppoimentService
     {
+        public void ValidateStatusSecretaryOnUpdate(UpdateStatusAppoimentDto updateStatusAppoimentDto)
+        {
+            if (updateStatusAppoimentDto.statusPlaningDto != StatusPlaningDto.Delayed || updateStatusAppoimentDto.statusPlaningDto != StatusPlaningDto.passed)
+            {
+                throw new InvalidException(nameof(updateStatusAppoimentDto), updateStatusAppoimentDto, "Secretary");
+            }
+        }
+        public void ValidateEntryOnUpdateStatusAppoiment(string Email,UpdateStatusAppoimentDto updateStatusAppoiment)
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                throw new NullException(nameof(Email));
+            }
+            if (updateStatusAppoiment != null)
+            {
+                if (updateStatusAppoiment.Id == null)
+                {
+                    throw new NullException(nameof(updateStatusAppoiment.Id));
+                }
+              
+            }
+            else
+            {
+                throw new NullException(nameof(updateStatusAppoiment));
+            }
+
+        }
         public void ValidateEntryOnGetAllAppoimentPatientDoctor(string Email ,KeysAppoimentInformationDoctor keysAppoimentInformationDoctor)
         {
             if (string.IsNullOrEmpty(Email))

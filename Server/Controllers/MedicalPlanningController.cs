@@ -26,7 +26,26 @@ namespace Server.Controllers
             this.planningAppoimentService = planningAppoimentService;
             this.hubContext = hubContext;
         }
-
+        [HttpPatch("UpdateStatusAppoiment")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE,MEDECIN")]
+        public async Task<ActionResult> PatchStatusAppoimentPatient([FromBody] UpdateStatusAppoimentDto updateStatusAppoimentDto)
+        {
+            try
+            {
+                var Role = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.planningAppoimentService.UpdateStatusAppoimentMedical(Email, updateStatusAppoimentDto,Role);
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
 
         [HttpGet("ListAppoimentDoctorPatient/{CabinetId}/{DateAppoiment}")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]

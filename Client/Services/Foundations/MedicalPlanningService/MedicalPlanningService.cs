@@ -197,5 +197,29 @@ namespace Client.Services.Foundations.MedicalPlanningService
                 throw new ProblemException("Error Intern");
             }
         }
+
+        public async Task UpdateStatusApoimentPatient(UpdateStatusAppoimentDto updateStatusAppoimentPatient)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Patch, "/api/MedicalPlanning/UpdateStatusAppoiment");
+            var JsCabinetMedical = JsonSerializer.Serialize(updateStatusAppoimentPatient);
+          
+            request.Content = new StringContent(JsCabinetMedical, Encoding.UTF8, "application/json");
+            var JwtBearer = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await httpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("User Not Authorized in This Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Data Error");
+            }
+         
+        }
     }
 }

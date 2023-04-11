@@ -53,5 +53,27 @@ namespace Client.Pages
             }
         }
 
+        public async Task OnTreated(string IdAppoiment)
+        {
+            try
+            {
+                await this.medicalPlanningService.UpdateStatusApoimentPatient(new UpdateStatusAppoimentDto { Id = IdAppoiment, statusPlaningDto = StatusPlaningDto.Treated });
+            }catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+        }
+        public async Task OnAbsent(string IdAppoiment)
+        {
+            try
+            {
+                await this.medicalPlanningService.UpdateStatusApoimentPatient(new UpdateStatusAppoimentDto { Id = IdAppoiment, statusPlaningDto = StatusPlaningDto.absent });
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+        }
+
     }
 }

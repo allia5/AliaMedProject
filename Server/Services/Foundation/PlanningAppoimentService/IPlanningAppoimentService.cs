@@ -9,6 +9,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
         public Task DeleteMedicalPlanningAppoiment(string Email, string IdPlanning);
         public Task<List<PlanningDto>> GetPatientAppoimentMedicalSecretary(string Email, KeysAppoimentInformationSecretary keysAppoimentInformationSecretary);
         public Task<List<PlanningDto>> GetPatientAppoimentMedicalDoctor(string Email, KeysAppoimentInformationDoctor keysAppoimentInformationDoctor);
+        public Task UpdateStatusAppoimentMedical(string Email,UpdateStatusAppoimentDto updateStatusAppoiment,string Role);
 
     }
 }

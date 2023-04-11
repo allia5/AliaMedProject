@@ -10,6 +10,7 @@ namespace Client.Pages
     {
         public LoginAccountDto loginAccount = new LoginAccountDto();
         public string ErrorMessage = null;
+        public bool IsLoading = true;
         [Parameter]
         public string ReturnUrl { get; set; }
         [Inject]
@@ -31,13 +32,15 @@ namespace Client.Pages
             {
                 this.navigationManager.NavigateTo(ReturnUrl, forceLoad: true);
             }
-
+            IsLoading = false;
         }
         public async Task OnValid()
         {
             try
             {
+                IsLoading = true;
                 await this.loginService.AuthentificationAccount(loginAccount);
+                IsLoading = false;
                 navigationManager.NavigateTo(ReturnUrl, forceLoad: true);
             }
             catch (UnauthorizedException Ex)
@@ -52,6 +55,9 @@ namespace Client.Pages
             catch (BadRequestException Ex)
             {
                 this.ErrorMessage = Ex.Message;
+            }catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
             }
         }
 
