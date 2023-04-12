@@ -45,17 +45,9 @@ namespace Client.Pages
                 Informations = Informations.Where(s => s.IdUser != Id).ToList();
                 this.Index = null;
             }
-            catch (BadRequestException Ex)
+            catch (Exception ex)
             {
-
-            }
-            catch (NotFoundException Ex)
-            {
-
-            }
-            catch (ProblemException Ex)
-            {
-
+                this.ErrorMessage= ex.Message;  
             }
 
         }

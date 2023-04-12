@@ -10,7 +10,7 @@
     <input @bind="DateAppoiment" type="date" class="form-control" /><button class="btn btn-dark">Search</button>
 </div>
 <div class="shadow-lg p-3 mb-5 alert-warning rounded">
-    <p class="text-center">list Doctor our service.</p>
+    <p class="text-center">List Patient Treadted</p>
     <table class="table">
         <thead>
             <tr>
@@ -18,6 +18,9 @@
                 <th scope="col">Last Name</th>
                 <th scope="col">NN</th>
                 <th scope="col">Number Phone</th>
+                <th scope="col">Delay Appoiment</th>
+                  <th scope="col">Passed Appoiment</th>
+               
 
             </tr>
         </thead>
@@ -29,6 +32,8 @@
                     <td>@item.PatientInformation.LastName</td>
                     <td>@item.PatientInformation.NationalNumber</td>
                     <td>@item.PatientInformation.NumberPhone</td>
+                    <td><button class="btn btn-success">Delaye</button></td>
+                    <td><button class="btn btn-primary">Passed</button></td>
 
 
                 </tr>
@@ -42,7 +47,7 @@
 <br />
 
 <div class="shadow-lg p-3 mb-5 alert-primary rounded">
-    <p class="text-center">list Doctor our service.</p>
+    <p class="text-center">List Patient Still await.</p>
     <table class="table">
         <thead>
             <tr>
@@ -63,8 +68,30 @@
                     <td>@item.PatientAppoimentInformation.AppoimentCount</td>
                     <td>@item.PatientInformation.NationalNumber</td>
                     <td>@item.PatientInformation.NumberPhone</td>
-                    <td><button class="btn btn-danger">absent</button></td>
-                    <td><button class="btn btn-warning">Treatd</button></td>
+                    <td>
+                        <button @onclick="()=>OnAbsent(item.PatientAppoimentInformation.Id)" class="btn btn-danger">
+                            absent
+                            @if (IndexBtnOne == item.PatientAppoimentInformation.Id)
+                            {
+
+
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            }
+                        </button>
+                    </td>
+                    <td>
+                        <button @onclick="()=>OnTreated(item.PatientAppoimentInformation.Id)" class="btn btn-warning">
+                            Treatd
+                            @if (IndexBtnTwo == item.PatientAppoimentInformation.Id)
+                            {
+
+
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            }
+                        </button>
+                    </td>
 
 
                 </tr>
@@ -77,12 +104,12 @@
 <br />
 <br />
 <div class="shadow-lg p-3 mb-5 alert-danger rounded">
-    <p class="text-center">list Doctor our service.</p>
+    <p class="text-center">list Patient Absent</p>
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Count Appoiment</th>
                 <th scope="col">NN</th>
                 <th scope="col">Number Phone</th>
                 <th scope="col">Set Treated</th>
@@ -93,11 +120,22 @@
             @foreach (var item in this.planningDtosAbsent)
             {
                 <tr>
-                    <td scope="row">@item.PatientInformation.FirstName</td>
-                    <td>@item.PatientInformation.LastName</td>
+                    <td scope="row">@item.PatientInformation.FirstName -- @item.PatientInformation.LastName</td>
+                    <td>@item.PatientAppoimentInformation.AppoimentCount</td>
                     <td>@item.PatientInformation.NationalNumber</td>
                     <td>@item.PatientInformation.NumberPhone</td>
-                    <td><button class="btn btn-warning">Treatd</button></td>
+                    <td>
+                        <button @onclick="()=>OnTreated(item.PatientAppoimentInformation.Id)" class="btn btn-warning">
+                            Treatd
+                            @if (IndexBtnTwo == item.PatientAppoimentInformation.Id)
+                            {
+
+
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            }
+                        </button>
+                    </td>
 
                 </tr>
             }

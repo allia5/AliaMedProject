@@ -16,7 +16,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
     {
         public void ValidateStatusSecretaryOnUpdate(UpdateStatusAppoimentDto updateStatusAppoimentDto)
         {
-            if (updateStatusAppoimentDto.statusPlaningDto != StatusPlaningDto.Delayed || updateStatusAppoimentDto.statusPlaningDto != StatusPlaningDto.passed)
+            if (updateStatusAppoimentDto.statusPlaningDto == StatusPlaningDto.Delayed || updateStatusAppoimentDto.statusPlaningDto == StatusPlaningDto.passed)
             {
                 throw new InvalidException(nameof(updateStatusAppoimentDto), updateStatusAppoimentDto, "Secretary");
             }

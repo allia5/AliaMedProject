@@ -16,6 +16,8 @@ namespace Client.Pages
 
         protected string ErrorMessage = null;
         protected bool IsLoading = true;
+        protected string IndexBtnOne = null;
+        protected string IndexBtnTwo = null;
         protected DateTime DateAppoiment { get; set; } = DateTime.Now;
         protected List<PlanningDto> planningDtos = new List<PlanningDto>();
         protected List<PlanningDto> planningDtosStill = new List<PlanningDto>();
@@ -57,7 +59,12 @@ namespace Client.Pages
         {
             try
             {
+                IndexBtnTwo = IdAppoiment;
                 await this.medicalPlanningService.UpdateStatusApoimentPatient(new UpdateStatusAppoimentDto { Id = IdAppoiment, statusPlaningDto = StatusPlaningDto.Treated });
+                var itemTreated=  this.planningDtos.Where(e=>e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
+                if(itemTreated != null) { this.planningDtosTreated.Add(itemTreated); this.planningDtosStill.Remove(itemTreated); }
+                IndexBtnTwo = null;
+                
             }catch(Exception e)
             {
                 this.ErrorMessage = e.Message;
@@ -67,7 +74,11 @@ namespace Client.Pages
         {
             try
             {
+                IndexBtnOne = IdAppoiment;
                 await this.medicalPlanningService.UpdateStatusApoimentPatient(new UpdateStatusAppoimentDto { Id = IdAppoiment, statusPlaningDto = StatusPlaningDto.absent });
+                var ItemAbsent = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
+                if (ItemAbsent != null) { this.planningDtosAbsent.Add(ItemAbsent); this.planningDtosStill.Remove(ItemAbsent); }
+                IndexBtnOne = null;
             }
             catch (Exception e)
             {
