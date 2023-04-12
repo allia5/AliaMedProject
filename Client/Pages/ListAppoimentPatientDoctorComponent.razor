@@ -42,7 +42,7 @@
                     <td>@item.PatientInformation.LastName</td>
                     <td>@item.PatientInformation.NationalNumber</td>
                     <td>@item.PatientInformation.NumberPhone</td>
-                    <td><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delaye</button></td>
+                    <td><button class="btn btn-success" @onclick="()=>OnDelyed(item.PatientAppoimentInformation.Id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delaye</button></td>
                     <td><button @onclick="()=>OnPassed(item.PatientAppoimentInformation.Id)" class="btn btn-primary">Passed
                             @if (IndexBtnthree == item.PatientAppoimentInformation.Id)
                             {
@@ -179,7 +179,7 @@
                 <input class="form-control" @bind="DateAppoiment" type="date" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Ok</button>
+                <button type="button"  @onclick="()=>DelayAppoiment()" class="btn btn-outline-primary" data-bs-dismiss="modal">Ok</button>
 
             </div>
         </div>

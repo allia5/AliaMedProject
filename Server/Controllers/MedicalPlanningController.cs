@@ -26,6 +26,34 @@ namespace Server.Controllers
             this.planningAppoimentService = planningAppoimentService;
             this.hubContext = hubContext;
         }
+
+        [HttpPatch("DelayAppoiment")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult> PatchStatusAppoimentPatient([FromBody] DelayeAppoimentMedical delayeAppoiment)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+              
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.planningAppoimentService.DelayeAppoimentPatient(Email, delayeAppoiment);
+                transaction.Complete();
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
+        }
+
         [HttpPatch("UpdateStatusAppoiment")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE,MEDECIN")]
         public async Task<ActionResult> PatchStatusAppoimentPatient([FromBody] UpdateStatusAppoimentDto updateStatusAppoimentDto)

@@ -14,6 +14,25 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 {
     public partial class PlanningAppoimentService
     {
+        public void ValidateEntryOnDelayAppoiment(string Email, DelayeAppoimentMedical delayeAppoiment)
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                throw new NullException(nameof(Email));
+            }
+            if (delayeAppoiment != null)
+            {
+                if (delayeAppoiment.Id == null)
+                {
+                    throw new NullException(nameof(delayeAppoiment.Id));
+                }
+              
+            }
+            else
+            {
+                throw new NullException(nameof(delayeAppoiment));
+            }
+        }
         public void ValidateStatusSecretaryOnUpdate(UpdateStatusAppoimentDto updateStatusAppoimentDto)
         {
             if (updateStatusAppoimentDto.statusPlaningDto == StatusPlaningDto.Delayed || updateStatusAppoimentDto.statusPlaningDto == StatusPlaningDto.passed)

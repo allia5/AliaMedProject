@@ -12,7 +12,7 @@ namespace Client.Pages
     {
         [Parameter]
         public string CabinetId { get; set; }
-
+        protected string IdAppoimentDelyed = null;
         protected string IndexBtnTwo = null;
         protected string IndexBtnOne = null;
         protected string IndexBtnthree=null;
@@ -56,6 +56,22 @@ namespace Client.Pages
                 IsLoading = false;
             }
         }
+        protected async Task DelayAppoiment()
+        {
+            try
+            {
+                await this.medicalPlanningService.DelayeApoimentPatient(new DelayeAppoimentMedical { DateAppoiment = DateAppoiment, Id = IdAppoimentDelyed, statusPlaningDto = StatusPlaningDto.Delayed });
+                var ItemAbsent = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == IdAppoimentDelyed).FirstOrDefault();
+                if (ItemAbsent != null) { this.planningDtosTreated.Remove(ItemAbsent); }
+               
+                décrementCountAppoimentAbsent();
+                décrementCountAppoimentStill();
+            }
+            catch(Exception Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+            }
+        }
         protected async Task OnSearch()
         {
             IndexBtnSearshloading = true;
@@ -64,6 +80,11 @@ namespace Client.Pages
             this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
             this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
             IndexBtnSearshloading = false;
+        }
+        protected async Task OnDelyed(string IdAppoiment)
+        {
+            this.IdAppoimentDelyed =IdAppoiment;
+
         }
         public async Task OnTreated(string IdAppoiment)
         {

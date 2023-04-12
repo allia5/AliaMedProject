@@ -10,5 +10,6 @@ namespace Client.Services.Foundations.MedicalPlanningService
         public Task<List<PlanningDto>> GetAppointmentInformationPatientSecretaryDto(KeysAppoimentInformationSecretary keysAppoimentInformationSecretary);
         public Task<List<PlanningDto>> GetAppointmentInformationPatientDoctorDto(KeysAppoimentInformationDoctor keysAppoimentInformationDoctor);
         public Task UpdateStatusApoimentPatient(UpdateStatusAppoimentDto updateStatusAppoimentPatient);
+        public Task DelayeApoimentPatient(DelayeAppoimentMedical delayeAppoiment);
     }
 }
