@@ -4,6 +4,7 @@ using DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Client.Pages
 {
@@ -15,6 +16,7 @@ namespace Client.Pages
         protected string IndexBtnTwo = null;
         protected string IndexBtnOne = null;
         protected string IndexBtnthree=null;
+        protected bool IndexBtnSearshloading = false;
         protected string ErrorMessage = null;
         protected bool IsLoading = true;
         protected DateTime DateAppoiment { get; set; } = DateTime.Now;
@@ -37,9 +39,9 @@ namespace Client.Pages
                 {
 
                     this.planningDtos = await this.medicalPlanningService.GetAppointmentInformationPatientDoctorDto(new KeysAppoimentInformationDoctor { CabinetId = CabinetId, DateAppoiment = DateAppoiment });
-                    this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
-                    this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).ToList();
-                    this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).ToList();
+                    this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+                    this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+                    this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.IsLoading = false;
                 }
 
@@ -53,6 +55,15 @@ namespace Client.Pages
                 ErrorMessage = ex.Message;
                 IsLoading = false;
             }
+        }
+        protected async Task OnSearch()
+        {
+            IndexBtnSearshloading = true;
+            this.planningDtos = await this.medicalPlanningService.GetAppointmentInformationPatientDoctorDto(new KeysAppoimentInformationDoctor { CabinetId = CabinetId, DateAppoiment = DateAppoiment });
+            this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+            this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+            this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+            IndexBtnSearshloading = false;
         }
         public async Task OnTreated(string IdAppoiment)
         {
@@ -95,12 +106,37 @@ namespace Client.Pages
                 var ItemAbsent = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
                 if (ItemAbsent != null) {  this.planningDtosTreated.Remove(ItemAbsent); }
                 IndexBtnOne = null;
+                décrementCountAppoimentAbsent();
+                décrementCountAppoimentStill();
             }
             catch (Exception e)
             {
                 this.ErrorMessage = e.Message;
             }
         }
+        protected  async Task décrementCountAppoimentAbsent()
+        {
+            var k = 1;
+            foreach (var itemAbsent in planningDtosAbsent)
+            {
+                itemAbsent.PatientAppoimentInformation.AppoimentCount = k;
+                k++; 
+                var index = planningDtosAbsent.IndexOf(itemAbsent);
+                planningDtosAbsent[index] = itemAbsent;
+            }
+        }
+        protected async Task décrementCountAppoimentStill()
+        {
+            var k = 1;
+            foreach (var itemAbsent in planningDtosStill)
+            {
+                itemAbsent.PatientAppoimentInformation.AppoimentCount = k;
+                k++; 
+                var index = planningDtosAbsent.IndexOf(itemAbsent);
+                planningDtosAbsent[index] = itemAbsent;
+            }
+        }
+
 
     }
 }

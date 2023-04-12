@@ -225,7 +225,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 ValidateCabinetMedicalIsNull(Cabinet);
                 var workDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(Doctor.Id, Cabinet.Id);
                 ValidateWorkDoctorIsNull(workDoctor);
-                var AppoimentsMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Doctor.Id, Cabinet.Id);
+                var AppoimentsMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Cabinet.Id, Doctor.Id,keysAppoimentInformationDoctor.DateAppoiment);
                 foreach (var item in AppoimentsMedical)
                 {
                     var UserAppoiment = await this._userManager.FindByIdAsync(item.IdUser);
@@ -265,8 +265,8 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 
                 }
                 if (updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.passed)
-                {
-                    var appoimentsCabinetDoctor = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdDoctor, Appoiment.IdCabinet);
+                {  
+                    var appoimentsCabinetDoctor = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet,Appoiment.IdDoctor,DateTime.Now);
                      appoimentsCabinetDoctor = appoimentsCabinetDoctor.Where(e => e.Status == StatusPlaning.Still && e.IdUser != UserAccount.Id).OrderBy(e=>e.AppointmentCount).ToList();
                     int k = 1;
                     foreach (var appoimentPatient in appoimentsCabinetDoctor)

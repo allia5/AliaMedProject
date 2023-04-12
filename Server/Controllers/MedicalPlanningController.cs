@@ -55,7 +55,7 @@ namespace Server.Controllers
 
         [HttpGet("ListAppoimentDoctorPatient/{CabinetId}/{DateAppoiment}")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
-        public async Task<ActionResult<List<PlanningDto>>> GetListAppoimentPlanningPatientSecretary(string CabinetId, string DateAppoiment)
+        public async Task<ActionResult<List<PlanningDto>>> GetListAppoimentPlanningPatientDoctor(string CabinetId, string DateAppoiment)
         {
             try
             {
