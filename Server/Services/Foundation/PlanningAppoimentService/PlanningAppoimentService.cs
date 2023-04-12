@@ -264,7 +264,27 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                     await this.planningAppoimentManager.UpdatePlanningMedical(newAppoiment);
 
                 }
-                if(updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.absent)
+                if (updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.passed)
+                {
+                    var appoimentsCabinetDoctor = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdDoctor, Appoiment.IdCabinet);
+                     appoimentsCabinetDoctor = appoimentsCabinetDoctor.Where(e => e.Status == StatusPlaning.Still && e.IdUser != UserAccount.Id).OrderBy(e=>e.AppointmentCount).ToList();
+                    int k = 1;
+                    foreach (var appoimentPatient in appoimentsCabinetDoctor)
+                    {
+                        var UserAppoiment = await this._userManager.FindByIdAsync(appoimentPatient.IdUser);
+                        var UserdoctorAppoiment = await this.userManager.SelectUserByIdDoctor(appoimentPatient.IdDoctor);
+                        if(UserAppoiment != null && UserdoctorAppoiment != null)
+                        {
+                            appoimentPatient.AppointmentCount = k;
+                            await this.planningAppoimentManager.UpdatePlanningMedical(appoimentPatient);
+                            var mailRequest = MapperMailRequestDeleteMedicalAppoiment(UserAppoiment, UserdoctorAppoiment, k);
+                            await this.mailService.SendEmailNotification(mailRequest);
+
+                        }
+                        k++;
+                    }
+                }
+               else  if(updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.absent)
                 {
                     var UserOfAppoiment = await this._userManager.FindByIdAsync(Appoiment.IdUser);
                     var UserAccountDoctor = await this.userManager.SelectUserByIdDoctor(Appoiment.IdDoctor);

@@ -22,6 +22,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                                 $"<a>status your appoiment has been chaged to  {updateStatusAppoiment.statusPlaningDto} By Doctor : {UserDoctor.Firstname} {UserDoctor.LastName} </a>" + "<br/>"
             };
         }
+   
         public static MedicalPlanning MapperToNewMedicalPlanning(UpdateStatusAppoimentDto updateStatusAppoiment,MedicalPlanning medicalPlanning)
         {
             medicalPlanning.Status = (StatusPlaning)updateStatusAppoiment.statusPlaningDto;

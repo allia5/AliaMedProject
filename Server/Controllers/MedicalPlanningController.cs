@@ -30,11 +30,13 @@ namespace Server.Controllers
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE,MEDECIN")]
         public async Task<ActionResult> PatchStatusAppoimentPatient([FromBody] UpdateStatusAppoimentDto updateStatusAppoimentDto)
         {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
                 var Role = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.planningAppoimentService.UpdateStatusAppoimentMedical(Email, updateStatusAppoimentDto,Role);
+                transaction.Complete();
                 return Ok();
             }
             catch (ValidationException Ex)
@@ -44,6 +46,10 @@ namespace Server.Controllers
             catch (Exception e)
             {
                 return Problem(e.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
             }
         }
 

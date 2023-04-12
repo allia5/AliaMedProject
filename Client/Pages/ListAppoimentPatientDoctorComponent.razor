@@ -20,6 +20,7 @@
                 <th scope="col">Number Phone</th>
                 <th scope="col">Delay Appoiment</th>
                   <th scope="col">Passed Appoiment</th>
+                <th scope="col">File Médical</th>
                
 
             </tr>
@@ -32,8 +33,17 @@
                     <td>@item.PatientInformation.LastName</td>
                     <td>@item.PatientInformation.NationalNumber</td>
                     <td>@item.PatientInformation.NumberPhone</td>
-                    <td><button class="btn btn-success">Delaye</button></td>
-                    <td><button class="btn btn-primary">Passed</button></td>
+                    <td><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delaye</button></td>
+                    <td><button @onclick="()=>OnPassed(item.PatientAppoimentInformation.Id)" class="btn btn-primary">Passed
+                            @if (IndexBtnthree == item.PatientAppoimentInformation.Id)
+                            {
+
+
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            }
+                    </button></td>
+                    <td><button class="btn btn-secondary">Go File Medical</button></td>
 
 
                 </tr>
@@ -147,3 +157,22 @@
 
 
 
+<!-- Modal -->
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Adress Of Cabinet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" @bind="DateAppoiment" type="date" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Ok</button>
+
+            </div>
+        </div>
+    </div>
+</div>
