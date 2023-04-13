@@ -14,9 +14,10 @@ namespace Server.Services.Foundation.PlanningAppoimentService
     {
         public static MedicalPlanning MapperToNewDelayeMedicalPlanning(DelayeAppoimentMedical updateStatusAppoiment, MedicalPlanning medicalPlanning)
         {
-            medicalPlanning.Status = (StatusPlaning)updateStatusAppoiment.statusPlaningDto;
-            medicalPlanning.AppointmentDate = updateStatusAppoiment.DateAppoiment;
-            return medicalPlanning;
+            var newMedicalPlanning = medicalPlanning;
+            newMedicalPlanning.Status = (StatusPlaning)updateStatusAppoiment.statusPlaningDto;
+            newMedicalPlanning.AppointmentDate = updateStatusAppoiment.DateAppoiment;
+            return newMedicalPlanning;
         }
 
         public static MailRequest MapperMailRequestUpdateStatusAppoiment(UpdateStatusAppoimentDto updateStatusAppoiment , User user ,User UserDoctor)
@@ -43,8 +44,9 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 
         public static MedicalPlanning MapperToNewMedicalPlanning(UpdateStatusAppoimentDto updateStatusAppoiment,MedicalPlanning medicalPlanning)
         {
-            medicalPlanning.Status = (StatusPlaning)updateStatusAppoiment.statusPlaningDto;
-            return medicalPlanning;
+            var newPlanningMedical = medicalPlanning;
+            newPlanningMedical.Status = (StatusPlaning)updateStatusAppoiment.statusPlaningDto;
+            return newPlanningMedical;
         }
         public static PatientAppoimentInformationDto MapperToPatientAppoimentInformationDto(MedicalPlanning medicalPlanning)
         {

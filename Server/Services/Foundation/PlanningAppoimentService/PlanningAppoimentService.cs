@@ -306,18 +306,20 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAccount.Id);
                 ValidationDoctorIsNull(Doctor);
                 var Appoiment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid( delayeAppoiment.Id));
+                var OldDateAppoitment = Appoiment.AppointmentDate;
                 ValidatePlanningIsNull(Appoiment);
                 var newAppoimentDelay = MapperToNewDelayeMedicalPlanning(delayeAppoiment, Appoiment);
+                var ListAppoitmentOfLostPatientDelayed =  await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet, Appoiment.IdDoctor, delayeAppoiment.DateAppoiment);
+                newAppoimentDelay.AppointmentCount = ListAppoitmentOfLostPatientDelayed.Count() + 1;
                 await this.planningAppoimentManager.UpdatePlanningMedical(newAppoimentDelay);
                 var UserAccountPatient = await this._userManager.FindByIdAsync(Appoiment.IdUser);
                 var UserAccountDoctor = await this.userManager.SelectUserByIdDoctor(Appoiment.IdDoctor);
                 if(UserAccountDoctor != null && UserAccountPatient != null)
                 {
-
                    var mailRequestDelayAppoiment = MapperMailRequestDelayAppoiment(delayeAppoiment,UserAccountPatient,UserAccountDoctor);
                     await this.mailService.SendEmailNotification(mailRequestDelayAppoiment);
                 }
-                var AppoimentsCabinet = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet, Appoiment.IdDoctor, DateTime.Now);
+                var AppoimentsCabinet = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet, Appoiment.IdDoctor, OldDateAppoitment);
                 AppoimentsCabinet = AppoimentsCabinet.Where(e => e.Status == StatusPlaning.Still && e.IdUser != Appoiment.IdUser).OrderBy(e => e.AppointmentCount).ToList();
                 int k = 1;
                 foreach (var appoimentPatient in AppoimentsCabinet)

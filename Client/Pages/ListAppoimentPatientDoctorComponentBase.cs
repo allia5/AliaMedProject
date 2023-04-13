@@ -76,7 +76,7 @@ namespace Client.Pages
         {
             IndexBtnSearshloading = true;
             this.planningDtos = await this.medicalPlanningService.GetAppointmentInformationPatientDoctorDto(new KeysAppoimentInformationDoctor { CabinetId = CabinetId, DateAppoiment = DateAppoiment });
-            this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still ).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+            this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
             this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
             this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
             IndexBtnSearshloading = false;
@@ -135,26 +135,28 @@ namespace Client.Pages
                 this.ErrorMessage = e.Message;
             }
         }
-        protected  async Task décrementCountAppoimentAbsent()
+        protected async Task décrementCountAppoimentAbsent()
         {
             var k = 1;
-            foreach (var itemAbsent in planningDtosAbsent)
+            foreach (var itemAbsent in planningDtosAbsent.ToList())
             {
-                itemAbsent.PatientAppoimentInformation.AppoimentCount = k;
-                k++; 
+
+
                 var index = planningDtosAbsent.IndexOf(itemAbsent);
+                itemAbsent.PatientAppoimentInformation.AppoimentCount = k;
                 planningDtosAbsent[index] = itemAbsent;
+                k++;
             }
         }
         protected async Task décrementCountAppoimentStill()
         {
             var k = 1;
-            foreach (var itemAbsent in planningDtosStill)
+            foreach (var itemStille in planningDtosStill.ToList())
             {
-                itemAbsent.PatientAppoimentInformation.AppoimentCount = k;
-                k++; 
-                var index = planningDtosAbsent.IndexOf(itemAbsent);
-                planningDtosStill[index] = itemAbsent;
+                var index = planningDtosStill.IndexOf(itemStille);
+                itemStille.PatientAppoimentInformation.AppoimentCount = k;
+                planningDtosStill[index] = itemStille;
+                k++;
             }
         }
 

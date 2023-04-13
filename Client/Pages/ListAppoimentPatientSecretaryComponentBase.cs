@@ -38,9 +38,9 @@ namespace Client.Pages
                 {
                    
                     this.planningDtos = await this.medicalPlanningService.GetAppointmentInformationPatientSecretaryDto( new KeysAppoimentInformationSecretary { CabinetId = CabinetId ,IdDoctor = DoctorId, DateAppoiment = DateAppoiment});
-                    this.planningDtosStill = planningDtos.Where(e=>e.PatientAppoimentInformation.Status == StatusPlaningDto.Still).ToList();
-                    this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).ToList();
-                    this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).ToList();
+                    this.planningDtosStill = planningDtos.Where(e=>e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+                    this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+                    this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.IsLoading = false;
                 }
 
@@ -64,8 +64,10 @@ namespace Client.Pages
                 var itemTreated=  this.planningDtos.Where(e=>e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
                 if(itemTreated != null) { this.planningDtosTreated.Add(itemTreated); this.planningDtosStill.Remove(itemTreated); }
                 IndexBtnTwo = null;
-                
-            }catch(Exception e)
+            
+
+            }
+            catch(Exception e)
             {
                 this.ErrorMessage = e.Message;
             }
@@ -79,10 +81,38 @@ namespace Client.Pages
                 var ItemAbsent = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
                 if (ItemAbsent != null) { this.planningDtosAbsent.Add(ItemAbsent); this.planningDtosStill.Remove(ItemAbsent); }
                 IndexBtnOne = null;
+             //   await décrementCountAppoimentAbsent();
+                await décrementCountAppoimentStill();
             }
             catch (Exception e)
             {
                 this.ErrorMessage = e.Message;
+            }
+        }
+
+        protected async Task décrementCountAppoimentAbsent()
+        {
+            var k = 1;
+            foreach (var itemAbsent in planningDtosAbsent.ToList())
+            {
+                
+            
+                var index = planningDtosAbsent.IndexOf(itemAbsent);
+                itemAbsent.PatientAppoimentInformation.AppoimentCount = k;
+                planningDtosAbsent[index] = itemAbsent;
+                k++;
+            }
+        }
+        protected async Task décrementCountAppoimentStill()
+        {
+            var k = 1;
+            foreach (var itemStille in planningDtosStill.ToList())
+            {
+                
+                var index = planningDtosStill.IndexOf(itemStille);
+                itemStille.PatientAppoimentInformation.AppoimentCount = k;
+                planningDtosStill[index] = itemStille;
+                k++;
             }
         }
 
