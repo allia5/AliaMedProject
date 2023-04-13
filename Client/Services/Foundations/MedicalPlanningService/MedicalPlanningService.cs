@@ -223,7 +223,7 @@ namespace Client.Services.Foundations.MedicalPlanningService
         }
         public async Task DelayeApoimentPatient(DelayeAppoimentMedical delayeAppoiment)
         {
-            var request = new HttpRequestMessage(HttpMethod.Patch, "/api/MedicalPlanning/UpdateStatusAppoiment");
+            var request = new HttpRequestMessage(HttpMethod.Patch, "/api/MedicalPlanning/DelayAppoiment");
             var JsCabinetMedical = JsonSerializer.Serialize(delayeAppoiment);
 
             request.Content = new StringContent(JsCabinetMedical, Encoding.UTF8, "application/json");

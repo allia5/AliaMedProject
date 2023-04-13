@@ -267,7 +267,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 if (updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.passed || updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.absent)
                 {  
                     var appoimentsCabinetDoctor = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet,Appoiment.IdDoctor, Appoiment.AppointmentDate);
-                     appoimentsCabinetDoctor = appoimentsCabinetDoctor.Where(e => e.Status == StatusPlaning.Still && e.IdUser != UserAccount.Id).OrderBy(e=>e.AppointmentCount).ToList();
+                     appoimentsCabinetDoctor = appoimentsCabinetDoctor.Where(e => e.Status == StatusPlaning.Still && e.IdUser != Appoiment.IdUser).OrderBy(e=>e.AppointmentCount).ToList();
                     int k = 1;
                     foreach (var appoimentPatient in appoimentsCabinetDoctor)
                     {
@@ -317,8 +317,8 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                    var mailRequestDelayAppoiment = MapperMailRequestDelayAppoiment(delayeAppoiment,UserAccountPatient,UserAccountDoctor);
                     await this.mailService.SendEmailNotification(mailRequestDelayAppoiment);
                 }
-                var AppoimentsCabinet = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet, Appoiment.IdDoctor, Appoiment.AppointmentDate);
-                AppoimentsCabinet = AppoimentsCabinet.Where(e => e.Status == StatusPlaning.Still && e.IdUser != UserAccount.Id).OrderBy(e => e.AppointmentCount).ToList();
+                var AppoimentsCabinet = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet, Appoiment.IdDoctor, DateTime.Now);
+                AppoimentsCabinet = AppoimentsCabinet.Where(e => e.Status == StatusPlaning.Still && e.IdUser != Appoiment.IdUser).OrderBy(e => e.AppointmentCount).ToList();
                 int k = 1;
                 foreach (var appoimentPatient in AppoimentsCabinet)
                 {
