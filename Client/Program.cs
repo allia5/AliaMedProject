@@ -40,4 +40,5 @@ builder.Services.AddScoped<IMedicalPlanningService, MedicalPlanningService>();
 builder.Services.AddScoped<AuthenticationStateProvider>((provider => provider.GetRequiredService<AuthentificationStatService>()));
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
+
 await builder.Build().RunAsync();

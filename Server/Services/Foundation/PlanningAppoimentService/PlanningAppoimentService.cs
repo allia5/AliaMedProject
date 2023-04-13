@@ -295,6 +295,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 
                     }
                 }
+               
             });
 
         public async Task DelayeAppoimentPatient(string Email, DelayeAppoimentMedical delayeAppoiment) =>

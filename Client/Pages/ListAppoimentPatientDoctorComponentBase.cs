@@ -3,6 +3,7 @@ using Client.Services.Foundations.MedicalPlanningService;
 using DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.SignalR.Client;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -24,6 +25,7 @@ namespace Client.Pages
         protected List<PlanningDto> planningDtosStill = new List<PlanningDto>();
         protected List<PlanningDto> planningDtosAbsent = new List<PlanningDto>();
         protected List<PlanningDto> planningDtosTreated = new List<PlanningDto>();
+        protected HubConnection? hubConnection { get; set; }
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
@@ -34,6 +36,7 @@ namespace Client.Pages
         {
             try
             {
+                
                 var UserStat = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
                 if (UserStat.User.Identity?.IsAuthenticated ?? false)
                 {
@@ -43,7 +46,28 @@ namespace Client.Pages
                     this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.IsLoading = false;
+
+                    this.hubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7104/PlanningAppoimentHub").Build();
+                    hubConnection.On<UpdateStatusAppoimentDto>("ReceiveUpdateStatusAppoitment", (ItemUpdate) =>
+                    {
+                   
+                        if (ItemUpdate.statusPlaningDto == StatusPlaningDto.absent)
+                        {
+                            var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
+                            this.planningDtosAbsent.Add(item);
+                           
+                            
+                        }
+                        else if (ItemUpdate.statusPlaningDto == StatusPlaningDto.Treated)
+                        {
+                            var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
+                            this.planningDtosTreated.Add(item);
+                        }
+                        StateHasChanged();
+                    });
+                    await hubConnection.StartAsync();
                 }
+
 
             }
             catch (UnauthorizedException Ex)

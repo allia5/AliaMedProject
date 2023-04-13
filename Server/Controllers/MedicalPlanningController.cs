@@ -21,6 +21,7 @@ namespace Server.Controllers
     {
         public readonly IPlanningAppoimentService planningAppoimentService;
         public readonly IHubContext<PlanningAppoimentHub> hubContext;
+        
         public MedicalPlanningController(IPlanningAppoimentService planningAppoimentService, IHubContext<PlanningAppoimentHub> hubContext)
         {
             this.planningAppoimentService = planningAppoimentService;
@@ -37,6 +38,7 @@ namespace Server.Controllers
               
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.planningAppoimentService.DelayeAppoimentPatient(Email, delayeAppoiment);
+               
                 transaction.Complete();
                 return Ok();
             }
@@ -64,6 +66,8 @@ namespace Server.Controllers
                 var Role = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.planningAppoimentService.UpdateStatusAppoimentMedical(Email, updateStatusAppoimentDto,Role);
+                
+               this.hubContext.Clients.All.SendAsync("ReceiveUpdateStatusAppoitment", updateStatusAppoimentDto).Wait();
                 transaction.Complete();
                 return Ok();
             }
