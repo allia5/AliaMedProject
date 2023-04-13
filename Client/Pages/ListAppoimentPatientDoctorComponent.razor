@@ -42,7 +42,13 @@
                     <td>@item.PatientInformation.LastName</td>
                     <td>@item.PatientInformation.NationalNumber</td>
                     <td>@item.PatientInformation.NumberPhone</td>
-                    <td><button class="btn btn-success" @onclick="()=>OnDelyed(item.PatientAppoimentInformation.Id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delaye</button></td>
+                    <td><button class="btn btn-success" @onclick="()=>OnDelyed(item.PatientAppoimentInformation.Id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delaye
+                            @if( IndexBtnDelay == IdAppoimentDelyed)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            }
+                        </button></td>
                     <td><button @onclick="()=>OnPassed(item.PatientAppoimentInformation.Id)" class="btn btn-primary">Passed
                             @if (IndexBtnthree == item.PatientAppoimentInformation.Id)
                             {
@@ -128,7 +134,7 @@
         <thead>
             <tr>
                 <th scope="col">Full Name</th>
-                <th scope="col">Count Appoiment</th>
+              
                 <th scope="col">NN</th>
                 <th scope="col">Number Phone</th>
                 <th scope="col">Set Treated</th>
@@ -140,7 +146,7 @@
             {
                 <tr>
                     <td scope="row">@item.PatientInformation.FirstName -- @item.PatientInformation.LastName</td>
-                    <td>@item.PatientAppoimentInformation.AppoimentCount</td>
+                   
                     <td>@item.PatientInformation.NationalNumber</td>
                     <td>@item.PatientInformation.NumberPhone</td>
                     <td>

@@ -195,7 +195,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 ValidateCabinetMedicalIsNull(Cabinet);
                 var workDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(Doctor.Id, Cabinet.Id);
                 ValidateWorkDoctorIsNull(workDoctor);
-                var AppoimentsMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Doctor.Id, Cabinet.Id);
+                var AppoimentsMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Cabinet.Id,Doctor.Id,keysAppoimentInformationSecretary.DateAppoiment );
                 foreach (var item in AppoimentsMedical)
                 {
                     var UserAppoiment = await this._userManager.FindByIdAsync(item.IdUser);

@@ -38,7 +38,7 @@ namespace Server.Controllers
               
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.planningAppoimentService.DelayeAppoimentPatient(Email, delayeAppoiment);
-               
+                this.hubContext.Clients.All.SendAsync("ReceiveUpdateStatusAppoitment", new UpdateStatusAppoimentDto { Id=delayeAppoiment.Id,statusPlaningDto=delayeAppoiment.statusPlaningDto}).Wait();
                 transaction.Complete();
                 return Ok();
             }

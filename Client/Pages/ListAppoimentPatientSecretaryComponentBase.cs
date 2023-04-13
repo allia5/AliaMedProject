@@ -4,6 +4,7 @@ using Client.Services.Foundations.SecretaryService;
 using DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Client.Pages
 {
@@ -13,7 +14,7 @@ namespace Client.Pages
         public string CabinetId { get; set; }
         [Parameter]
         public string DoctorId { get; set; }
-
+        protected bool IndexBtnSearshloading = false;
         protected string ErrorMessage = null;
         protected bool IsLoading = true;
         protected string IndexBtnOne = null;
@@ -23,6 +24,7 @@ namespace Client.Pages
         protected List<PlanningDto> planningDtosStill = new List<PlanningDto>();
         protected List<PlanningDto> planningDtosAbsent = new List<PlanningDto>();
         protected List<PlanningDto> planningDtosTreated = new List<PlanningDto>();
+        protected HubConnection hubConnection { get; set; }
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
@@ -42,6 +44,55 @@ namespace Client.Pages
                     this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.IsLoading = false;
+
+                    this.hubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7104/PlanningAppoimentHub").Build();
+                    hubConnection.On<UpdateStatusAppoimentDto>("ReceiveUpdateStatusAppoitment", (ItemUpdate) =>
+                    {
+
+                        if (ItemUpdate.statusPlaningDto == StatusPlaningDto.absent)
+                        {
+                            var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
+                            this.planningDtosAbsent.Add(item);
+                            this.planningDtosStill.Remove(item);
+                            
+                            décrementCountAppoimentStill();
+
+
+
+                        }
+                        else if (ItemUpdate.statusPlaningDto == StatusPlaningDto.Treated)
+                        {
+                            var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
+                            this.planningDtosTreated.Add(item);
+                            this.planningDtosStill.Remove(item);
+                            var itemAbsent = this.planningDtosAbsent.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
+                            if (itemAbsent != null)
+                            {
+                                this.planningDtosAbsent.Remove(itemAbsent);
+                            }
+                        }
+                        else if (ItemUpdate.statusPlaningDto == StatusPlaningDto.passed)
+                        {
+                            var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
+                            if(item != null)
+                            {
+                                this.planningDtosTreated.Remove(item);
+                                this.planningDtosStill.Remove(item);
+                                décrementCountAppoimentStill();
+
+                            }
+
+                        }
+                        else if (ItemUpdate.statusPlaningDto == StatusPlaningDto.Delayed)
+                        {
+                            var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
+                            this.planningDtosTreated.Remove(item);
+                            this.planningDtosStill.Remove(item);
+                            décrementCountAppoimentStill();
+                        }
+                        StateHasChanged();
+                    });
+                    await hubConnection.StartAsync();
                 }
 
             }catch(UnauthorizedException Ex)
@@ -54,15 +105,23 @@ namespace Client.Pages
                 IsLoading = false;
             }
         }
-
+        protected async Task OnSearch()
+        {
+            IndexBtnSearshloading = true;
+            this.planningDtos = await this.medicalPlanningService.GetAppointmentInformationPatientSecretaryDto(new KeysAppoimentInformationSecretary { CabinetId = CabinetId, IdDoctor = DoctorId, DateAppoiment = DateAppoiment });
+            this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+            this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+            this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+            IndexBtnSearshloading = false;
+        }
         public async Task OnTreated(string IdAppoiment)
         {
             try
             {
                 IndexBtnTwo = IdAppoiment;
                 await this.medicalPlanningService.UpdateStatusApoimentPatient(new UpdateStatusAppoimentDto { Id = IdAppoiment, statusPlaningDto = StatusPlaningDto.Treated });
-                var itemTreated=  this.planningDtos.Where(e=>e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
-                if(itemTreated != null) { this.planningDtosTreated.Add(itemTreated); this.planningDtosStill.Remove(itemTreated); }
+                /*var itemTreated=  this.planningDtos.Where(e=>e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
+                if(itemTreated != null) { this.planningDtosTreated.Add(itemTreated); this.planningDtosStill.Remove(itemTreated); }*/
                 IndexBtnTwo = null;
             
 
@@ -78,11 +137,11 @@ namespace Client.Pages
             {
                 IndexBtnOne = IdAppoiment;
                 await this.medicalPlanningService.UpdateStatusApoimentPatient(new UpdateStatusAppoimentDto { Id = IdAppoiment, statusPlaningDto = StatusPlaningDto.absent });
-                var ItemAbsent = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
-                if (ItemAbsent != null) { this.planningDtosAbsent.Add(ItemAbsent); this.planningDtosStill.Remove(ItemAbsent); }
+               /* var ItemAbsent = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
+                if (ItemAbsent != null) { this.planningDtosAbsent.Add(ItemAbsent); this.planningDtosStill.Remove(ItemAbsent); }*/
                 IndexBtnOne = null;
              //   await décrementCountAppoimentAbsent();
-                await décrementCountAppoimentStill();
+                
             }
             catch (Exception e)
             {
