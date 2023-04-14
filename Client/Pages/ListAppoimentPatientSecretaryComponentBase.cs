@@ -52,10 +52,14 @@ namespace Client.Pages
                         if (ItemUpdate.statusPlaningDto == StatusPlaningDto.absent)
                         {
                             var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
-                            this.planningDtosAbsent.Add(item);
-                            this.planningDtosStill.Remove(item);
-                            
-                            décrementCountAppoimentStill();
+                            if(item != null)
+                            {
+                                this.planningDtosAbsent.Add(item);
+                                this.planningDtosStill.Remove(item);
+
+                                décrementCountAppoimentStill();
+                            }
+                      
 
 
 
@@ -63,13 +67,17 @@ namespace Client.Pages
                         else if (ItemUpdate.statusPlaningDto == StatusPlaningDto.Treated)
                         {
                             var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
-                            this.planningDtosTreated.Add(item);
-                            this.planningDtosStill.Remove(item);
-                            var itemAbsent = this.planningDtosAbsent.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
-                            if (itemAbsent != null)
+                            if (item != null)
                             {
-                                this.planningDtosAbsent.Remove(itemAbsent);
+                                this.planningDtosTreated.Add(item);
+                                this.planningDtosStill.Remove(item);
+                                var itemAbsent = this.planningDtosAbsent.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
+                                if (itemAbsent != null)
+                                {
+                                    this.planningDtosAbsent.Remove(itemAbsent);
+                                }
                             }
+                           
                         }
                         else if (ItemUpdate.statusPlaningDto == StatusPlaningDto.passed)
                         {
@@ -86,9 +94,13 @@ namespace Client.Pages
                         else if (ItemUpdate.statusPlaningDto == StatusPlaningDto.Delayed)
                         {
                             var item = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == ItemUpdate.Id).FirstOrDefault();
-                            this.planningDtosTreated.Remove(item);
-                            this.planningDtosStill.Remove(item);
-                            décrementCountAppoimentStill();
+                            if(item != null)
+                            {
+                                this.planningDtosTreated.Remove(item);
+                                this.planningDtosStill.Remove(item);
+                                décrementCountAppoimentStill();
+                            }
+                           
                         }
                         StateHasChanged();
                     });
