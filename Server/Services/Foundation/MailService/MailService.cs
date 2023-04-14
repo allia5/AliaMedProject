@@ -65,7 +65,7 @@ namespace Server.Services.Foundation.MailService
                     new KeyValuePair<string, string>("{{Link}}",
                         string.Format(appDomain + confirmationLink, user.Id, token))
                 },
-                Body = " <h3> Data Finder </h3> " +
+                Body = " <h3> AliaMed </h3> " +
                                "Cliquez sur le lien pour " + $"<a  href=\"{Link}\">confirmer votre inscription</a>" + "<br/>"
 
 
