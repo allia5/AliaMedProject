@@ -23,11 +23,11 @@
     <div class="container m-auto  ">
         <div class="form-floating  ">
                 <InputText type="texte" class="form-control" @bind-Value="RegistreAccountDto.LastName" id="LastName" placeholder="LastName"></InputText>
-            <label for="floatingPassword">LastName</label>
+            <label for="floatingPassword">Last Name</label>
         </div>
         <div class="form-floating  ">
                 <InputText type="text" class="form-control" @bind-Value="RegistreAccountDto.FirstName" id="FirstName" placeholder="FirstName"></InputText>
-            <label for="floatingPassword">FirstName</label>
+            <label for="floatingPassword">First Name</label>
         </div>
             <div class="form-floating">
                 <InputSelect class="form-control" @bind-Value="@RegistreAccountDto.Sexe">
@@ -37,7 +37,7 @@
                     <option value="2"> Famme </option>
 
                 </InputSelect>
-                <label for="floatingPassword">Sexe</label>
+                <label for="floatingPassword">Sex</label>
             </div>
             <div class="form-floating">
                 <InputDate  class="form-control" @bind-Value="RegistreAccountDto.DateOfBirth"></InputDate>
@@ -47,11 +47,11 @@
 
         <div class="form-floating  ">
                 <InputText type="text" class="form-control" @bind-Value="RegistreAccountDto.NationalNumber" id="NumberNationel" placeholder="NumberNationel"></InputText>
-            <label for="floatingPassword">Nationel Number</label>
+                                <label for="floatingPassword">National Identification Number</label>
         </div>
         <div class="form-floating ">
                 <InputText type="text" class="form-control" @bind-Value="RegistreAccountDto.PhoneNumber" id="PhoneNumber" placeholder="Phone Number"></InputText>
-            <label for="floatingPassword">Phone Number</label>
+                                <label for="floatingPassword">Phone number</label>
         </div>
     </div>
    
@@ -69,7 +69,9 @@
                     <label for="floatingPassword">Confirm Password</label>
                 </div>
                 <button  class="btn btn-light mb-3">Create Account</button>
-                
+                            <p class="mt-5 mb-3 text-muted">
+                            <p class="fw-light fs-6">Have an account already? <a href="https://localhost:7286/Login/Home">Log in</a></p>
+                            </p>
             </div>
         </EditForm>
         </div>

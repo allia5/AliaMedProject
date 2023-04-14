@@ -7,7 +7,7 @@ namespace Client.Pages
 {
     public class SignInBase : ComponentBase
     {
-        public bool isloading = true;
+        public bool isloading = false;
         public RegistreAccountDto RegistreAccountDto = new RegistreAccountDto();
         protected MessageResultDto messageResult = new MessageResultDto();
         [Inject]
@@ -32,6 +32,7 @@ namespace Client.Pages
         {
             try
             {
+                isloading = true;
                 this.messageResult = await this.SignInService.SignInAsync(RegistreAccountDto);
                 isloading = false;
 

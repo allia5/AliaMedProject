@@ -16,7 +16,7 @@ namespace Client.Pages
         protected string IdAppoimentDelyed = null;
         protected string IndexBtnTwo = null;
         protected string IndexBtnOne = null;
-        protected string IndexBtnDelay = null;
+    
         protected string IndexBtnthree=null;
         protected bool IndexBtnSearshloading = false;
         protected string ErrorMessage = null;
@@ -110,9 +110,9 @@ namespace Client.Pages
         {
             try
             {
-                IndexBtnDelay = IdAppoimentDelyed;
+               
                 await this.medicalPlanningService.DelayeApoimentPatient(new DelayeAppoimentMedical { DateAppoiment = DateAppoiment, Id = IdAppoimentDelyed, statusPlaningDto = StatusPlaningDto.Delayed });
-                IndexBtnDelay = null;
+              
                // var ItemAbsent = this.planningDtos.Where(e => e.PatientAppoimentInformation.Id == IdAppoimentDelyed).FirstOrDefault();
               //  if (ItemAbsent != null) { this.planningDtosTreated.Remove(ItemAbsent); this.planningDtosStill.Remove(ItemAbsent); }
                
@@ -135,6 +135,7 @@ namespace Client.Pages
         }
         protected async Task OnDelyed(string IdAppoiment)
         {
+        
             this.IdAppoimentDelyed =IdAppoiment;
 
         }

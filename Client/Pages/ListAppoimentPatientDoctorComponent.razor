@@ -27,9 +27,9 @@
                 <th scope="col">Last Name</th>
                 <th scope="col">NN</th>
                 <th scope="col">Number Phone</th>
-                <th scope="col">Delay Appoiment</th>
-                  <th scope="col">Passed Appoiment</th>
-                <th scope="col">File Médical</th>
+                <th scope="col">Delay an appointment</th>
+                <th scope="col">pass the appointment</th>
+                <th scope="col">medical file</th>
                
 
             </tr>
@@ -42,12 +42,9 @@
                     <td>@item.PatientInformation.LastName</td>
                     <td>@item.PatientInformation.NationalNumber</td>
                     <td>@item.PatientInformation.NumberPhone</td>
-                    <td><button class="btn btn-success" @onclick="()=>OnDelyed(item.PatientAppoimentInformation.Id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delaye
-                            @if( IndexBtnDelay == IdAppoimentDelyed)
-                            {
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                <span class="sr-only">Loading...</span>
-                            }
+                    <td>
+                        <button class="btn btn-success" @onclick="()=>OnDelyed(item.PatientAppoimentInformation.Id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Delay
                         </button></td>
                     <td><button @onclick="()=>OnPassed(item.PatientAppoimentInformation.Id)" class="btn btn-primary">Passed
                             @if (IndexBtnthree == item.PatientAppoimentInformation.Id)
@@ -80,8 +77,8 @@
                 <th scope="col">Count Appoiment</th>
                 <th scope="col">NN</th>
                 <th scope="col">Number Phone</th>
-                <th scope="col">set absent</th>
-                <th scope="col">set Treated</th>
+                <th scope="col">absent status</th>
+                <th scope="col">treatment Status</th>
 
             </tr>
         </thead>
@@ -107,7 +104,7 @@
                     </td>
                     <td>
                         <button @onclick="()=>OnTreated(item.PatientAppoimentInformation.Id)" class="btn btn-warning">
-                            Treatd
+                            to treat
                             @if (IndexBtnTwo == item.PatientAppoimentInformation.Id)
                             {
 
@@ -137,7 +134,7 @@
               
                 <th scope="col">NN</th>
                 <th scope="col">Number Phone</th>
-                <th scope="col">Set Treated</th>
+                <th scope="col">treatment Status</th>
 
             </tr>
         </thead>
@@ -151,7 +148,7 @@
                     <td>@item.PatientInformation.NumberPhone</td>
                     <td>
                         <button @onclick="()=>OnTreated(item.PatientAppoimentInformation.Id)" class="btn btn-warning">
-                            Treatd
+                            to treat
                             @if (IndexBtnTwo == item.PatientAppoimentInformation.Id)
                             {
 

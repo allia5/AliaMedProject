@@ -27,19 +27,19 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">Cabinet Name: @item.nameCabinet</h5>
-                    <p class="card-text">Adress : @item.Adress</p>
+                    <h5 class="card-title"> @item.nameCabinet</h5>
+                    <p class="card-text">Adيress : @item.Adress</p>
                     <p class="card-text">Services : @item.Services</p>
                         <p class="card-text">Number Phone:@item.NumberPhone</p>
                        
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                 
                 </div>
             </div>
         </div>
             <div class="align-self-end ml-auto ">
                 @if(item.StatusServiceDoctor == DTO.StatusWorkDoctor.accepted){
-                    <button @onclick="()=>OnInAcceptJob(item.IdJob)" class="btn btn-danger">
-                        Delete Job
+                    <button @onclick="()=>OnInAcceptJob(item.IdJob)" class="btn btn-warning">
+                        Stop Work
                         @if (Index == item.IdJob)
                         {
 
@@ -51,7 +51,7 @@
                 }
                 else @if (item.StatusServiceDoctor == DTO.StatusWorkDoctor.Notaccepted){
                     <button @onclick="()=>OnBackJob(item.IdJob)" class="btn btn-primary">
-                        Back Job
+                        Back Work
                         @if (Index == item.IdJob)
                         {
 
@@ -61,8 +61,9 @@
                         }
                     </button>
                 }
-               
-        <a href="/JobSetting/@item.IdJob.Replace("/","*")"><button class="btn btn-success">Update Job</button></a></div>
+
+                <a href="/JobSetting/@item.IdJob.Replace("/","*")"><button class="btn btn-success">work settings</button></a>
+            </div>
     </div>
     </div>
 }
