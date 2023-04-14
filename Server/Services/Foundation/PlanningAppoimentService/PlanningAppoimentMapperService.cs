@@ -26,8 +26,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             {
                 ToEmail = user.Email,
                 Subject = "Notification",
-                Body = " <h3> AliaMed.Com </h3> " +
-                                $"<a>status your appoiment has been chaged to  {updateStatusAppoiment.statusPlaningDto} By Doctor : {UserDoctor.Firstname} {UserDoctor.LastName} </a>" + "<br/>"
+                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> AliaMed.Com </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> Reservation status notification  </h5>\r\n        <p class=card-text>status your appoiment has been chaged to  {updateStatusAppoiment.statusPlaningDto} By Doctor : {UserDoctor.Firstname} {UserDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
             };
         }
 
@@ -87,8 +86,8 @@ Sexe= (Sexe)userAccount.Sexe
             {
                 ToEmail = user.Email,
                 Subject = "Notification",
-                Body = " <h3> AliaMed.Com </h3> " +
-                                $"<a>The order of your reservation number at the doctor {DoctorUserAccount.Firstname} {DoctorUserAccount.LastName} has been changed to {k}</a>" + "<br/>"
+                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> AliaMed.Com </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> Reservation status notification  </h5>\r\n        <p class=card-text>Order OfYour Appointment has been changed To <br/> <h1 class=\"display-1\">{k}</h1><br/> by Doctor :{DoctorUserAccount.Firstname} ,{DoctorUserAccount.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>" 
+                               
             };
         }
         public static MedicalPlanning MapperToNewMedicalPlanning(MedicalPlanning medicalPlanning, int CountPatient)
