@@ -12,7 +12,10 @@ namespace Client.Pages
         protected bool IsLoading = true;
         public string AdressMap = null;
         protected string Index = null;
+        protected string IndexBtnSearshloading = null;
+        protected DateTime DateAppoiment { get; set;  } = DateTime.Now;
         public List<AppointmentInformationDto> ListappointmentInformation = new List<AppointmentInformationDto>();
+        public List<AppointmentInformationDto> ListappointmentInformationTemp = new List<AppointmentInformationDto>();
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
         [Inject]
@@ -22,6 +25,10 @@ namespace Client.Pages
         [Inject]
         public ILocalStorageServices localStorageServices { get; set; }
 
+        protected async Task OnSearch()
+        {
+          this.ListappointmentInformationTemp =  this.ListappointmentInformation.Where(e => e.DateAppoiment.Date == DateAppoiment.Date).ToList();
+        }
         protected override async Task OnInitializedAsync()
         {
             try
@@ -31,6 +38,7 @@ namespace Client.Pages
                 if (result.User.Identity?.IsAuthenticated ?? false)
                 {
                     this.ListappointmentInformation = await this.medicalPlanningService.GetAppointmentInformationDto();
+                    this.ListappointmentInformationTemp = ListappointmentInformation.Where(x => x.DateAppoiment.Date == DateAppoiment.Date).OrderByDescending(x => x.DateAppoiment).ToList();   
                     IsLoading = false;
                 }
                 else
@@ -53,7 +61,8 @@ namespace Client.Pages
             {
                 this.Index = IdAppoimentMedical;
                 await this.medicalPlanningService.DeleteMedecalAppoiment(IdAppoimentMedical);
-                this.ListappointmentInformation = ListappointmentInformation.Where(e => e.Id != IdAppoimentMedical).ToList();
+                var Item = ListappointmentInformation.Where(e => e.Id == IdAppoimentMedical).FirstOrDefault();
+                this.ListappointmentInformation.Remove(Item);
                 this.Index = null;
             }
             catch (Exception e)
