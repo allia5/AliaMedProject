@@ -18,6 +18,8 @@ namespace Server.Models.MedicalOrder
         [Required]
         public DateTime ReleaseDate { get; set; }
         [Required]
+        public StatusVisibility Visibility { get; set; }
+        [Required]
         public string summary { get; set; }
         [Required]
         public StatuseOrdreMedical Status { get; set; }

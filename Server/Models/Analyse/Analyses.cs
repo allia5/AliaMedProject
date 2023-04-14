@@ -15,6 +15,9 @@ namespace Server.Models.Analyse
         public Guid Id { get; set; }
         [Required]
         public string description { get; set; }
+        [DataType(DataType.Upload)]
+
+        public byte[]? FileAnalyse { get; set; }
         [Required]
         public string QrCode { get; set; }
         public string Instruction { get; set; }

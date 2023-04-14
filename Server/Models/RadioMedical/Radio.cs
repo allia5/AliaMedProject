@@ -14,6 +14,9 @@ namespace Server.Models.RadioMedical
     {
         [Key]
         public Guid Id { get; set; }
+        [DataType(DataType.Upload)]
+
+        public byte[]? FileRadio { get; set; }
         [Required]
         public string QrCode { get; set; }
         [Required]
