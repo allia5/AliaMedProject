@@ -15,6 +15,7 @@ namespace Server.Managers.Storages.WorkDoctorManager
         public Task<List<WorkDoctors>> SelectWorksDoctorByIdDoctorActive(Guid DoctorId);
         public Task<WorkDoctors> SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(Guid DoctorId, Guid CabinetId);
         public Task<List<WorkDoctors>> SelectAllWorkDoctorWithStatusActiveByIdCabinet(Guid IdCabinet);
+        public Task<WorkDoctors> SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Guid DoctorId, Guid CabinetId);
 
     }
 }

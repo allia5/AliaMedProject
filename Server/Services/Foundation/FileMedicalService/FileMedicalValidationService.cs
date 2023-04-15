@@ -4,14 +4,31 @@ using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.MedicalPlannings;
 using Server.Models.UserAccount;
+using Server.Models.WorkDoctor;
 
 namespace Server.Services.Foundation.FileMedicalService
 {
     public partial class FileMedicalService
     {
+        public void  ValidateEntryOnGetFilePatient(string Email,string AppointmentId)
+        {
+            if(Email == null) {
+                throw new ArgumentNullException(nameof(Email));
+            }else if(AppointmentId == null)
+            {
+                throw new ArgumentNullException(nameof(AppointmentId));
+            }
+        }
+        public void ValidateWorkDoctorIsNull(WorkDoctors workDoctors)
+        {
+            if (workDoctors == null)
+            {
+                throw new NullException(nameof(workDoctors));
+            }
+        }
         public void ValidateAppointmentWithDoctor(MedicalPlanning medicalPlanning,Doctors doctors)
         {
-            if(medicalPlanning.IdDoctor != doctors.Id)
+            if(medicalPlanning.IdDoctor != doctors.Id || medicalPlanning.AppointmentDate.Date != DateTime.Now.Date)
             {
                 throw new CompatibilityError(nameof(medicalPlanning),nameof(doctors));
             }

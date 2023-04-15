@@ -5,5 +5,6 @@ namespace Server.Managers.Storages.FileMedicalManager
     public interface IFileMedicalManager
     {
         public Task<fileMedicals> InsertFileMedical(fileMedicals fileMedicals);
+        public Task<List<fileMedicals>> SelectFilesMedicalByIdUser(string UserId);
     }
 }

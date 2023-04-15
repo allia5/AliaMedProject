@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text;
 using System.Transactions;
 
 namespace Server.Utility
@@ -6,7 +7,33 @@ namespace Server.Utility
     public static class Utility
     {
         private const string encryptionKey = "AAECAwQFBgcICQoLDA0ODw==";
-        public static TransactionScope CreateAsyncTransactionScope(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+
+
+
+
+
+
+
+        public static string GenerateID(string firstname, string lastname, DateTime dateOfBirth)
+        {
+            // Concatenate the inputs into a string
+            string inputStr = $"{firstname} {lastname} {dateOfBirth.ToShortDateString()}";
+
+            // Hash the input string using SHA-256
+            SHA256 sha256 = SHA256.Create();
+            byte[] inputBytes = Encoding.UTF8.GetBytes(inputStr);
+            byte[] hashBytes = sha256.ComputeHash(inputBytes);
+            string hashStr = BitConverter.ToString(hashBytes).Replace("-", "");
+
+            // Truncate the hash to 16 characters to generate a unique ID
+            string id = hashStr.Substring(0, 16);
+
+            return id;
+        }
+    
+
+
+    public static TransactionScope CreateAsyncTransactionScope(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             var transactionOptions = new TransactionOptions
             {

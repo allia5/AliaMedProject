@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Models.Doctor.Exceptions;
 using Server.Services.Foundation.FileMedicalService;
 using System.Security.Claims;
+using System.Transactions;
+using static Server.Utility.Utility;
 
 namespace Server.Controllers
 {
@@ -18,15 +20,42 @@ namespace Server.Controllers
         {
             this.FileMedicalService = fileMedicalService;
         }
+        [HttpGet("GetFilesPatient/{IdAppointment}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult<FileMedicalMainPatientDto>> GetAllFileMedicalPatient(string IdAppointment)
+        {
+            try
+            {
+                IdAppointment = IdAppointment.Replace("-", "/");
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.FileMedicalService.GetAllFileMedicalMainPatient(Email, IdAppointment);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.InnerException);
+            }
+            catch (ServiceException ex)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
         [HttpPost("PostNewFileMedical")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
         public async Task<ActionResult<FileMedicalPatientDto>> PostNewFileMedicalPatient([FromBody] FileMedicalToAddDto fileMedicalToAdd)
         {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
+                
                 fileMedicalToAdd.IdAppointment = fileMedicalToAdd.IdAppointment.Replace("-", "/");
                 var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
-                return await this.FileMedicalService.AddNewFileMedicalPatient(email,fileMedicalToAdd);
+                var result =  await this.FileMedicalService.AddNewFileMedicalPatient(email,fileMedicalToAdd);
+                transaction.Complete();
+                return Ok(result);
             }
             catch (ValidationException Ex)
             {
@@ -39,6 +68,10 @@ namespace Server.Controllers
             catch(Exception ex)
             {
                 return Problem(ex.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
             }
         }
     }

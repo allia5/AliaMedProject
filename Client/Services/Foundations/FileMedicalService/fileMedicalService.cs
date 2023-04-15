@@ -56,5 +56,40 @@ namespace Client.Services.Foundations.FileMedicalService
                 throw new ProblemException("Error Intern");
             }
         }
+
+        public async Task<FileMedicalMainPatientDto> GetAllFileMedicalMainPatient(string IdAppointment)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/FileMedical/GetFilesPatient/{IdAppointment}");
+            var JwtBearer = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await httpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<FileMedicalMainPatientDto>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new PreconditionFailedException("Condition User denied");
+            }
+            else
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
     }
 }
