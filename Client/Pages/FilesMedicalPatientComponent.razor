@@ -1,2 +1,56 @@
 ﻿@page "/FilesMedicalPatient/{IdAppointment}"
+@inherits FilesMedicalPatientComponentBase
 
+<div class="container">
+    <div class="form-control">
+         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Adress Of Cabinet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                 <EditForm Model="fileMedicalToAdd" OnValidSubmit="OnAddFileMedical">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+                    <div class="form-floating  ">
+                        <InputText type="texte" class="form-control" @bind-Value="fileMedicalToAdd.LastName" id="LastName" placeholder="LastName"></InputText>
+                        <label for="floatingPassword">Last Name</label>
+                    </div>
+                    <div class="form-floating  ">
+                        <InputText type="text" class="form-control" @bind-Value="fileMedicalToAdd.FirstName" id="FirstName" placeholder="FirstName"></InputText>
+                        <label for="floatingPassword">First Name</label>
+                    </div>
+                    <div class="form-floating">
+                        <InputSelect class="form-control" @bind-Value="@fileMedicalToAdd.Sexe">
+
+                            <option value="1">Male </option>
+
+                            <option value="2"> Famme </option>
+
+                        </InputSelect>
+                        <label for="floatingPassword">Sex</label>
+                    </div>
+                    <div class="form-floating">
+                        <InputDate class="form-control" @bind-Value="fileMedicalToAdd.DateOfBirth"></InputDate>
+                        <label for="floatingPassword">Date Of Birth</label>
+                    </div>
+    </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button"class="btn btn-outline-primary" @onclick="OnAddFileMedical" data-bs-dismiss="modal">Add File </button>
+
+            </div>
+        </div>
+    </div>
+</div>
