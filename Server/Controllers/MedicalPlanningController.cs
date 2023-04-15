@@ -136,7 +136,6 @@ namespace Server.Controllers
             }
             catch(ServiceException Ex)
             {
-
                 return StatusCode(412);
             }catch (Exception Ex) 
             {

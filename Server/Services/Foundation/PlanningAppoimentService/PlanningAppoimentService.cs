@@ -221,7 +221,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
            
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(User.Id);
                 ValidationDoctorIsNull(Doctor);
-                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(DecryptGuid(keysAppoimentInformationDoctor.CabinetId));
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalById(DecryptGuid(keysAppoimentInformationDoctor.CabinetId));
                 ValidateCabinetMedicalIsNull(Cabinet);
                 var workDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(Doctor.Id, Cabinet.Id);
                 ValidateWorkDoctorIsNull(workDoctor);
