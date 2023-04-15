@@ -24,6 +24,7 @@ namespace Server.Controllers
         {
             try
             {
+                fileMedicalToAdd.IdAppointment = fileMedicalToAdd.IdAppointment.Replace("-", "/");
                 var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 return await this.FileMedicalService.AddNewFileMedicalPatient(email,fileMedicalToAdd);
             }

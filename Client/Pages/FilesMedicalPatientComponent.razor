@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="form-control">
-         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
+         <button class="btn btn-success" style="width:100%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add File Medical</button>
     </div>
 </div>
 
@@ -45,7 +45,13 @@
                         <InputDate class="form-control" @bind-Value="fileMedicalToAdd.DateOfBirth"></InputDate>
                         <label for="floatingPassword">Date Of Birth</label>
                     </div>
-    </EditForm>
+                  
+                    @foreach(var item in chronicDiseasesDtosToAdd)
+                    {
+                        <button class="btn btn-primary" @onclick="() => AjouterMaladie(item)">@item.name +</button>
+                    }
+
+                </EditForm>
             </div>
             <div class="modal-footer">
                 <button type="button"class="btn btn-outline-primary" @onclick="OnAddFileMedical" data-bs-dismiss="modal">Add File </button>

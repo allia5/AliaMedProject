@@ -21,6 +21,7 @@ using Server.Managers.Storages.WorkDoctorManager;
 using Server.Managers.UserManager;
 using Server.Models.UserAccount;
 using Server.Services.Foundation.CabinetMedicalService;
+using Server.Services.Foundation.ChronicDiseasesService;
 using Server.Services.Foundation.DoctorService;
 using Server.Services.Foundation.FileMedicalService;
 using Server.Services.Foundation.JwtService;
@@ -103,6 +104,7 @@ builder.Services.AddScoped<IFileMedicalManager, FileMedicalManager>();
 builder.Services.AddScoped<IFileMedicalService, FileMedicalService>();
 builder.Services.AddScoped<IChronicDiseasesManager, ChronicDiseasesManager>();
 builder.Services.AddScoped<IFileChronicDiseasesManager, FileChronicDiseasesManager>();
+builder.Services.AddScoped<IChronicDiseasesService, ChronicDiseasesService>();  
 
 builder.Services.AddSignalR();
 

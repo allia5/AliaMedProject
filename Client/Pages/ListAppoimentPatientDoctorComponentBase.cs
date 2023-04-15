@@ -136,6 +136,10 @@ namespace Client.Pages
                 this.ErrorMessage = Ex.Message;
             }
         }
+        protected async Task OnNavigateToFileMedical(string IdAppointment)
+        {
+            this.NavigationManager.NavigateTo($"/FilesMedicalPatient/{IdAppointment.Replace("/","-")}", forceLoad:true);
+        }
         protected async Task OnSearch()
         {
             IndexBtnSearshloading = true;
