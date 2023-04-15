@@ -48,13 +48,13 @@
                   
                     @foreach(var item in chronicDiseasesDtosToAdd)
                     {
-                        <button class="btn btn-primary" @onclick="() => AjouterMaladie(item)">@item.name +</button>
+                        <button type="button" class="btn btn-primary" @onclick="() => AjouterMaladie(item)">@item.name +</button>
                     }
 
                 </EditForm>
             </div>
             <div class="modal-footer">
-                <button type="button"class="btn btn-outline-primary" @onclick="OnAddFileMedical" data-bs-dismiss="modal">Add File </button>
+                <button type="submit" class="btn btn-outline-primary" @onclick="OnAddFileMedical" data-bs-dismiss="modal">Add File </button>
 
             </div>
         </div>

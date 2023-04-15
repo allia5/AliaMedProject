@@ -11,7 +11,7 @@ namespace Server.Services.Foundation.FileMedicalService
     {
         public void ValidateAppointmentWithDoctor(MedicalPlanning medicalPlanning,Doctors doctors)
         {
-            if(medicalPlanning.IdDoctor != doctors.Id ||  medicalPlanning.AppointmentDate < DateTime.Now)
+            if(medicalPlanning.IdDoctor != doctors.Id)
             {
                 throw new CompatibilityError(nameof(medicalPlanning),nameof(doctors));
             }
