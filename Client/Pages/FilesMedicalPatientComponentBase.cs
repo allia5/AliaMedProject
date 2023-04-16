@@ -12,8 +12,10 @@ namespace Client.Pages
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
         protected FileMedicalMainPatientDto FilesMainPatient = null;
+       
         protected FileMedicalToAddDto fileMedicalToAdd = new FileMedicalToAddDto();
         protected List<chronicDiseasesDto> chronicDiseasesDtos = new List<chronicDiseasesDto>();
+        protected List<chronicDiseasesDto> chronicDiseasesDtosPatient = new List<chronicDiseasesDto>();
         protected List<chronicDiseasesDto> chronicDiseasesDtosToAdd = new List<chronicDiseasesDto>();
         [Parameter]
         public string IdAppointment { get; set; }
@@ -67,6 +69,11 @@ namespace Client.Pages
 
           
         }
+        public async Task ShowchronicDiseases(string IdFileMedical)
+        {
+            var FileMedicalPatient = this.FilesMainPatient.fileMedicals.Where(e => e.Id == IdFileMedical).ToList();
+            this.chronicDiseasesDtosPatient = FileMedicalPatient.Select(e => e.chronicDiseases).First();   
+        }
 
         public async Task AjouterMaladie(chronicDiseasesDto chronicDiseases)
         {
@@ -84,6 +91,7 @@ namespace Client.Pages
                 this.FilesMainPatient.fileMedicals.Add(result);
                 this.SuccessMessage = "Operation Success";
                 chronicDiseasesDtosToAdd = new List<chronicDiseasesDto>();
+                this.chronicDiseasesDtos = await this.chronicDiseasesService.GetChronicDiseasesAsync();
             }
             catch(Exception ex)
             {

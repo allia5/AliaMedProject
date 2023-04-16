@@ -12,7 +12,8 @@ namespace Server.Managers.Storages.FileChronicDiseasesManager
         }
         public async Task<FileChronicDiseases> insertFileChronicDisease(FileChronicDiseases fileChronicDiseases)
         {
-          var result = await this.ServerDbContext.FileChronicDiseases.AddAsync(fileChronicDiseases);
+          var result =  this.ServerDbContext.FileChronicDiseases.Add(fileChronicDiseases);
+            this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
         }
     }

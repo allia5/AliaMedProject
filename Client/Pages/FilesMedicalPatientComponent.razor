@@ -1,11 +1,11 @@
 ﻿@page "/FilesMedicalPatient/{IdAppointment}"
 @inherits FilesMedicalPatientComponentBase
 
-<div class="container">
-    <div class="form-control">
-         <button class="btn btn-success" style="width:100%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add File Medical</button>
-    </div>
-</div>
+
+
+
+
+
 
 
 
@@ -15,10 +15,38 @@
 }
 @if (FilesMainPatient != null)
 {
+
+
+    <div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <img src="/FileLogo.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6 mx-auto">
+                <ul class="list-group list-group-flush ">
+                    <li class="list-group-item border-bottom">First Name : @FilesMainPatient.MainUser.FirstName</li>
+                    <li class="list-group-item border-bottom">Last Name: @FilesMainPatient.MainUser.LastName</li>
+                    <li class="list-group-item border-bottom">Sexe : @FilesMainPatient.MainUser.Sexe</li>
+                    <li class="list-group-item border-bottom">National Number : @FilesMainPatient.MainUser.NationalNumber</li>
+                    <li class="list-group-item border-bottom">Phone Number : @FilesMainPatient.MainUser.NumberPhone</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </div>
+    <br />
+    <br />
+
+
+
     @foreach (var item in FilesMainPatient.fileMedicals.ToList())
     {
+        <div class="shadow-lg p-3 mb-5 bg-light rounded">
         <div class="card">
-            <h5 class="card-header">Featured</h5>
+            <h5 class="card-header">Partial File</h5>
             <div class="card-body">
                 <h5 class="card-title">FullName :@item.FirstName,@item.LastName</h5>
                 <p class="card-text">Date of Birth :@item.DateOfBirth</p>
@@ -29,8 +57,19 @@
                 {
                       <p class="card-text">Doctor Create File Medical :@item.Doctor.FirstName @item.Doctor.LastName  </p>
                 }
+                    <div class="container">
+                        <div class="row">
+                        <div class="col"><button class=" btn btn-success w-100">Update File</button>
+                            </div>
+                            <div class="col">
+                                <button class=" btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" @onclick="()=>ShowchronicDiseases(item.Id)">chronic diseases</button>
+                        </div>
+                        </div>
+                        </div>
             </div>
         </div>
+        </div>
+
     }
 }
 
@@ -38,11 +77,35 @@
 
 <!-- Modal -->
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Adress Of Cabinet</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">chronic diseases</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    @foreach (var Maladie in chronicDiseasesDtosPatient)
+                    {
+                        <li class="list-group-item">@Maladie.name</li>
+                    }
+                </ul>
+               
+            </div>
+         
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add New File</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -65,7 +128,7 @@
                             <option value="2"> Famme </option>
 
                         </InputSelect>
-                        <label for="floatingPassword">Sex</label>
+                        <label for="floatingPassword">Sexe</label>
                     </div>
                     <div class="form-floating">
                         <InputDate class="form-control" @bind-Value="fileMedicalToAdd.DateOfBirth"></InputDate>
@@ -74,7 +137,7 @@
                   
                     @foreach(var item in chronicDiseasesDtos)
                     {
-                        <button type="button" class="btn btn-primary" @onclick="() => AjouterMaladie(item)">@item.name +</button>
+                        <button type="button" style="border-radius:15px;" class="btn btn-primary" @onclick="() => AjouterMaladie(item)">@item.name +</button>
                     }
 
                 </EditForm>
@@ -84,5 +147,11 @@
 
             </div>
         </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="form-control">
+        <button class="btn btn-secondary" style="width:100%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Add File Medical</button>
     </div>
 </div>
