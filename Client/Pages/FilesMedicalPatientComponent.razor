@@ -73,6 +73,9 @@
                             <div class="col">
                                 <button class=" btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" @onclick="()=>ShowchronicDiseases(item.Id)">chronic diseases</button>
                         </div>
+                            <div class="col">
+                                <button class=" btn btn-dark w-100"  >Order Medical</button>
+                            </div>
                         </div>
                         </div>
             </div>
@@ -207,7 +210,7 @@
                         <label for="floatingPassword">Date Of Birth</label>
                     </div>
                   
-                    @foreach(var item in chronicDiseasesDtos)
+                    @foreach (var item in chronicDiseasesDtosNotInToAdd)
                     {
                         <button type="button" style="border-radius:15px;" class="btn btn-primary" @onclick="() => AjouterMaladie(item)">@item.name +</button>
                     }
@@ -224,6 +227,6 @@
 
 <div class="container">
     <div class="form-control">
-        <button class="btn btn-secondary" style="width:100%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Add File Medical</button>
+        <button class="btn btn-secondary" @onclick="BtnOnAddFile" style="width:100%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Add File Medical</button>
     </div>
 </div>

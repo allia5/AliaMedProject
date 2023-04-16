@@ -19,6 +19,7 @@ namespace Client.Pages
         protected List<chronicDiseasesDto> chronicDiseasesDtos = new List<chronicDiseasesDto>();
         protected List<chronicDiseasesDto> chronicDiseasesDtosPatient = new List<chronicDiseasesDto>();
         protected List<chronicDiseasesDto> chronicDiseasesDtosToAdd = new List<chronicDiseasesDto>();
+        protected List<chronicDiseasesDto> chronicDiseasesDtosNotInToAdd = new List<chronicDiseasesDto>();
         [Parameter]
         public string IdAppointment { get; set; }
         [Inject]
@@ -40,7 +41,9 @@ namespace Client.Pages
                     this.IsLoading = true;
                     this.FilesMainPatient = await this.FilemedicalService.GetAllFileMedicalMainPatient(IdAppointment);
                     this.chronicDiseasesDtos = await this.chronicDiseasesService.GetChronicDiseasesAsync();
+                    this.chronicDiseasesDtosNotInToAdd = chronicDiseasesDtos;
                     this.IsLoading = false;
+                    
                     /*     foreach (var Item in chronicDiseasesDtos.ToList())
                          {
                              foreach(var ItemToAdd in chronicDiseasesDtosToAdd.ToList())
@@ -66,17 +69,21 @@ namespace Client.Pages
             catch(Exception ex)
             {
                 this.ErrorMessage=ex.Message;
+                this.IsLoading = false;
             }
           
 
           
         }
+
+        /*function update File Medical*/
         public async Task OnUpdateFileMedical()
         {
             try
             {
                 FileMedicalToUpdate.AppointmentId = IdAppointment;
                 await this.FilemedicalService.UpdateFileMedicalPatient(FileMedicalToUpdate);
+                this.SuccessMessage = "Operation Suucess";
 
             }
             catch(Exception ex)
@@ -134,17 +141,34 @@ namespace Client.Pages
             }
 
         }
+
+
+        /*Function Show Chronic Disease*/
+
         public async Task ShowchronicDiseases(string IdFileMedical)
         {
             var FileMedicalPatient = this.FilesMainPatient.fileMedicals.Where(e => e.Id == IdFileMedical).FirstOrDefault();
             this.chronicDiseasesDtosPatient = FileMedicalPatient.chronicDiseases;
         }
 
+
+
+
+
+
+        /*Function Add Files*/
+
+
+        protected async Task BtnOnAddFile()
+        {
+            chronicDiseasesDtosNotInToAdd = this.chronicDiseasesDtos;
+        }
+
         public async Task AjouterMaladie(chronicDiseasesDto chronicDiseases)
         {
 
             this.chronicDiseasesDtosToAdd.Add(chronicDiseases);
-            this.chronicDiseasesDtos.Remove(chronicDiseases);
+            this.chronicDiseasesDtosNotInToAdd.Remove(chronicDiseases);
         }
 
         protected async Task OnAddFileMedical()

@@ -223,7 +223,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 ValidationDoctorIsNull(Doctor);
                 var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalById(DecryptGuid(keysAppoimentInformationDoctor.CabinetId));
                 ValidateCabinetMedicalIsNull(Cabinet);
-                var workDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(Doctor.Id, Cabinet.Id);
+                var workDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Doctor.Id, Cabinet.Id);
                 ValidateWorkDoctorIsNull(workDoctor);
                 var AppoimentsMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Cabinet.Id, Doctor.Id,keysAppoimentInformationDoctor.DateAppoiment);
                 foreach (var item in AppoimentsMedical)
