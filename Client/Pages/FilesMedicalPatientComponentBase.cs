@@ -11,6 +11,7 @@ namespace Client.Pages
         protected bool IsLoading = true;
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
+        protected FileMedicalMainPatientDto FilesMainPatient = null;
         protected FileMedicalToAddDto fileMedicalToAdd = new FileMedicalToAddDto();
         protected List<chronicDiseasesDto> chronicDiseasesDtos = new List<chronicDiseasesDto>();
         protected List<chronicDiseasesDto> chronicDiseasesDtosToAdd = new List<chronicDiseasesDto>();
@@ -21,47 +22,56 @@ namespace Client.Pages
         [Inject]
         public IChronicDiseasesService chronicDiseasesService { get; set; }
         [Inject]
-        public IfileMedicalService medicalService { get; set; }
+        public IfileMedicalService FilemedicalService { get; set; }
         [Inject]
         public NavigationManager NavigationManager { get; set; }
       
         protected override async Task OnInitializedAsync()
         {
-          
-            var ResultAuth = await this.AuthentificationStatService.GetAuthenticationStateAsync();
-            if (ResultAuth.User.Identity?.IsAuthenticated ?? false)
+            try
             {
-                this.chronicDiseasesDtos = await this.chronicDiseasesService.GetChronicDiseasesAsync();
-                bool isIn = false;
-                foreach (var Item in chronicDiseasesDtos.ToList())
+                var ResultAuth = await this.AuthentificationStatService.GetAuthenticationStateAsync();
+                if (ResultAuth.User.Identity?.IsAuthenticated ?? false)
                 {
-                    foreach(var ItemToAdd in chronicDiseasesDtosToAdd.ToList())
-                    {
-                        if(Item == ItemToAdd)
-                        {
-                            isIn = true;
-                        }
-                    }
-                    if(isIn==false)
-                    {
-                        chronicDiseasesDtosToAdd.Add(Item);
-                        chronicDiseasesDtos.Remove(Item);
-                    }
-                    isIn = false;
+                    this.IsLoading = true;
+                    this.FilesMainPatient = await this.FilemedicalService.GetAllFileMedicalMainPatient(IdAppointment);
+                    this.chronicDiseasesDtos = await this.chronicDiseasesService.GetChronicDiseasesAsync();
+                    this.IsLoading = false;
+                    /*     foreach (var Item in chronicDiseasesDtos.ToList())
+                         {
+                             foreach(var ItemToAdd in chronicDiseasesDtosToAdd.ToList())
+                             {
+                                 if(Item == ItemToAdd)
+                                 {
+                                     isIn = true;
+                                 }
+                             }
+                             if(isIn==false)
+                             {
+                                 chronicDiseasesDtosToAdd.Add(Item);
+                                 chronicDiseasesDtos.Remove(Item);
+                             }
+                             isIn = false;
+                         }*/
+                }
+                else
+                {
+                    this.NavigationManager.NavigateTo("/Login/Home"); this.IsLoading = false;
                 }
             }
-            else
+            catch(Exception ex)
             {
-                this.NavigationManager.NavigateTo("/Login/Home");
+                this.ErrorMessage=ex.Message;
             }
+          
 
           
         }
 
         public async Task AjouterMaladie(chronicDiseasesDto chronicDiseases)
         {
-            this.chronicDiseasesDtos.Add(chronicDiseases);
-            this.chronicDiseasesDtosToAdd.Remove(chronicDiseases);
+            this.chronicDiseasesDtosToAdd.Add(chronicDiseases);
+            this.chronicDiseasesDtos.Remove(chronicDiseases);
         }
 
         protected async Task OnAddFileMedical()
@@ -69,9 +79,11 @@ namespace Client.Pages
             try
             {
                 fileMedicalToAdd.IdAppointment = IdAppointment;
-                fileMedicalToAdd.chronicDiseases = chronicDiseasesDtos;
-                var result = await this.medicalService.PostFileMedicalPatientAsync(fileMedicalToAdd);
+                fileMedicalToAdd.chronicDiseases = chronicDiseasesDtosToAdd;
+                var result = await this.FilemedicalService.PostFileMedicalPatientAsync(fileMedicalToAdd);
+                this.FilesMainPatient.fileMedicals.Add(result);
                 this.SuccessMessage = "Operation Success";
+                chronicDiseasesDtosToAdd = new List<chronicDiseasesDto>();
             }
             catch(Exception ex)
             {

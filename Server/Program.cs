@@ -102,7 +102,7 @@ builder.Services.AddScoped<ISecretaryService, SecretaryService>();
 builder.Services.AddScoped<IPlanningAppoimentManager, PlanningAppoimentManager>();
 builder.Services.AddScoped<IPlanningAppoimentService, PlanningAppoimentService>();
 builder.Services.AddScoped<IFileMedicalManager, FileMedicalManager>();
-builder.Services.AddScoped<IOrdreMedicalManager, IOrdreMedicalManager>();   
+builder.Services.AddScoped<IOrdreMedicalManager, OrdreMedicalManager>();   
 builder.Services.AddScoped<IFileMedicalService, FileMedicalService>();
 builder.Services.AddScoped<IChronicDiseasesManager, ChronicDiseasesManager>();
 builder.Services.AddScoped<IFileChronicDiseasesManager, FileChronicDiseasesManager>();

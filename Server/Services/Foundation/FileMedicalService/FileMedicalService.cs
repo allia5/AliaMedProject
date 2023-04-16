@@ -14,6 +14,7 @@ using Server.Managers.Storages.ChronicDiseasesManager;
 using Server.Managers.Storages.FileChronicDiseasesManager;
 using Server.Managers.Storages.WorkDoctorManager;
 using Server.Managers.Storages.OrdreMedicalManager;
+using Server.Managers.Storages.SpecialitiesManager;
 
 namespace Server.Services.Foundation.FileMedicalService
 {
@@ -28,9 +29,12 @@ namespace Server.Services.Foundation.FileMedicalService
         public readonly IPlanningAppoimentManager planningAppoimentManager;
         public readonly IWorkDoctorManager workDoctorManager;
         public readonly IOrdreMedicalManager ordreMedicalManager;
+        public readonly ISpecialitiesManager specialitiesManager;
         
-        public FileMedicalService(IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
+        public FileMedicalService(ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
         {
+            this.ordreMedicalManager=ordreMedicalManager;
+            this.specialitiesManager = specialitiesManager;
             this.workDoctorManager = workDoctorManager;
             this.fileChronicDiseasesManager= fileChronicDiseasesManager;
             this.chronicDiseasesManager= chronicDiseasesManager;
@@ -46,6 +50,7 @@ namespace Server.Services.Foundation.FileMedicalService
             {
                 List<FileMedicalPatientDto> fileMedicalPatientDtos = new List<FileMedicalPatientDto>();
                 List<chronicDiseasesDto> chronicDiseasesDtos = new List<chronicDiseasesDto>();
+                
                 ValidateEntryOnGetFilePatient(Email, IdAppointment);
                 var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(UserAccountDoctor);
@@ -61,19 +66,33 @@ namespace Server.Services.Foundation.FileMedicalService
                 var ListFilesMedicalPatient = await this.fileMedicalManager.SelectFilesMedicalByIdUser(UserAccountPatient.Id);
                 foreach (var file in ListFilesMedicalPatient)
                 {
-                    var ListOrdreMedicalFileMeicalPatient = await this.ordreMedicalManager.SelectListOrdreMedicalByIdMedicalFile(file.Id);
-                    var ListChronicDiseases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdMedicalFileAsync(file.Id);
-                    foreach(var ItemChronicDeases in ListChronicDiseases)
+                    var DoctorAccountCreatedFile = await this.userManager.SelectUserByIdDoctor(file.IdDoctor);
+                    var specialitiesDoctor = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(file.IdDoctor);
+                        var ListOrdreMedicalFileMeicalPatient = await this.ordreMedicalManager.SelectListOrdreMedicalByIdMedicalFile(file.Id);
+                        var ListChronicDiseases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdMedicalFileAsync(file.Id);
+                        foreach (var ItemChronicDeases in ListChronicDiseases)
+                        {
+                            var ChronicDiseases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdAsync(ItemChronicDeases.IdChronicDisease);
+                             if(ChronicDiseases != null)
+                             {
+                                 var result = MapperTochronicDiseasesDto(ChronicDiseases);
+                                 chronicDiseasesDtos.Add(result);
+                             }
+                        }
+                if(DoctorAccountCreatedFile != null && chronicDiseasesDtos != null && specialitiesDoctor != null)
                     {
-                        var ChronicDiseases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdAsync(ItemChronicDeases.IdChronicDisease);
-                        var result = MapperTochronicDiseasesDto(ChronicDiseases);
-                        chronicDiseasesDtos.Add(result);
-                        
+                        var resultMappingFileMedicalPatientDto = MapperTofileMedicalPatientDtos(ListOrdreMedicalFileMeicalPatient.Count(), chronicDiseasesDtos, DoctorAccountCreatedFile, file, specialitiesDoctor);
+                        fileMedicalPatientDtos.Add(resultMappingFileMedicalPatientDto);
                     }
-                    var resultMappingFileMedicalPatientDto = MapperTofileMedicalPatientDtos(ListOrdreMedicalFileMeicalPatient.Count(), chronicDiseasesDtos, UserAccountDoctor,file);
-                    fileMedicalPatientDtos.Add(resultMappingFileMedicalPatientDto);
-                   chronicDiseasesDtos = new List<chronicDiseasesDto>();
+                        
+                        chronicDiseasesDtos = new List<chronicDiseasesDto>();
+                       
+
+
+
+
                 }
+                
                 var ResultMappingUserInformationDto = MppperToPatientInformationDto(UserAccountPatient);
                 return MapperToFileMedicalMainPatientDto(fileMedicalPatientDtos, ResultMappingUserInformationDto);
 
@@ -89,6 +108,7 @@ namespace Server.Services.Foundation.FileMedicalService
                 ValidateUserIsNull(UserAccountDoctor);
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAccountDoctor.Id);
                 ValidationDoctorIsNull(Doctor);
+                var SpecialitiesDoctor = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(Doctor.Id);
                 var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid( fileMedicalToAdd.IdAppointment));
                 ValidatePlanningIsNull(Appointment);
                 ValidateAppointmentWithDoctor(Appointment, Doctor);
@@ -104,7 +124,8 @@ namespace Server.Services.Foundation.FileMedicalService
                         await this.fileChronicDiseasesManager.insertFileChronicDisease(new Models.FileChronicDisease.FileChronicDiseases { Id = Guid.NewGuid(), IdFile = newFileMedical.Id, IdChronicDisease = chroniqueDisease.Id });
                     }
                 }
-               return MapperToFileMedicalPatient(UserAccountDoctor,newFileMedical,fileMedicalToAdd);
+                
+               return MapperToFileMedicalPatient(UserAccountDoctor,newFileMedical,fileMedicalToAdd,SpecialitiesDoctor);
 
 
             });

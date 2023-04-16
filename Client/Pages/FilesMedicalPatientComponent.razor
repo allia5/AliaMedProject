@@ -9,6 +9,32 @@
 
 
 
+@if (IsLoading == true)
+{
+    <WaitComponent />
+}
+@if (FilesMainPatient != null)
+{
+    @foreach (var item in FilesMainPatient.fileMedicals.ToList())
+    {
+        <div class="card">
+            <h5 class="card-header">Featured</h5>
+            <div class="card-body">
+                <h5 class="card-title">FullName :@item.FirstName,@item.LastName</h5>
+                <p class="card-text">Date of Birth :@item.DateOfBirth</p>
+                <p class="card-text">Sexe :@item.Sexe</p>
+                <p class="card-text">count Order Medical : @item.CountOrderMedical</p>
+                <p class="card-text">Date Of Create :@item.DateOfCreate</p>
+                @if (@item.Doctor != null)
+                {
+                      <p class="card-text">Doctor Create File Medical :@item.Doctor.FirstName @item.Doctor.LastName  </p>
+                }
+            </div>
+        </div>
+    }
+}
+
+
 
 <!-- Modal -->
 
@@ -46,7 +72,7 @@
                         <label for="floatingPassword">Date Of Birth</label>
                     </div>
                   
-                    @foreach(var item in chronicDiseasesDtosToAdd)
+                    @foreach(var item in chronicDiseasesDtos)
                     {
                         <button type="button" class="btn btn-primary" @onclick="() => AjouterMaladie(item)">@item.name +</button>
                     }
