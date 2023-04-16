@@ -8,7 +8,30 @@ namespace Server.Services.Foundation.FileMedicalService
     {
         public delegate Task<FileMedicalPatientDto> ReturningFileMedicalPatientAsync();
         public delegate Task<FileMedicalMainPatientDto> ReturningFileMedicalMainPatientAsync();
+        public delegate Task ReturningUpdateFileMedical();
 
+        public async Task TryCatch(ReturningUpdateFileMedical returningUpdateFileMedical)
+        {
+            try
+            {
+                await returningUpdateFileMedical();
+            }
+            catch (ArgumentNullException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch (NullException Ex)
+            {
+                throw new ServiceException(Ex);
+            }catch(StatusValidationException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch(CompatibilityError Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+        }
         public async Task<FileMedicalMainPatientDto> TryCatch(ReturningFileMedicalMainPatientAsync returningFileMedicalMainPatient)
         {
             try

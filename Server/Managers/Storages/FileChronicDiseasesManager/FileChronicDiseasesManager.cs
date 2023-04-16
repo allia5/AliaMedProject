@@ -1,4 +1,5 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.Models.FileChronicDisease;
 
 namespace Server.Managers.Storages.FileChronicDiseasesManager
@@ -15,6 +16,16 @@ namespace Server.Managers.Storages.FileChronicDiseasesManager
           var result =  this.ServerDbContext.FileChronicDiseases.Add(fileChronicDiseases);
             this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public async Task DeleteFileFileChronicDiseaseByFileId(Guid FileId)
+        {
+            var FileChronicDeases = await (from item in this.ServerDbContext.FileChronicDiseases where item.IdFile == FileId select item).ToListAsync();
+            foreach(var ItemToRemove in FileChronicDeases)
+            {
+                this.ServerDbContext.FileChronicDiseases.Remove(ItemToRemove);
+                await this.ServerDbContext.SaveChangesAsync();
+            }
         }
     }
 }

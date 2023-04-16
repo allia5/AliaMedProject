@@ -26,5 +26,17 @@ namespace Server.Managers.Storages.FileMedicalManager
         {
             return await (from file in this.ServerDbContext.fileMedicals where file.IdUser == UserId select file).ToListAsync();
         }
+
+        public async Task<fileMedicals> SelectFileMedicalByIdAsync(Guid FileId)
+        {
+            return await (from file in this.ServerDbContext.fileMedicals where file.Id == FileId select file).FirstOrDefaultAsync();
+        }
+
+        public async Task<fileMedicals> UpdateFileMedicalAsync(fileMedicals fileMedicals)
+        {
+            var result =  this.ServerDbContext.fileMedicals.Update(fileMedicals);
+            this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }

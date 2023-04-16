@@ -129,6 +129,36 @@ namespace Server.Services.Foundation.FileMedicalService
 
 
             });
-       
+
+        public async Task UpdateFileMedicalService(string Email,UpdateFileMedicalDto UpdateFileMedical) =>
+            await TryCatch(async () =>
+            {
+                ValidateEntryOnUpdateFileMedical(Email, UpdateFileMedical);
+                var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccountDoctor);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAccountDoctor.Id);
+                ValidationDoctorIsNull(Doctor);
+                var Appoiment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid( UpdateFileMedical.AppointmentId));
+                ValidatePlanningIsNull(Appoiment);
+                ValidateAppointmentWithDoctor(Appoiment, Doctor);
+                var WorkDoctorActive = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Appoiment.IdDoctor,Appoiment.IdCabinet);
+                ValidateWorkDoctorIsNull(WorkDoctorActive);
+                var FileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(DecryptGuid(UpdateFileMedical.FileId));
+                validateeFileMedicalIsNull(FileMedical);
+                await this.fileChronicDiseasesManager.DeleteFileFileChronicDiseaseByFileId(FileMedical.Id);
+                foreach (var item in UpdateFileMedical.ChronicDiseases)
+                {
+                    var ChronicDiseases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdAsync(item.id);
+                    if(ChronicDiseases != null)
+                    {
+                        await this.fileChronicDiseasesManager.insertFileChronicDisease(new Models.FileChronicDisease.FileChronicDiseases { Id=Guid.NewGuid() , IdFile = FileMedical.Id ,IdChronicDisease=ChronicDiseases.Id});
+                    }
+                }
+                var newIdentifieMedecal = GenerateID(UpdateFileMedical.FirstName, UpdateFileMedical.LastName, UpdateFileMedical.DateOfBirth);
+                var newFile = MapperToFileMedicalUpdated(FileMedical, UpdateFileMedical);
+                await this.fileMedicalManager.UpdateFileMedicalAsync(newFile);
+
+            });
+        
     }
 }

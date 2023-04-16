@@ -2,6 +2,7 @@
 using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
+using Server.Models.fileMedical;
 using Server.Models.MedicalPlannings;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
@@ -10,6 +11,23 @@ namespace Server.Services.Foundation.FileMedicalService
 {
     public partial class FileMedicalService
     {
+       public void validateeFileMedicalIsNull(fileMedicals fileMedicals)
+        {
+            if (ArePropertiesNull(fileMedicals))
+            {
+                throw new NullException(nameof(fileMedicals));
+            }
+        }
+        public void ValidateEntryOnUpdateFileMedical(string Email,UpdateFileMedicalDto updateFileMedicalDto)
+        {
+            if(ArePropertiesNull(updateFileMedicalDto) == false)
+            {
+                throw new ArgumentNullException(nameof(updateFileMedicalDto));
+            }else if(Email == null)
+            {
+                throw new ArgumentNullException(nameof(Email));
+            }
+        }
         public void  ValidateEntryOnGetFilePatient(string Email,string AppointmentId)
         {
             if(Email == null) {

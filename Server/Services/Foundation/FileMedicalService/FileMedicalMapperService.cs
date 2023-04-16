@@ -54,6 +54,14 @@ namespace Server.Services.Foundation.FileMedicalService
 
             };
         }
+        public static fileMedicals MapperToFileMedicalUpdated(fileMedicals fileMedicals , UpdateFileMedicalDto updateFileMedical)
+        {
+            fileMedicals.DateOfBirth = updateFileMedical.DateOfBirth;
+            fileMedicals.Lastname = updateFileMedical.LastName;
+            fileMedicals.Sexe = (EnumSexe)updateFileMedical.Sexe;
+            return fileMedicals;
+
+        }
         public static fileMedicals MapperToFileMedical(FileMedicalToAddDto fileMedicalToAdd , MedicalPlanning medicalPlanning)
         {
             return new fileMedicals
