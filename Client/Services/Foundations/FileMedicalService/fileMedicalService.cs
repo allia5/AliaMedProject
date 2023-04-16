@@ -91,5 +91,34 @@ namespace Client.Services.Foundations.FileMedicalService
                 throw new ProblemException("Error Intern");
             }
         }
+
+        public async Task UpdateFileMedicalPatient(UpdateFileMedicalDto updateFileMedicalDto)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Patch, "/api/FileMedical/PatchFileMedical");
+            var keysReservation = JsonSerializer.Serialize(updateFileMedicalDto);
+
+            request.Content = new StringContent(keysReservation, Encoding.UTF8, "application/json");
+            var JwtBearer = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await httpClient.SendAsync(request);
+
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new PreconditionFailedException("Condition User denied");
+            }
+
+            else if(result.StatusCode == HttpStatusCode.InternalServerError) 
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace Server.Managers.Storages.FileMedicalManager
         public async Task<fileMedicals> UpdateFileMedicalAsync(fileMedicals fileMedicals)
         {
             var result =  this.ServerDbContext.fileMedicals.Update(fileMedicals);
-            this.ServerDbContext.SaveChangesAsync();
+            await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
         }
     }

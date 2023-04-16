@@ -12,8 +12,10 @@ namespace Client.Pages
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
         protected FileMedicalMainPatientDto FilesMainPatient = null;
-       
+        protected UpdateFileMedicalDto FileMedicalToUpdate =null;
         protected FileMedicalToAddDto fileMedicalToAdd = new FileMedicalToAddDto();
+
+        protected List<chronicDiseasesDto> chronicDiseasesUpdateDtosNotIn = new  List<chronicDiseasesDto>();
         protected List<chronicDiseasesDto> chronicDiseasesDtos = new List<chronicDiseasesDto>();
         protected List<chronicDiseasesDto> chronicDiseasesDtosPatient = new List<chronicDiseasesDto>();
         protected List<chronicDiseasesDto> chronicDiseasesDtosToAdd = new List<chronicDiseasesDto>();
@@ -69,14 +71,78 @@ namespace Client.Pages
 
           
         }
+        public async Task OnUpdateFileMedical()
+        {
+            try
+            {
+                FileMedicalToUpdate.AppointmentId = IdAppointment;
+                await this.FilemedicalService.UpdateFileMedicalPatient(FileMedicalToUpdate);
+
+            }
+            catch(Exception ex)
+            {
+                this.ErrorMessage= ex.Message;
+            }
+           
+
+        }
+        public async Task DeleteMaladieOnUpdate(chronicDiseasesDto chronicDiseasesDto)
+        {
+            this.FileMedicalToUpdate.ChronicDiseases.Remove(chronicDiseasesDto);
+            this.chronicDiseasesUpdateDtosNotIn.Add(chronicDiseasesDto);
+
+        }
+        public async Task AddMaladieOnUpdate(chronicDiseasesDto chronicDiseasesDto)
+        {
+            this.FileMedicalToUpdate.ChronicDiseases.Add(chronicDiseasesDto);
+            this.chronicDiseasesUpdateDtosNotIn.Remove(chronicDiseasesDto);
+        }
+        
+
+        public async Task GetInformationFileMedicalUpdate(string FileMedicalId )
+        {
+            this.FileMedicalToUpdate = new UpdateFileMedicalDto();
+            this.FileMedicalToUpdate.ChronicDiseases = new List<chronicDiseasesDto>();
+            this.chronicDiseasesUpdateDtosNotIn = new List<chronicDiseasesDto>();
+            var FileMedicalPatient = this.FilesMainPatient.fileMedicals.Where(e => e.Id == FileMedicalId).FirstOrDefault();
+            this.FileMedicalToUpdate.ChronicDiseases = FileMedicalPatient.chronicDiseases;
+          
+            this.FileMedicalToUpdate.DateOfBirth = FileMedicalPatient.DateOfBirth;
+            this.FileMedicalToUpdate.FirstName= FileMedicalPatient.FirstName;
+            this.FileMedicalToUpdate.LastName= FileMedicalPatient.LastName;
+            this.FileMedicalToUpdate.Sexe = FileMedicalPatient.Sexe;
+            this.FileMedicalToUpdate.FileId = FileMedicalPatient.Id;
+            bool index = false;
+
+           foreach (var itemOne in this.chronicDiseasesDtos.ToList())
+            {
+                foreach (var itemTwo in this.FileMedicalToUpdate.ChronicDiseases.ToList())
+                {
+                    if(itemOne.name == itemTwo.name)
+                    {
+                        index = true;
+                       
+                    }
+                   
+                }
+                if (index == false)
+                {
+                    this.chronicDiseasesUpdateDtosNotIn.Add(itemOne);
+                }
+               
+                index = false;
+            }
+
+        }
         public async Task ShowchronicDiseases(string IdFileMedical)
         {
-            var FileMedicalPatient = this.FilesMainPatient.fileMedicals.Where(e => e.Id == IdFileMedical).ToList();
-            this.chronicDiseasesDtosPatient = FileMedicalPatient.Select(e => e.chronicDiseases).First();   
+            var FileMedicalPatient = this.FilesMainPatient.fileMedicals.Where(e => e.Id == IdFileMedical).FirstOrDefault();
+            this.chronicDiseasesDtosPatient = FileMedicalPatient.chronicDiseases;
         }
 
         public async Task AjouterMaladie(chronicDiseasesDto chronicDiseases)
         {
+
             this.chronicDiseasesDtosToAdd.Add(chronicDiseases);
             this.chronicDiseasesDtos.Remove(chronicDiseases);
         }

@@ -6,5 +6,6 @@ namespace Client.Services.Foundations.FileMedicalService
     {
         public Task<FileMedicalPatientDto> PostFileMedicalPatientAsync(FileMedicalToAddDto fileMedicalToAdd);
         public Task<FileMedicalMainPatientDto> GetAllFileMedicalMainPatient(string IdAppointment);
+        public Task UpdateFileMedicalPatient(UpdateFileMedicalDto updateFileMedicalDto);
     }
 }

@@ -20,6 +20,33 @@ namespace Server.Controllers
         {
             this.FileMedicalService = fileMedicalService;
         }
+        [HttpPatch("PatchFileMedical")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult> UpdateFileMedical(UpdateFileMedicalDto updateFileMedicalDto)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+                updateFileMedicalDto.AppointmentId = updateFileMedicalDto.AppointmentId.Replace("-", "/");
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.FileMedicalService.UpdateFileMedicalService(Email, updateFileMedicalDto);
+               transaction.Complete();
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch(Exception ex)
+            {
+                return Problem(ex.Message);
+            }finally { transaction.Dispose(); }
+        }
+
         [HttpGet("GetFilesPatient/{IdAppointment}")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
         public async Task<ActionResult<FileMedicalMainPatientDto>> GetAllFileMedicalPatient(string IdAppointment)

@@ -5,7 +5,15 @@
 
 
 
+@if(ErrorMessage != null)
+{
+    <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}
 
+@if(SuccessMessage != null)
+{
+    <CorrectRoutingMessage></CorrectRoutingMessage>
+}
 
 
 
@@ -59,7 +67,8 @@
                 }
                     <div class="container">
                         <div class="row">
-                        <div class="col"><button class=" btn btn-success w-100">Update File</button>
+                            <div class="col">
+                                <button @onclick="()=>GetInformationFileMedicalUpdate(item.Id)" class=" btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Update File</button>
                             </div>
                             <div class="col">
                                 <button class=" btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" @onclick="()=>ShowchronicDiseases(item.Id)">chronic diseases</button>
@@ -74,8 +83,71 @@
 }
 
 
+<div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">chronic diseases</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if(FileMedicalToUpdate != null)
+                {
+                    <EditForm Model="FileMedicalToUpdate" OnValidSubmit="OnUpdateFileMedical">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-floating  ">
+                            <InputText type="texte" class="form-control" @bind-Value="FileMedicalToUpdate.LastName" id="LastName" placeholder="LastName"></InputText>
+                            <label for="floatingPassword">Last Name</label>
+                        </div>
+                        <div class="form-floating  ">
+                            <InputText type="text" class="form-control" @bind-Value="FileMedicalToUpdate.FirstName" id="FirstName" placeholder="FirstName"></InputText>
+                            <label for="floatingPassword">First Name</label>
+                        </div>
+                        <div class="form-floating">
+                            <InputSelect class="form-control" @bind-Value="@FileMedicalToUpdate.Sexe">
 
-<!-- Modal -->
+                                <option value="1">Male </option>
+
+                                <option value="2"> Famme </option>
+
+                            </InputSelect>
+                            <label for="floatingPassword">Sexe</label>
+                        </div>
+                        <div class="form-floating">
+                            <InputDate class="form-control" @bind-Value="FileMedicalToUpdate.DateOfBirth"></InputDate>
+                            <label for="floatingPassword">Date Of Birth</label>
+                        </div>
+
+                        @foreach (var item in FileMedicalToUpdate.ChronicDiseases.ToList())
+                        {
+                            <button type="button" style="border-radius:15px;" class="btn btn-danger" @onclick="() => DeleteMaladieOnUpdate(item)">@item.name -</button>
+                        }
+                        <hr />
+                        @if(chronicDiseasesUpdateDtosNotIn != null)
+                        {
+                            @foreach (var item in chronicDiseasesUpdateDtosNotIn)
+                            {
+                                <button type="button" style="border-radius:15px;" class="btn btn-primary " @onclick="() => AddMaladieOnUpdate(item)">@item.name +</button>
+                            }
+                        }
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Update File</button>
+
+                        </div>
+
+                    </EditForm>
+                }
+               
+            </div>
+           
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Chronic Maladie -->
 
 <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -99,7 +171,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Modal Add File -->
 
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down">
