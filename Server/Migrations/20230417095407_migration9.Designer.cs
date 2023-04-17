@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -11,9 +12,11 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    partial class ServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230417095407_migration9")]
+    partial class migration9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,14 +58,18 @@ namespace Server.Migrations
                     b.Property<byte[]>("FileAnalyse")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<Guid?>("IdMedicalAnalyse")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("IdOrdreMedical")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("IdPharmacist")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Instruction")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("MedicalAnalyseId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("QrCode")
                         .IsRequired()
@@ -77,9 +84,11 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdMedicalAnalyse");
-
                     b.HasIndex("IdOrdreMedical");
+
+                    b.HasIndex("IdPharmacist");
+
+                    b.HasIndex("MedicalAnalyseId");
 
                     b.ToTable("Analyses");
                 });
@@ -493,7 +502,7 @@ namespace Server.Migrations
                     b.Property<Guid>("IdOrdreMedical")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("IdRadiology")
+                    b.Property<Guid>("IdRadiology")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Instruction")
@@ -771,43 +780,43 @@ namespace Server.Migrations
                         new
                         {
                             Id = new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"),
-                            ConcurrencyStamp = "b3effe4a-3e46-4ddc-ae05-d3dee622a842",
+                            ConcurrencyStamp = "d695f45e-537b-4307-a145-fec3a977ce76",
                             Name = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"),
-                            ConcurrencyStamp = "912b98c5-6c74-406d-bbc8-cfd9ab9b4986",
+                            ConcurrencyStamp = "d341cafc-71da-4c9e-ab2f-622f451844ac",
                             Name = "PATIENT"
                         },
                         new
                         {
                             Id = new Guid("0d518584-64a4-424b-b011-7283083394b8"),
-                            ConcurrencyStamp = "3f2b7b08-9ade-47cb-9e65-6897487c2781",
+                            ConcurrencyStamp = "9d35fab1-b81b-4093-9698-eaef5c0651fb",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
                             Id = new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"),
-                            ConcurrencyStamp = "589c19be-3d54-46f2-817b-d313bd5aae5e",
+                            ConcurrencyStamp = "881951aa-8767-45e0-aa5f-005835c50cf3",
                             Name = "MEDECIN"
                         },
                         new
                         {
                             Id = new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"),
-                            ConcurrencyStamp = "861f786c-8093-474c-8d93-d85eeaa9808d",
+                            ConcurrencyStamp = "666f3118-5aa9-436e-80e0-116f2d4daba5",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
                             Id = new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"),
-                            ConcurrencyStamp = "ec8b1caa-5a7d-4211-8510-a8cfddfbc071",
+                            ConcurrencyStamp = "48ad8719-358d-4838-9db8-9914f46d6c35",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
                             Id = new Guid("232d07c5-711e-4802-a048-f2f73804ea40"),
-                            ConcurrencyStamp = "111e013a-c6b7-440b-8750-939234acea5b",
+                            ConcurrencyStamp = "ac488795-def8-4620-91aa-6ef45a6ba8b6",
                             Name = "ANALYSE"
                         });
                 });
@@ -1058,20 +1067,26 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.Analyse.Analyses", b =>
                 {
-                    b.HasOne("Server.Models.MedicalAnalysis.MedicalAnalyse", "MedicalAnalyse")
-                        .WithMany("Analyses")
-                        .HasForeignKey("IdMedicalAnalyse")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Server.Models.MedicalOrder.MedicalOrdres", "MedicalOrdres")
                         .WithMany("Analyses")
                         .HasForeignKey("IdOrdreMedical")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("MedicalAnalyse");
+                    b.HasOne("Server.Models.Pharmacist.Pharmacists", "Pharmacists")
+                        .WithMany()
+                        .HasForeignKey("IdPharmacist")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Server.Models.MedicalAnalysis.MedicalAnalyse", null)
+                        .WithMany("Analyses")
+                        .HasForeignKey("MedicalAnalyseId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("MedicalOrdres");
+
+                    b.Navigation("Pharmacists");
                 });
 
             modelBuilder.Entity("Server.Models.Doctor.Doctors", b =>
@@ -1228,7 +1243,8 @@ namespace Server.Migrations
                     b.HasOne("Server.Models.Radiologys.Radiology", "Radiology")
                         .WithMany("Radios")
                         .HasForeignKey("IdRadiology")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("MedicalOrdres");
 

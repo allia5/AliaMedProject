@@ -20,7 +20,7 @@ namespace Server.Models.MedicalOrder
         [Required]
         public StatusVisibility Visibility { get; set; }
         [Required]
-        public string summary { get; set; }
+        public string? summary { get; set; }
         [Required]
         public StatuseOrdreMedical Status { get; set; }
         public DateTime DateValidation { get; set; }
@@ -31,7 +31,7 @@ namespace Server.Models.MedicalOrder
         public Guid IdFileMedical { get; set; }
         public fileMedicals fileMedicals { get; set; }
         [ForeignKey("Secretarys")]
-        public Guid IdSecritary { get; set; }
+        public Guid? IdSecritary { get; set; }
         public Secretarys Secretarys { get; set; }
         [ForeignKey("CabinetMedical")]
         public Guid IdCabinetMedical { get; set; }

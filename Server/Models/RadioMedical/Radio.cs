@@ -22,13 +22,13 @@ namespace Server.Models.RadioMedical
         [Required]
         public string Description { get; set; }
         [Required]
-        public string Instruction { get; set; }
+        public string? Instruction { get; set; }
         [Required]
         public StatusRadio Status { get; set; }
 
         public DateTime DateValidation { get; set; }
         [ForeignKey("Radiology")]
-        public Guid IdRadiology { get; set; }
+        public Guid? IdRadiology { get; set; }
         public Radiology Radiology { get; set; }
         [ForeignKey("MedicalOrdres")]
         public Guid IdOrdreMedical { get; set; }

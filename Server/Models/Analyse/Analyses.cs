@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Server.Models.MedicalAnalysis;
 using Server.Models.MedicalOrder;
 using Server.Models.Pharmacist;
 using Server.Models.ResultAnalyses;
@@ -20,14 +21,14 @@ namespace Server.Models.Analyse
         public byte[]? FileAnalyse { get; set; }
         [Required]
         public string QrCode { get; set; }
-        public string Instruction { get; set; }
+        public string? Instruction { get; set; }
         [Required]
         public StatusAnalyse Status { get; set; }
         [Required]
         public DateTime DateValidation { get; set; }
-        [ForeignKey("Pharmacists")]
-        public Guid IdPharmacist { get; set; }
-        public Pharmacists Pharmacists { get; set; }
+        [ForeignKey("MedicalAnalyse")]
+        public Guid? IdMedicalAnalyse { get; set; }
+        public MedicalAnalyse MedicalAnalyse { get; set; }
         [ForeignKey("MedicalOrdres")]
         public Guid IdOrdreMedical { get; set; }
         public MedicalOrdres MedicalOrdres { get; set; }
