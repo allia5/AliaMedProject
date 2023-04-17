@@ -16,5 +16,12 @@ namespace Server.Managers.Storages.AnalyseManager
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task<Analyses> UpdateAnalyseAsync(Analyses analyses)
+        {
+           var result = this.ServerDbContext.Analyses.Update(analyses);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }

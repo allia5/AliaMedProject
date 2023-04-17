@@ -17,5 +17,13 @@ namespace Server.Managers.Storages.PrescriptionManager
             return result.Entity;
 
         }
+
+        public async Task<Prescription> UpdatePrescriptionAsync(Prescription prescription)
+        {
+            var result = this.ServerDbContext.prescriptions.Update(prescription);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+
+        }
     }
 }

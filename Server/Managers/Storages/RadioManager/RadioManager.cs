@@ -16,5 +16,12 @@ namespace Server.Managers.Storages.RadioManager
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task<Radio> UpdateRadioAsync(Radio radio)
+        {
+            var result = this.ServerDbContext.Radio.Update(radio);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }
