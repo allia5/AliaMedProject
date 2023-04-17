@@ -33,7 +33,7 @@ namespace Server.Managers.Storages.PlanningAppoimentManager
         {
             return await (from planning in this.ServerDbContext.medicalPlannings
                           where planning.IdUser == UserId
-                          && planning.Status == StatusPlaning.Still
+                          && planning.Status != StatusPlaning.passed
 
 
                           select planning).ToListAsync();
