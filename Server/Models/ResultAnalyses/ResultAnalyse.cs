@@ -9,7 +9,9 @@ namespace Server.Models.ResultAnalyses
         [Key]
         public Guid Id { get; set; }
         [Required]
-        public string ReferenceFile { get; set; }
+        [DataType(DataType.Upload)]
+
+        public byte[]? AnalyseResult { get; set; }
         [Required]
         public FileType FileType { get; set; }
         [ForeignKey("Analyses")]

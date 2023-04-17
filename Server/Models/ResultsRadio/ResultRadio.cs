@@ -10,7 +10,9 @@ namespace Server.Models.ResultsRadio
         [Key]
         public Guid Id { get; set; }
         [Required]
-        public string ReferenceFile { get; set; }
+        [DataType(DataType.Upload)]
+
+        public byte[]? FileResult { get; set; }
         [Required]
         public FileType FileType { get; set; }
         [ForeignKey("Radio")]

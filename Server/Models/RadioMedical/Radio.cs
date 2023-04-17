@@ -20,6 +20,8 @@ namespace Server.Models.RadioMedical
         [Required]
         public string QrCode { get; set; }
         [Required]
+        public string Description { get; set; }
+        [Required]
         public string Instruction { get; set; }
         [Required]
         public StatusRadio Status { get; set; }

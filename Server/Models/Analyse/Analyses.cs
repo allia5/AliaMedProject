@@ -23,6 +23,8 @@ namespace Server.Models.Analyse
         public string Instruction { get; set; }
         [Required]
         public StatusAnalyse Status { get; set; }
+        [Required]
+        public DateTime DateValidation { get; set; }
         [ForeignKey("Pharmacists")]
         public Guid IdPharmacist { get; set; }
         public Pharmacists Pharmacists { get; set; }
