@@ -121,7 +121,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             DateTime today = DateTime.Today;
             TimeSpan EndTime = workDoctors.EndTime.TimeOfDay;
             DateTime DateTimeEndTime = today.Add(EndTime);
-            if (DateTime.Today < DateTimeEndTime)
+            if (DateTime.Now >= DateTimeEndTime)
             {
                 var ListPlanningMedicalConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now.AddDays(1));
 
