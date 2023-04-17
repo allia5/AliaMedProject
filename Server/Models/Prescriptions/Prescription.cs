@@ -12,6 +12,7 @@ namespace Server.Models.Prescriptions
         [Key]
         public Guid Id { get; set; }
         [Required]
+        
         public string qrCode { get; set; }
         [DataType(DataType.Upload)]
 

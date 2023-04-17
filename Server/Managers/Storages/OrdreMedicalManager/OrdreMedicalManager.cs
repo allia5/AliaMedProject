@@ -16,5 +16,12 @@ namespace Server.Managers.Storages.OrdreMedicalManager
             return await (from ordre in this.ServerDbContext.MedicalOrdres where ordre.IdFileMedical == FileId select ordre ).ToListAsync();
                  
         }
+
+        public async Task<MedicalOrdres> InsertOrdreMedicalAsync(MedicalOrdres MedicalOrdres)
+        {
+           var result = this.ServerDbContext.MedicalOrdres.Add(MedicalOrdres);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }
