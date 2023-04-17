@@ -10,6 +10,7 @@ using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Services.Foundation.PlanningAppoimentService;
 using System.Security.Claims;
+using System.Text;
 using System.Transactions;
 using static Server.Utility.Utility;
 
@@ -199,7 +200,9 @@ namespace Server.Controllers
             TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
-                IdMedicalAppoiment = System.Web.HttpUtility.UrlDecode(IdMedicalAppoiment);
+               // IdMedicalAppoiment =  System.Web.HttpUtility.UrlDecode(IdMedicalAppoiment);
+                
+                
                 var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.planningAppoimentService.DeleteMedicalPlanningAppoiment(email, IdMedicalAppoiment);
                 transaction.Complete();

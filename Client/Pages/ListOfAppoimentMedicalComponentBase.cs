@@ -62,7 +62,7 @@ namespace Client.Pages
                 this.Index = IdAppoimentMedical;
                 await this.medicalPlanningService.DeleteMedecalAppoiment(IdAppoimentMedical);
                 var Item = ListappointmentInformation.Where(e => e.Id == IdAppoimentMedical).FirstOrDefault();
-                this.ListappointmentInformation.Remove(Item);
+                this.ListappointmentInformationTemp.Remove(Item);
                 this.Index = null;
             }
             catch (Exception e)
