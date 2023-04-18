@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Client.Services.Foundations.OrdreMedicalService;
 using DTO;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Client.Pages
 {
@@ -55,6 +56,55 @@ namespace Client.Pages
         public async Task OnAddLine()
         {
             this.CountInput++;
+            this.OrderMedicalToAddDro.Prescription.prescriptionLines.Add(new PrescriptionLineDto());
+        }
+        protected async Task HandleFileAnalyseSelected(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            using (var stream = file.OpenReadStream())
+            {
+                var buffer = new byte[file.Size];
+                await stream.ReadAsync(buffer, 0, (int)file.Size);
+                 this.OrderMedicalToAddDro.AnalyseToAdd.FileMedicalAnalyse = buffer;
+            }
+        }
+        protected async Task HandleFileRadioSelected(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            using (var stream = file.OpenReadStream())
+            {
+                var buffer = new byte[file.Size];
+                await stream.ReadAsync(buffer, 0, (int)file.Size);
+                this.OrderMedicalToAddDro.RadioToAdd.FileMedicalRadio = buffer;
+            }
+        }
+        protected async Task HandleFilePrescriptionSelected(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            using (var stream = file.OpenReadStream())
+            {
+                var buffer = new byte[file.Size];
+                await stream.ReadAsync(buffer, 0, (int)file.Size);
+                this.OrderMedicalToAddDro.Prescription.PrescriptionFile = buffer;
+            }
+        }
+        protected async Task Done()
+        {
+            try
+            {
+                this.isLoading = true;
+                this.OrderMedicalToAddDro.AppointmentId = this.AppointmentId;
+                this.OrderMedicalToAddDro.FileId = this.FileId;
+                var result = await this.OrdreMedicalService.PostOrdreMedicalPatient(OrderMedicalToAddDro);
+                this.ordreMedicalDtos.Add(result);
+                SuccessMessage = "Operation Success";
+                this.isLoading = false;
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+          
         }
     }
 }
