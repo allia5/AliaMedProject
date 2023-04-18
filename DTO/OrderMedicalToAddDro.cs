@@ -26,14 +26,14 @@ namespace DTO
     {
         public byte[] PrescriptionFile { get; set; }
         public string Instruction { get; set; }
-        public List<PrescriptionLine> prescriptionLines { get; set; }
+        public List<PrescriptionLineDto> prescriptionLines { get; set; }
     }
 
-    public class PrescriptionLine
+    public class PrescriptionLineDto
     {
         public string MedicamentName { get; set; }
         public string Description { get; set; }
-        public int Quantity { get;}
+        public int Quantity { get; set; }
 
     }
     public class RadioToAddDto

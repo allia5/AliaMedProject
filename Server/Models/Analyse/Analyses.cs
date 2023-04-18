@@ -25,7 +25,7 @@ namespace Server.Models.Analyse
         [Required]
         public StatusAnalyse Status { get; set; }
         [Required]
-        public DateTime DateValidation { get; set; }
+        public DateTime? DateValidation { get; set; }
         [ForeignKey("MedicalAnalyse")]
         public Guid? IdMedicalAnalyse { get; set; }
         public MedicalAnalyse MedicalAnalyse { get; set; }

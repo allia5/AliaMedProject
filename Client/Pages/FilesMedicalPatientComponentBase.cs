@@ -189,6 +189,10 @@ namespace Client.Pages
             }
             
         }
+        public async Task OnNavigateToOrdreMedical(string FileId)
+        {
+            this.NavigationManager.NavigateTo($"/OrdreMidical/{IdAppointment.Replace("/","-")}/{FileId.Replace("/", "-")}", forceLoad: true);
+        }
 
     }
 }

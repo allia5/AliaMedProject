@@ -18,7 +18,7 @@ namespace Server.Models.RadioMedical
 
         public byte[]? FileRadio { get; set; }
         [Required]
-        public string QrCode { get; set; }
+        public string? QrCode { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
@@ -26,7 +26,7 @@ namespace Server.Models.RadioMedical
         [Required]
         public StatusRadio Status { get; set; }
 
-        public DateTime DateValidation { get; set; }
+        public DateTime? DateValidation { get; set; }
         [ForeignKey("Radiology")]
         public Guid? IdRadiology { get; set; }
         public Radiology Radiology { get; set; }

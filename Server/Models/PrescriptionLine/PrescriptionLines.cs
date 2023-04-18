@@ -18,12 +18,12 @@ namespace Server.Models.PrescriptionLine
         [Required]
         public StatusPrescriptionLine StatusPrescriptionLine { get; set; }
 
-        public DateTime DateValidation { get; set; }
+        public DateTime? DateValidation { get; set; }
         [ForeignKey("Prescription")]
         public Guid IdPrescription { get; set; }
         public Prescription Prescription { get; set; }
         [ForeignKey("Pharmacists")]
-        public Guid IdPharmacist { get; set; }
+        public Guid? IdPharmacist { get; set; }
         public Pharmacists Pharmacists { get; set; }
 
     }

@@ -162,7 +162,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var PlanningMedical = await this.planningAppoimentManager.SelectPalnningMedicalByIdPlanningIdUser(DecryptGuid(IdPlanning), User.Id);
                 ValidatePlanningIsNull(PlanningMedical);
                 await this.planningAppoimentManager.DeletePlanningMedical(PlanningMedical);
-                var ListPlanningMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(PlanningMedical.IdDoctor, PlanningMedical.IdCabinet);
+                var ListPlanningMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(PlanningMedical.IdDoctor, PlanningMedical.IdCabinet,DateTime.Now);
                 ListPlanningMedical = ListPlanningMedical.OrderBy(o => o.AppointmentCount).ToList();
                 int k = 1;
                 foreach (var Item in ListPlanningMedical)

@@ -31,6 +31,7 @@ using Server.Services.Foundation.DoctorService;
 using Server.Services.Foundation.FileMedicalService;
 using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
+using Server.Services.Foundation.OrdreMedicalService;
 using Server.Services.Foundation.PlanningAppoimentService;
 using Server.Services.Foundation.SecretaryService;
 using Server.Services.Foundation.WorkDoctorService;
@@ -115,6 +116,7 @@ builder.Services.AddScoped<IPrescriptionManager, PrescriptionManager>();
 builder.Services.AddScoped<IPrescriptionLineManager, PrescriptionLineManager>();
 builder.Services.AddScoped<IRadioManager, RadioManager>();
 builder.Services.AddScoped<IAnalyseManager, AnalyseManager>();
+builder.Services.AddScoped<IOrdreMedicalService, OrdreMedicalService>();
 
 builder.Services.AddSignalR();
 

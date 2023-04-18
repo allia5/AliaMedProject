@@ -74,7 +74,7 @@
                                 <button class=" btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" @onclick="()=>ShowchronicDiseases(item.Id)">chronic diseases</button>
                         </div>
                             <div class="col">
-                                <button class=" btn btn-dark w-100"  >Order Medical</button>
+                                <button class=" btn btn-dark w-100" @onclick="()=>OnNavigateToOrdreMedical(item.Id)" >Order Medical</button>
                             </div>
                         </div>
                         </div>
@@ -185,8 +185,8 @@
             </div>
             <div class="modal-body">
                  <EditForm Model="fileMedicalToAdd" OnValidSubmit="OnAddFileMedical">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+                   <DataAnnotationsValidator />
+                   <ValidationSummary />
                     <div class="form-floating  ">
                         <InputText type="texte" class="form-control" @bind-Value="fileMedicalToAdd.LastName" id="LastName" placeholder="LastName"></InputText>
                         <label for="floatingPassword">Last Name</label>

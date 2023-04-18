@@ -1,6 +1,10 @@
-﻿using System.Security.Cryptography;
+﻿using System.Drawing;
+using System.Security.Cryptography;
 using System.Text;
 using System.Transactions;
+using ZXing;
+using ZXing.Common;
+using ZXing.QrCode;
 
 namespace Server.Utility
 {
@@ -10,7 +14,49 @@ namespace Server.Utility
 
 
 
+        public static string GenerateQRCodeStringFromGuid(Guid guid)
+        {
+            // Convertit le GUID en une chaîne de texte
+            var text = guid.ToString();
 
+            // Crée un objet BarcodeWriter qui générera le code QR
+            var writer = new BarcodeWriterPixelData
+            {
+                Format = BarcodeFormat.QR_CODE, // Format de code QR
+                Options = new QrCodeEncodingOptions // Options d'encodage
+                {
+                    Height = 250, // Hauteur de l'image
+                    Width = 250, // Largeur de l'image
+                    Margin = 1 // Marge autour du code QR
+                }
+            };
+
+            // Génère les données de pixels de l'image du code QR à partir de la chaîne de texte
+            var pixelData = writer.Write(text);
+
+            // Crée une image bitmap à partir des données de pixels du code QR
+            using (var bitmap = new Bitmap(pixelData.Width, pixelData.Height))
+            {
+                var bitmapData = bitmap.LockBits(new Rectangle(0, 0, pixelData.Width, pixelData.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                try
+                {
+                    // Copie les données de pixels dans l'image bitmap
+                    System.Runtime.InteropServices.Marshal.Copy(pixelData.Pixels, 0, bitmapData.Scan0, pixelData.Pixels.Length);
+                }
+                finally
+                {
+                    bitmap.UnlockBits(bitmapData);
+                }
+
+                // Convertit l'image bitmap en une chaîne de texte Base64
+                using (var ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    var imageBytes = ms.ToArray();
+                    return Convert.ToBase64String(imageBytes);
+                }
+            }
+        }
 
 
 
