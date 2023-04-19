@@ -30,14 +30,14 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             };
         }
 
-        public static MailRequest MapperMailRequestDelayAppoiment(DelayeAppoimentMedical delayeAppoiment, User user, User UserDoctor)
+        public static MailRequest MapperMailRequestDelayAppoiment(DelayeAppoimentMedical delayeAppoiment, User user, User UserDoctor,int CountPatient)
         {
             return new MailRequest
             {
                 ToEmail = user.Email,
                 Subject = "Notification",
                 Body = " <h3> AliaMed.Com </h3> " +
-                                $"<a> appoiment has been delayed  to date   {delayeAppoiment.DateAppoiment} By Doctor : {UserDoctor.Firstname} {UserDoctor.LastName} </a>" + "<br/>"
+                                $"<a> appoiment has been delayed  to date   {delayeAppoiment.DateAppoiment} and count of your appointment has been {CountPatient} By Doctor : {UserDoctor.Firstname} {UserDoctor.LastName} </a>" + "<br/>"
             };
         }
 

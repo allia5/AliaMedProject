@@ -321,7 +321,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var UserAccountDoctor = await this.userManager.SelectUserByIdDoctor(Appoiment.IdDoctor);
                 if(UserAccountDoctor != null && UserAccountPatient != null)
                 {
-                   var mailRequestDelayAppoiment = MapperMailRequestDelayAppoiment(delayeAppoiment,UserAccountPatient,UserAccountDoctor);
+                   var mailRequestDelayAppoiment = MapperMailRequestDelayAppoiment(delayeAppoiment,UserAccountPatient,UserAccountDoctor, newAppoimentDelay.AppointmentCount);
                     await this.mailService.SendEmailNotification(mailRequestDelayAppoiment);
                 }
                 var AppoimentsCabinet = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet, Appoiment.IdDoctor, OldDateAppoitment);

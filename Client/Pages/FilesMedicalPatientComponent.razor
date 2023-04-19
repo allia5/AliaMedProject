@@ -178,15 +178,16 @@
 
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down">
+        <EditForm Model="fileMedicalToAdd" OnValidSubmit="OnAddFileMedical">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Add New File</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                 <EditForm Model="fileMedicalToAdd" OnValidSubmit="OnAddFileMedical">
-                   <DataAnnotationsValidator />
-                   <ValidationSummary />
+                
                     <div class="form-floating  ">
                         <InputText type="texte" class="form-control" @bind-Value="fileMedicalToAdd.LastName" id="LastName" placeholder="LastName"></InputText>
                         <label for="floatingPassword">Last Name</label>
@@ -215,13 +216,14 @@
                         <button type="button" style="border-radius:15px;" class="btn btn-primary" @onclick="() => AjouterMaladie(item)">@item.name +</button>
                     }
 
-                </EditForm>
+             
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-outline-primary" @onclick="OnAddFileMedical" data-bs-dismiss="modal">Add File </button>
+                <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Add File </button>
 
             </div>
         </div>
+        </EditForm>
     </div>
 </div>
 
