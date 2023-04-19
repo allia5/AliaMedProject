@@ -12,9 +12,17 @@ namespace Server.Managers.Storages.AnalyseManager
         }
         public async Task<Analyses> InsertAnalyseAsync(Analyses analyses)
         {
-            var result = this.ServerDbContext.Analyses.Add(analyses);
-            await this.ServerDbContext.SaveChangesAsync();
-            return result.Entity;
+            try
+            {
+                var result = this.ServerDbContext.Analyses.Add(analyses);
+                await this.ServerDbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
 
         public async Task<Analyses> UpdateAnalyseAsync(Analyses analyses)

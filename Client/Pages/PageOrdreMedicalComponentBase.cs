@@ -28,6 +28,10 @@ namespace Client.Pages
         public string FileId { get; set; }
 
        
+
+
+
+
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
