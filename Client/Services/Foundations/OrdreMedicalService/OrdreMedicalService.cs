@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Text;
 using Client.Services.Foundations.LocalStorageService;
 using System.Net.Http.Json;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Client.Services.Foundations.OrdreMedicalService
 {
@@ -20,13 +22,41 @@ namespace Client.Services.Foundations.OrdreMedicalService
         }
         public async Task<OrdreMedicalDto> PostOrdreMedicalPatient(OrderMedicalToAddDro orderMedicalToAddDro)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "/api/OrdreMedical/PostNewOrdreMedical");
-            var keysReservation = JsonSerializer.Serialize(orderMedicalToAddDro);
-
-            request.Content = new StringContent(keysReservation, Encoding.UTF8, "application/json");
-            var JwtBearer = await this.LocalStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/OrdreMedical");
+            var FilePrescriptionbase64String = Convert.ToBase64String(orderMedicalToAddDro.Prescription.PrescriptionFile);
+            var FileRadiobase64String = Convert.ToBase64String(orderMedicalToAddDro.RadioToAdd.FileMedicalRadio);
+            var FileAnalysebase64String = Convert.ToBase64String(orderMedicalToAddDro.AnalyseToAdd.FileMedicalAnalyse);
+            var jsonObject = new
+            {
+                appointmentId = orderMedicalToAddDro.AppointmentId,
+                fileId = orderMedicalToAddDro.FileId,
+                summary = orderMedicalToAddDro.Summary,
+                visibility = orderMedicalToAddDro.Visibility,
+                analyseToAdd = new
+                {
+                    fileMedicalAnalyse = FileAnalysebase64String,
+                    description = orderMedicalToAddDro.AnalyseToAdd.Description,
+                    instruction = orderMedicalToAddDro.AnalyseToAdd.Instruction
+                },
+                radioToAdd = new
+                {
+                    fileMedicalRadio = FileRadiobase64String,
+                    description = orderMedicalToAddDro.RadioToAdd.Description,
+                    instruction = orderMedicalToAddDro.RadioToAdd.Instruction
+                },
+                prescription = new
+                {
+                    prescriptionFile = FilePrescriptionbase64String,
+                    instruction = orderMedicalToAddDro.Prescription.Instruction,
+                    prescriptionLines = orderMedicalToAddDro.Prescription.prescriptionLines
+                }
+            };
+            var json = JsonConvert.SerializeObject(jsonObject);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            var jwtBearer = await this.LocalStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtBearer.Token);
             var result = await HttpClient.SendAsync(request);
+  
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 if (result.Content.Headers.ContentLength != 0)
@@ -41,7 +71,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
 
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
-                throw new BadRequestException("Validation Data Error");
+                throw new BadRequestException(result.ToString());
             }
             else if (result.StatusCode == HttpStatusCode.Unauthorized)
             {

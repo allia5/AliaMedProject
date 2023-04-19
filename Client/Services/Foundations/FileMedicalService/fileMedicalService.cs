@@ -18,7 +18,17 @@ namespace Client.Services.Foundations.FileMedicalService
             this.httpClient = httpClient;
             this.localStorageServices = localStorageServices;
         }
-        public async Task<FileMedicalPatientDto> PostFileMedicalPatientAsync(FileMedicalToAddDto fileMedicalToAdd)
+
+    
+
+
+
+
+
+
+
+
+    public async Task<FileMedicalPatientDto> PostFileMedicalPatientAsync(FileMedicalToAddDto fileMedicalToAdd)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "/api/FileMedical/PostNewFileMedical");
             var keysReservation = JsonSerializer.Serialize(fileMedicalToAdd);

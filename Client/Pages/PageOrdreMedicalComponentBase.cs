@@ -5,41 +5,49 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Client.Services.Foundations.OrdreMedicalService;
 using DTO;
 using Microsoft.AspNetCore.Components.Forms;
+using Client.Services.Foundations.FileMedicalService;
 
 namespace Client.Pages
 {
     public class PageOrdreMedicalComponentBase :ComponentBase
     {
-        protected bool isLoading = true;
+        protected bool isLoading = false;
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
         protected List<OrdreMedicalDto> ordreMedicalDtos = new List<OrdreMedicalDto>();
         protected OrderMedicalToAddDro OrderMedicalToAddDro = new OrderMedicalToAddDro();
+        protected RadioToAddDto RadioToAddDto = new RadioToAddDto();
+        protected AnalyseToAddDto AnalyseToAddDto = new AnalyseToAddDto();
+        protected PrescriptionDto PrescriptionDto= new PrescriptionDto();
+        protected PrescriptionLineDto PrescriptionLineDto= new PrescriptionLineDto();
+        protected List<PrescriptionLineDto> ListPrescriptionLineDto = new List<PrescriptionLineDto>();
         protected int CountInput = 0;
         [Parameter]
         public string AppointmentId { get; set; }
         [Parameter]
         public string FileId { get; set; }
 
-        protected HubConnection? hubConnection { get; set; }
+       
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
         protected IOrdreMedicalService OrdreMedicalService { get; set; }
         [Inject]
+        protected IfileMedicalService fileMedicalService { get; set; }  
+        [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-        public async Task OnUpdatePrescription()
+        public async Task OnAddPrescription()
         {
-
+           
         }
         public async Task OnSkipePrescription()
         {
 
         }
-        public async Task OnUpdateRadio()
+        public async Task OnAddRadio()
         {
-
+           
         }
         public async Task OnSkipRadio()
         {
@@ -47,7 +55,7 @@ namespace Client.Pages
         }
         public async Task OnUpdateAnalyse()
         {
-
+      
         }
         public async Task OnSkipAnalyse()
         {
@@ -55,8 +63,11 @@ namespace Client.Pages
         }
         public async Task OnAddLine()
         {
-            this.CountInput++;
-            this.OrderMedicalToAddDro.Prescription.prescriptionLines.Add(new PrescriptionLineDto());
+           
+            this.ListPrescriptionLineDto.Add(PrescriptionLineDto);
+            PrescriptionLineDto = new PrescriptionLineDto ();
+
+
         }
         protected async Task HandleFileAnalyseSelected(InputFileChangeEventArgs e)
         {
@@ -65,7 +76,7 @@ namespace Client.Pages
             {
                 var buffer = new byte[file.Size];
                 await stream.ReadAsync(buffer, 0, (int)file.Size);
-                 this.OrderMedicalToAddDro.AnalyseToAdd.FileMedicalAnalyse = buffer;
+                 this.AnalyseToAddDto.FileMedicalAnalyse = buffer;
             }
         }
         protected async Task HandleFileRadioSelected(InputFileChangeEventArgs e)
@@ -75,7 +86,7 @@ namespace Client.Pages
             {
                 var buffer = new byte[file.Size];
                 await stream.ReadAsync(buffer, 0, (int)file.Size);
-                this.OrderMedicalToAddDro.RadioToAdd.FileMedicalRadio = buffer;
+                this.RadioToAddDto.FileMedicalRadio = buffer;
             }
         }
         protected async Task HandleFilePrescriptionSelected(InputFileChangeEventArgs e)
@@ -85,7 +96,7 @@ namespace Client.Pages
             {
                 var buffer = new byte[file.Size];
                 await stream.ReadAsync(buffer, 0, (int)file.Size);
-                this.OrderMedicalToAddDro.Prescription.PrescriptionFile = buffer;
+                this.PrescriptionDto.PrescriptionFile = buffer;
             }
         }
         protected async Task Done()
@@ -95,6 +106,10 @@ namespace Client.Pages
                 this.isLoading = true;
                 this.OrderMedicalToAddDro.AppointmentId = this.AppointmentId;
                 this.OrderMedicalToAddDro.FileId = this.FileId;
+                this.OrderMedicalToAddDro.RadioToAdd = this.RadioToAddDto;
+                this.OrderMedicalToAddDro.AnalyseToAdd = this.AnalyseToAddDto;
+                this.PrescriptionDto.prescriptionLines = ListPrescriptionLineDto;
+                this.OrderMedicalToAddDro.Prescription =this.PrescriptionDto;
                 var result = await this.OrdreMedicalService.PostOrdreMedicalPatient(OrderMedicalToAddDro);
                 this.ordreMedicalDtos.Add(result);
                 SuccessMessage = "Operation Success";

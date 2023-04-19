@@ -31,73 +31,24 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 public static byte[] AjouterCodeQRDansFichierDocx(byte[] fichierDocx, string codeQR)
     {
-        // Générer le code QR à partir de la chaîne de caractères
-        BarcodeLib.Barcode qrCode = new BarcodeLib.Barcode();
-        qrCode.IncludeLabel = true;
-        qrCode.Encode(BarcodeLib.TYPE.Codabar, codeQR, System.Drawing.Color.Black, System.Drawing.Color.White, 300, 300);
-
-        // Convertir le code QR en tableau d'octets
-        byte[] codeQRBytes;
-        using (MemoryStream ms = new MemoryStream())
-        {
-            qrCode.SaveImage(ms, SaveTypes.PNG);
-            codeQRBytes = ms.ToArray();
-        }
-
-        // Ouvrir le fichier Word
-        using (MemoryStream docStream = new MemoryStream(fichierDocx))
-        using (WordprocessingDocument doc = WordprocessingDocument.Open(docStream, true))
-        {
-            MainDocumentPart mainPart = doc.MainDocumentPart;
-
-            if (mainPart == null)
+            try
             {
-                mainPart = doc.AddMainDocumentPart();
-                new Document(new Body()).Save(mainPart);
-            }
+                // Générer le code QR à partir de la chaîne de caractères
+                BarcodeLib.Barcode qrCode = new BarcodeLib.Barcode();
+                qrCode.IncludeLabel = true;
+                qrCode.Encode(BarcodeLib.TYPE.Codabar, codeQR, System.Drawing.Color.Black, System.Drawing.Color.White, 300, 300);
 
-            // Ajouter une nouvelle image dans le document
-            ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Png);
-            using (MemoryStream imageStream = new MemoryStream(codeQRBytes))
-            {
-                imagePart.FeedData(imageStream);
-            }
+                // Convertir le code QR en tableau d'octets
+                byte[] codeQRBytes;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    qrCode.SaveImage(ms, SaveTypes.PNG);
+                    codeQRBytes = ms.ToArray();
+                }
 
-            // Ajouter une nouvelle ligne dans le document avec l'image du code QR
-            mainPart.Document.Body.Append(new DocumentFormat.OpenXml.Drawing.Paragraph(new DocumentFormat.OpenXml.Drawing.Run(new Drawing(new Inline(new DocumentFormat.OpenXml.Wordprocessing.Drawing(
-                new DocumentFormat.OpenXml.Drawing.Wordprocessing.Anchor(
-                    new DocumentFormat.OpenXml.Drawing.Wordprocessing.SimplePosition() { X = 0, Y = 0 },
-                  //  new HorizontalPosition(new HorizontalAlignment() {  Value = DocumentFormat.OpenXml.Drawing.Diagrams.HorizontalAlignmentValues.Center }),
-                  //  new VerticalPosition(new VerticalAlignment() { Value = DocumentFormat.OpenXml.Drawing.Diagrams.VerticalAlignmentValues.Middle }),
-                    new DocumentFormat.OpenXml.Drawing.Wordprocessing.Extent() { Cx = 3000000L, Cy = 3000000L },
-                    new DocumentFormat.OpenXml.Drawing.Wordprocessing.DocProperties() { Id = 1, Name = "CodeQR" },
-                    new DocumentFormat.OpenXml.Drawing.Wordprocessing.NonVisualGraphicFrameDrawingProperties(
-                        new DocumentFormat.OpenXml.Drawing.GraphicData(
-                            new DocumentFormat.OpenXml.Drawing.Pictures.Picture(
-                                new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualPictureProperties(
-                                    new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualDrawingProperties() { Id = 0, Name = "CodeQR.png" },
-                                    new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualPictureDrawingProperties()),
-                                new DocumentFormat.OpenXml.Drawing.Pictures.BlipFill(
-                                    new DocumentFormat.OpenXml.Drawing.Blip() { Embed = mainPart.GetIdOfPart(imagePart) },
-                                    new DocumentFormat.OpenXml.Drawing.Stretch(new DocumentFormat.OpenXml.Drawing.FillRectangle())),
-                                new DocumentFormat.OpenXml.Drawing.Pictures.ShapeProperties()))))))))));
-
-            mainPart.Document.Save();
-        }
-
-        return fichierDocx;
-    }
-
-
-
-
-    public static byte[] AjouterStringDansFichierDocx(byte[] fichierDocx, string chaine)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                ms.Write(fichierDocx, 0, fichierDocx.Length);
-
-                using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
+                // Ouvrir le fichier Word
+                using (MemoryStream docStream = new MemoryStream(fichierDocx))
+                using (WordprocessingDocument doc = WordprocessingDocument.Open(docStream, true))
                 {
                     MainDocumentPart mainPart = doc.MainDocumentPart;
 
@@ -107,13 +58,78 @@ public static byte[] AjouterCodeQRDansFichierDocx(byte[] fichierDocx, string cod
                         new Document(new Body()).Save(mainPart);
                     }
 
-                    mainPart.Document.Body.Append(new DocumentFormat.OpenXml.Drawing.Paragraph(new DocumentFormat.OpenXml.Drawing.Run( MediaTypeNames.Text.Plain+chaine)));
+                    // Ajouter une nouvelle image dans le document
+                    ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Png);
+                    using (MemoryStream imageStream = new MemoryStream(codeQRBytes))
+                    {
+                        imagePart.FeedData(imageStream);
+                    }
+
+                    // Ajouter une nouvelle ligne dans le document avec l'image du code QR
+                    mainPart.Document.Body.Append(new DocumentFormat.OpenXml.Drawing.Paragraph(new DocumentFormat.OpenXml.Drawing.Run(new Drawing(new Inline(new DocumentFormat.OpenXml.Wordprocessing.Drawing(
+                        new DocumentFormat.OpenXml.Drawing.Wordprocessing.Anchor(
+                            new DocumentFormat.OpenXml.Drawing.Wordprocessing.SimplePosition() { X = 0, Y = 0 },
+                            //  new HorizontalPosition(new HorizontalAlignment() {  Value = DocumentFormat.OpenXml.Drawing.Diagrams.HorizontalAlignmentValues.Center }),
+                            //  new VerticalPosition(new VerticalAlignment() { Value = DocumentFormat.OpenXml.Drawing.Diagrams.VerticalAlignmentValues.Middle }),
+                            new DocumentFormat.OpenXml.Drawing.Wordprocessing.Extent() { Cx = 3000000L, Cy = 3000000L },
+                            new DocumentFormat.OpenXml.Drawing.Wordprocessing.DocProperties() { Id = 1, Name = "CodeQR" },
+                            new DocumentFormat.OpenXml.Drawing.Wordprocessing.NonVisualGraphicFrameDrawingProperties(
+                                new DocumentFormat.OpenXml.Drawing.GraphicData(
+                                    new DocumentFormat.OpenXml.Drawing.Pictures.Picture(
+                                        new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualPictureProperties(
+                                            new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualDrawingProperties() { Id = 0, Name = "CodeQR.png" },
+                                            new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualPictureDrawingProperties()),
+                                        new DocumentFormat.OpenXml.Drawing.Pictures.BlipFill(
+                                            new DocumentFormat.OpenXml.Drawing.Blip() { Embed = mainPart.GetIdOfPart(imagePart) },
+                                            new DocumentFormat.OpenXml.Drawing.Stretch(new DocumentFormat.OpenXml.Drawing.FillRectangle())),
+                                        new DocumentFormat.OpenXml.Drawing.Pictures.ShapeProperties()))))))))));
 
                     mainPart.Document.Save();
                 }
 
-                return ms.ToArray();
+                return fichierDocx;
             }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+      
+    }
+
+
+
+
+    public static byte[] AjouterStringDansFichierDocx(byte[] fichierDocx, string chaine)
+        {
+            try
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    ms.Write(fichierDocx, 0, fichierDocx.Length);
+
+                    using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
+                    {
+                        MainDocumentPart mainPart = doc.MainDocumentPart;
+
+                        if (mainPart == null)
+                        {
+                            mainPart = doc.AddMainDocumentPart();
+                            new Document(new Body()).Save(mainPart);
+                        }
+
+                        mainPart.Document.Body.Append(new DocumentFormat.OpenXml.Drawing.Paragraph(/*new DocumentFormat.OpenXml.Drawing.Run(MediaTypeNames.Text.)*/chaine));
+
+                        mainPart.Document.Save();
+                    }
+
+                    return ms.ToArray();
+                }
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+           
         }
 
 

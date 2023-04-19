@@ -18,19 +18,22 @@ namespace Server.Controllers
         public readonly IOrdreMedicalService ordreMedicalService;
         public OrdreMedicalController(IOrdreMedicalService ordreMedicalService)
         {
-            this.ControllerContext = ControllerContext;
+            this.ordreMedicalService = ordreMedicalService;
         }
-        [HttpPost("PostNewOrdreMedical")]
+        [HttpPost]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
-        public async Task<ActionResult<OrdreMedicalDto>> PostNewOrdreMedical(OrderMedicalToAddDro orderMedicalToAddDro)
+        public async Task<ActionResult<OrdreMedicalDto>> PostNewOrdreMedical( OrderMedicalToAddDro orderMedicalToAddDro)
         {
             TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
+                orderMedicalToAddDro.FileId = orderMedicalToAddDro.FileId.Replace("-", "/");
+                orderMedicalToAddDro.AppointmentId = orderMedicalToAddDro.AppointmentId.Replace("-", "/");
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 var ResultOrdreMedical = await this.ordreMedicalService.AddOrdreMedicalDto(Email, orderMedicalToAddDro);
                 transaction.Complete();
-                return ResultOrdreMedical;
+                 return ResultOrdreMedical;
+            
 
             }
             catch(ValidationException Ex)

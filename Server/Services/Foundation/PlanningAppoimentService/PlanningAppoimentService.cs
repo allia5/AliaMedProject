@@ -123,12 +123,13 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             DateTime DateTimeEndTime = today.Add(EndTime);
             if (DateTime.Now >= DateTimeEndTime)
             {
+                var listPlanningMedicalWithStatusNotPassed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinetWithoutPlanningPassedPlanningAbsent(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now.AddDays(1));
                 var ListPlanningMedicalConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now.AddDays(1));
 
                 if (ListPlanningMedicalConfirmed.Count() < workDoctors.NbPatientAvailble)
                 {
                     ValidateUserIsNotInListAppoiment(user.Id, ListPlanningMedicalConfirmed);
-                    return new PlanningInformationModel { DateAppoiment = DateTime.Now.AddDays(1), CountOfPatient = ListPlanningMedicalConfirmed.Count() + 1 };
+                    return new PlanningInformationModel { DateAppoiment = DateTime.Now.AddDays(1), CountOfPatient = listPlanningMedicalWithStatusNotPassed.Count() + 1 };
                 }
                 else
                 {
@@ -137,12 +138,13 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             }
             else
             {
+                var listPlanningMedicalWithStatusNotPassed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinetWithoutPlanningPassedPlanningAbsent(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now);
                 var ListPlanningMedicalConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now);
 
                 if (ListPlanningMedicalConfirmed.Count() < workDoctors.NbPatientAvailble)
                 {
                     ValidateUserIsNotInListAppoiment(user.Id, ListPlanningMedicalConfirmed);
-                    return new PlanningInformationModel { DateAppoiment = DateTime.Now, CountOfPatient = ListPlanningMedicalConfirmed.Count() + 1 };
+                    return new PlanningInformationModel { DateAppoiment = DateTime.Now, CountOfPatient = listPlanningMedicalWithStatusNotPassed.Count() + 1 };
                 }
                 else
                 {
@@ -162,7 +164,8 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var PlanningMedical = await this.planningAppoimentManager.SelectPalnningMedicalByIdPlanningIdUser(DecryptGuid(IdPlanning), User.Id);
                 ValidatePlanningIsNull(PlanningMedical);
                 await this.planningAppoimentManager.DeletePlanningMedical(PlanningMedical);
-                var ListPlanningMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(PlanningMedical.IdDoctor, PlanningMedical.IdCabinet,DateTime.Now);
+                var ListPlanningMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinetWithoutPlanningPassedPlanningAbsent(PlanningMedical.IdCabinet,PlanningMedical.IdDoctor, PlanningMedical.AppointmentDate);
+                ListPlanningMedical= ListPlanningMedical.Where(e => e.IdUser != User.Id).ToList();
                 ListPlanningMedical = ListPlanningMedical.OrderBy(o => o.AppointmentCount).ToList();
                 int k = 1;
                 foreach (var Item in ListPlanningMedical)
@@ -266,8 +269,8 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 }
                 if (updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.passed || updateStatusAppoiment.statusPlaningDto == StatusPlaningDto.absent)
                 {  
-                    var appoimentsCabinetDoctor = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet,Appoiment.IdDoctor, Appoiment.AppointmentDate);
-                     appoimentsCabinetDoctor = appoimentsCabinetDoctor.Where(e => e.Status == StatusPlaning.Still && e.IdUser != Appoiment.IdUser).OrderBy(e=>e.AppointmentCount).ToList();
+                    var appoimentsCabinetDoctor = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinetWithoutPlanningPassedPlanningAbsent(Appoiment.IdCabinet,Appoiment.IdDoctor, Appoiment.AppointmentDate);
+                     appoimentsCabinetDoctor = appoimentsCabinetDoctor.Where(e => (e.Status == StatusPlaning.Still || e.Status == StatusPlaning.Treated || e.Status == StatusPlaning.Delayed) && e.IdUser != Appoiment.IdUser).OrderBy(e=>e.AppointmentCount).ToList();
                     int k = 1;
                     foreach (var appoimentPatient in appoimentsCabinetDoctor)
                     {
@@ -310,7 +313,8 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var OldDateAppoitment = Appoiment.AppointmentDate;
                 ValidatePlanningIsNull(Appoiment);
                 var newAppoimentDelay = MapperToNewDelayeMedicalPlanning(delayeAppoiment, Appoiment);
-                var ListAppoitmentOfLostPatientDelayed =  await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet, Appoiment.IdDoctor, delayeAppoiment.DateAppoiment);
+                var ListAppoitmentOfLostPatientDelayed =  await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinetWithoutPlanningPassedPlanningAbsent(Appoiment.IdCabinet, Appoiment.IdDoctor, delayeAppoiment.DateAppoiment);
+               ListAppoitmentOfLostPatientDelayed = ListAppoitmentOfLostPatientDelayed.Where(e => e.IdUser != Appoiment.IdUser).ToList();
                 newAppoimentDelay.AppointmentCount = ListAppoitmentOfLostPatientDelayed.Count() + 1;
                 await this.planningAppoimentManager.UpdatePlanningMedical(newAppoimentDelay);
                 var UserAccountPatient = await this._userManager.FindByIdAsync(Appoiment.IdUser);

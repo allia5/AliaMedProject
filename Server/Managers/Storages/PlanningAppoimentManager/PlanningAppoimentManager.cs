@@ -29,13 +29,21 @@ namespace Server.Managers.Storages.PlanningAppoimentManager
                           select planning).ToListAsync();
         }
 
+        public async Task<List<MedicalPlanning>> SelectMedicalPlanningByIdDoctorIdCabinetWithoutPlanningPassedPlanningAbsent(Guid CabinetId, Guid DoctorId, DateTime Date)
+        {
+            return await (from planning in this.ServerDbContext.medicalPlannings
+                          where planning.IdCabinet == CabinetId
+                          && planning.IdDoctor == DoctorId
+                          && planning.AppointmentDate.Date == Date.Date
+                          && planning.Status != StatusPlaning.passed && planning.Status != StatusPlaning.absent
+                          select planning).ToListAsync();
+        }
+
         public async Task<List<MedicalPlanning>> SelectMedicalPlanningByIdUser(string UserId)
         {
             return await (from planning in this.ServerDbContext.medicalPlannings
                           where planning.IdUser == UserId
                           && planning.Status != StatusPlaning.passed
-
-
                           select planning).ToListAsync();
         }
 

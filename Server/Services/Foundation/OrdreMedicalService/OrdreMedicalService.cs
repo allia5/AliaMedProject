@@ -43,8 +43,9 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public readonly IRadioManager radioManager;
         public readonly IAnalyseManager analyseManager;
         
-        public OrdreMedicalService(IPrescriptionManager prescriptionManager, IPrescriptionLineManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
+        public OrdreMedicalService( IPrescriptionManager prescriptionManager, IPrescriptionLineManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
         {
+            this.fileMedicalManager = fileMedicalManager;
             this.prescriptionManager = prescriptionManager;
             this.PrescriptionLineManager= PrescriptionLineManager;
             this.radioManager= radioManager;
@@ -68,7 +69,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 ValidateUserIsNull(UserAccountDoctor);
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAccountDoctor.Id);
                 ValidationDoctorIsNull(Doctor);
-                var FileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(DecryptGuid( orderMedicalToAdd.FileId));
+                var FileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(DecryptGuid(orderMedicalToAdd.FileId));
                 validateeFileMedicalIsNull(FileMedical);
                 var ListSpecialitiesDoctor = await specialitiesManager.SelectSpecialitiesByIdDoctor(Doctor.Id);
                 if (ListSpecialitiesDoctor!=null)
@@ -101,7 +102,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                         ValidatePrecriptionLineOnAdd(item);
                        var prescriptionLineInsert = MapperToPrescriptionLine(PrescriptionInsert.Id, item);
                         await this.PrescriptionLineManager.InsertPrescriptionLineAsync(prescriptionLineInsert);
-                        PrescriptionInsert.FilePrescription = AjouterCodeQRDansFichierDocx(orderMedicalToAdd.Prescription.PrescriptionFile, item.MedicamentName);
+                        PrescriptionInsert.FilePrescription = AjouterStringDansFichierDocx(orderMedicalToAdd.Prescription.PrescriptionFile, item.MedicamentName);
                        
                     }
                     await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);

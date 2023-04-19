@@ -19,9 +19,12 @@ namespace Server.Managers.Storages.OrdreMedicalManager
 
         public async Task<MedicalOrdres> InsertOrdreMedicalAsync(MedicalOrdres MedicalOrdres)
         {
-           var result = this.ServerDbContext.MedicalOrdres.Add(MedicalOrdres);
-            await this.ServerDbContext.SaveChangesAsync();
-            return result.Entity;
+           
+                var result = this.ServerDbContext.MedicalOrdres.Add(MedicalOrdres);
+                await this.ServerDbContext.SaveChangesAsync();
+                return result.Entity;
+           
+        
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Server.Managers.Storages.PlanningAppoimentManager
         public Task<List<MedicalPlanning>> SelectMedicalPlanningByIdDoctorIdCabinet(Guid IdDoctor , Guid ICabinet);
         public Task<MedicalPlanning> UpdatePlanningMedical(MedicalPlanning medicalPlanning);
         public Task<MedicalPlanning> SelectMedicalPlannigById(Guid Id);
+        public Task<List<MedicalPlanning>> SelectMedicalPlanningByIdDoctorIdCabinetWithoutPlanningPassedPlanningAbsent(Guid CabinetId, Guid DoctorId, DateTime Date);
 
     }
 }

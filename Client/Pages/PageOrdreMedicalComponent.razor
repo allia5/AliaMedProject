@@ -27,12 +27,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @for (int k = 0; k <= CountInput; k++)
+               @foreach(var PrescriptionItem in ListPrescriptionLineDto)
                 {
-                    <div class="form-control d-flex">
-                        <input class="form-control w-75" @bind="OrderMedicalToAddDro.Prescription.prescriptionLines[k]" type="text" placeholder="Name Of Medicament"> <input class="form-control w-25" type="number" min="0" placeholder="Quantity">
-                    </div>
+                
+                        <div class="form-control d-flex">
+                        <input class="form-control w-50" @bind="PrescriptionItem.MedicamentName" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="PrescriptionItem.Description" type="text" placeholder="Description">   <input @bind="PrescriptionItem.Quantity" class="form-control w-25" type="number" min="0" placeholder="Quantity">
+                        </div>
+                    
+                    
                 }
+                <div class="form-control d-flex">
+                    <input class="form-control w-50" @bind="PrescriptionLineDto.MedicamentName" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="PrescriptionLineDto.Description" type="text" placeholder="Description">   <input @bind="PrescriptionLineDto.Quantity" class="form-control w-25" type="number" min="0" placeholder="Quantity">
+                </div>
+                <input class="form-control" @bind="PrescriptionDto.Instruction" type="text" placeholder="Name Of Medicament">
                 <div class="form-control">
                     <button class="btn btn-success" style="width:100%;" @onclick="OnAddLine" data-bs-toggle="modal">+ Add Prescription</button>
                 </div>
@@ -60,16 +67,16 @@
             </div>
             <div class="modal-body">
 
-                <EditForm Model="OrderMedicalToAddDro">
+                <EditForm Model="RadioToAddDto">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
                     <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Analyse Instruction:</label>
-                        <input type="text" @bind="OrderMedicalToAddDro.RadioToAdd.Instruction" class="form-control" id="recipient-name">
+                        <label for="recipient-name" class="col-form-label">Radio Instruction:</label>
+                        <input type="text" @bind="RadioToAddDto.Instruction" class="form-control" id="recipient-name">
                     </div>
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Analyse Description::</label>
-                        <textarea class="form-control"  @bind="OrderMedicalToAddDro.RadioToAdd.Description" id="message-text"></textarea>
+                        <label for="message-text" class="col-form-label">Radio Description::</label>
+                        <textarea class="form-control" @bind="RadioToAddDto.Description" id="message-text"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Default file input example</label>
@@ -95,16 +102,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <EditForm Model="OrderMedicalToAddDro">
+                <EditForm Model="AnalyseToAddDto">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Analyse Instruction:</label>
-                        <input @bind="OrderMedicalToAddDro.AnalyseToAdd.Instruction" type="text" class="form-control" id="recipient-name">
+                        <input @bind="AnalyseToAddDto.Instruction" type="text" class="form-control" id="recipient-name">
                     </div>
                     <div class="mb-3">
                         <label for="message-text"  class="col-form-label">Analyse Description::</label>
-                        <textarea class="form-control" @bind="OrderMedicalToAddDro.AnalyseToAdd.Description" id="message-text"></textarea>
+                        <textarea class="form-control" @bind="AnalyseToAddDto.Description" id="message-text"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Default file input example</label>
@@ -136,9 +143,9 @@
                     <div class="form-floating">
                         <InputSelect class="form-control" @bind-Value="@OrderMedicalToAddDro.Visibility">
 
-                            <option value="1">Private</option>
+                            <option value="0">Private</option>
 
-                            <option value="2"> Public </option>
+                            <option value="1"> Public </option>
 
                         </InputSelect>
                         <label for="floatingPassword">Visibility Ordre Medical</label>
