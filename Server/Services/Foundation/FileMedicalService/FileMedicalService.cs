@@ -15,6 +15,7 @@ using Server.Managers.Storages.FileChronicDiseasesManager;
 using Server.Managers.Storages.WorkDoctorManager;
 using Server.Managers.Storages.OrdreMedicalManager;
 using Server.Managers.Storages.SpecialitiesManager;
+using Server.Managers.Storages.CabinetMedicalManager;
 
 namespace Server.Services.Foundation.FileMedicalService
 {
@@ -30,9 +31,11 @@ namespace Server.Services.Foundation.FileMedicalService
         public readonly IWorkDoctorManager workDoctorManager;
         public readonly IOrdreMedicalManager ordreMedicalManager;
         public readonly ISpecialitiesManager specialitiesManager;
+        public readonly ICabinetMedicalManager cabinetMedicalManager;
         
-        public FileMedicalService(ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
+        public FileMedicalService(ICabinetMedicalManager cabinetMedicalManager, ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
         {
+            this.cabinetMedicalManager = cabinetMedicalManager;
             this.ordreMedicalManager=ordreMedicalManager;
             this.specialitiesManager = specialitiesManager;
             this.workDoctorManager = workDoctorManager;
@@ -112,6 +115,8 @@ namespace Server.Services.Foundation.FileMedicalService
                 var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid( fileMedicalToAdd.IdAppointment));
                 ValidatePlanningIsNull(Appointment);
                 ValidateAppointmentWithDoctor(Appointment, Doctor);
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(Appointment.IdCabinet);
+                ValidateCabinetMedicalIsNull(Cabinet);
                 var WorkDoctorActive = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Appointment.IdDoctor,Appointment.IdCabinet);
                 ValidateWorkDoctorIsNull(WorkDoctorActive);
                 var newFileMedical =MapperToFileMedical(fileMedicalToAdd, Appointment);
@@ -141,6 +146,8 @@ namespace Server.Services.Foundation.FileMedicalService
                 var Appoiment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid( UpdateFileMedical.AppointmentId));
                 ValidatePlanningIsNull(Appoiment);
                 ValidateAppointmentWithDoctor(Appoiment, Doctor);
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(Appoiment.IdCabinet);
+                ValidateCabinetMedicalIsNull(Cabinet);
                 var WorkDoctorActive = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Appoiment.IdDoctor,Appoiment.IdCabinet);
                 ValidateWorkDoctorIsNull(WorkDoctorActive);
                 var FileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(DecryptGuid(UpdateFileMedical.FileId));

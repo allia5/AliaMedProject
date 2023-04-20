@@ -36,7 +36,7 @@ public static byte[] AjouterCodeQRDansFichierDocx(byte[] fichierDocx, string cod
                 // Générer le code QR à partir de la chaîne de caractères
                 BarcodeLib.Barcode qrCode = new BarcodeLib.Barcode();
                 qrCode.IncludeLabel = true;
-                qrCode.Encode(BarcodeLib.TYPE.Codabar, "A1234B", System.Drawing.Color.Black, System.Drawing.Color.White, 300, 300);
+                qrCode.Encode(BarcodeLib.TYPE.Codabar, codeQR, System.Drawing.Color.Black, System.Drawing.Color.White, 300, 300);
 
                 // Convert the QR code to a byte array
                 byte[] codeQRBytes;

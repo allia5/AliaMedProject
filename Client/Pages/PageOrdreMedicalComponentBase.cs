@@ -114,8 +114,8 @@ namespace Client.Pages
                 this.OrderMedicalToAddDro.AnalyseToAdd = this.AnalyseToAddDto;
                 this.PrescriptionDto.prescriptionLines = ListPrescriptionLineDto;
                 this.OrderMedicalToAddDro.Prescription =this.PrescriptionDto;
-                var result = await this.OrdreMedicalService.PostOrdreMedicalPatient(OrderMedicalToAddDro);
-                this.ordreMedicalDtos.Add(result);
+                await this.OrdreMedicalService.PostOrdreMedicalPatient(OrderMedicalToAddDro);
+                
                 SuccessMessage = "Operation Success";
                 this.isLoading = false;
             }

@@ -325,7 +325,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                     await this.mailService.SendEmailNotification(mailRequestDelayAppoiment);
                 }
                 var AppoimentsCabinet = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(Appoiment.IdCabinet, Appoiment.IdDoctor, OldDateAppoitment);
-                AppoimentsCabinet = AppoimentsCabinet.Where(e => e.Status == StatusPlaning.Still && e.IdUser != Appoiment.IdUser).OrderBy(e => e.AppointmentCount).ToList();
+                AppoimentsCabinet = AppoimentsCabinet.Where(e => (e.Status == StatusPlaning.Still || e.Status == StatusPlaning.Delayed) && e.IdUser != Appoiment.IdUser).OrderBy(e => e.AppointmentCount).ToList();
                 int k = 1;
                 foreach (var appoimentPatient in AppoimentsCabinet)
                 {

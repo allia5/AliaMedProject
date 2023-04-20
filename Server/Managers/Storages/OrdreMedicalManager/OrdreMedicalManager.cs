@@ -26,5 +26,10 @@ namespace Server.Managers.Storages.OrdreMedicalManager
            
         
         }
+
+        public async Task<List<MedicalOrdres>> SelectAllMedicalOrderByIdCabinetByIdDoctorByDate(Guid CabinetId, Guid DoctorId, DateTime Date)
+        {
+            return await (from Order in this.ServerDbContext.MedicalOrdres where Order.IdCabinetMedical == CabinetId && Order.IdDoctor == DoctorId && Order.ReleaseDate.Date == Date.Date select Order).ToListAsync();
+        }
     }
 }

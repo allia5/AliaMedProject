@@ -1,4 +1,5 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.Models.Prescriptions;
 
 namespace Server.Managers.Storages.PrescriptionManager
@@ -24,6 +25,11 @@ namespace Server.Managers.Storages.PrescriptionManager
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
 
+        }
+
+        public async Task SelectPrescriptionByIdMedicalOrdreAsync(Guid MedicalOrdre)
+        {
+            return await (from ItemPrescription in this.ServerDbContext.prescriptions where ItemPrescription.IdMedicalOrdre == MedicalOrdre select ItemPrescription).FirstOrDefaultAsync();
         }
     }
 }

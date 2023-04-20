@@ -22,6 +22,7 @@ using Server.Managers.Storages.RadioManager;
 using Server.Managers.Storages.AnalyseManager;
 using Server.Managers.Storages.PrescriptionManager;
 using Server.Models.RadioMedical;
+using Server.Models.Analyse;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -85,7 +86,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 ValidateUserIsNull(UserAccountPatient);
                 var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Appointment.IdDoctor, Appointment.IdCabinet);
                 ValidateWorkDoctorIsNull(WorkDoctor);
-                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalById(Appointment.IdCabinet);
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(Appointment.IdCabinet);
                 ValidateCabinetMedicalIsNull(Cabinet);
                 var CabinetInformation = MapperToCabinetInformationAppointmentDto(Cabinet);
                 OrdreMedicalResult.cabinetInformation = CabinetInformation;
@@ -105,6 +106,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                         PrescriptionInsert.FilePrescription = AjouterStringDansFichierDocx(orderMedicalToAdd.Prescription.PrescriptionFile, item.MedicamentName);
                        
                     }
+                    PrescriptionInsert.FilePrescription = AjouterCodeQRDansFichierDocx(PrescriptionInsert.FilePrescription, Prescription.qrCode);
                     await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
                     OrdreMedicalResult.Lines = orderMedicalToAdd.Prescription.prescriptionLines;
                 }

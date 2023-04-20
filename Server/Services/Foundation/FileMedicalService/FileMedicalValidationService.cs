@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Server.Models.CabinetMedicals;
 using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
@@ -11,7 +12,14 @@ namespace Server.Services.Foundation.FileMedicalService
 {
     public partial class FileMedicalService
     {
-       public void validateeFileMedicalIsNull(fileMedicals fileMedicals)
+        public void ValidateCabinetMedicalIsNull(CabinetMedical cabinetMedical)
+        {
+            if (cabinetMedical == null)
+            {
+                throw new NullException(nameof(cabinetMedical));
+            }
+        }
+        public void validateeFileMedicalIsNull(fileMedicals fileMedicals)
         {
             if (ArePropertiesNull(fileMedicals))
             {

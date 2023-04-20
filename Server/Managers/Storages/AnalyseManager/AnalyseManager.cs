@@ -1,4 +1,5 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.Models.Analyse;
 
 namespace Server.Managers.Storages.AnalyseManager
@@ -30,6 +31,11 @@ namespace Server.Managers.Storages.AnalyseManager
            var result = this.ServerDbContext.Analyses.Update(analyses);
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public async Task<Analyses> SelectAnalyseByOrdreMedicalId(Guid MedicalOrdreId)
+        {
+            return await (from ItemAnalyse in this.ServerDbContext.Analyses where ItemAnalyse.IdOrdreMedical == MedicalOrdreId select ItemAnalyse ).FirstOrDefaultAsync();
         }
     }
 }

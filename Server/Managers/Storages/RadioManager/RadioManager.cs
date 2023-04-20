@@ -1,4 +1,5 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.Models.RadioMedical;
 
 namespace Server.Managers.Storages.RadioManager
@@ -9,6 +10,7 @@ namespace Server.Managers.Storages.RadioManager
         public RadioManager( ServerDbContext serverDbContext) { 
             ServerDbContext = serverDbContext;
         }
+
 
         public async Task<Radio> InsertRadioAsync(Radio radio)
         {
@@ -22,6 +24,11 @@ namespace Server.Managers.Storages.RadioManager
             var result = this.ServerDbContext.Radio.Update(radio);
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public async Task<Radio> SelectRadioByIdMedicalOrdre(Guid MedicalOrdre)
+        {
+            return await (from ItemRadio in this.ServerDbContext.Radio where ItemRadio.IdOrdreMedical == MedicalOrdre select ItemRadio).FirstOrDefaultAsync();
         }
     }
 }

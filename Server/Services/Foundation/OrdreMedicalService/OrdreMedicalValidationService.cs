@@ -21,6 +21,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 throw new ArgumentException(nameof(analyseToAddDto));
             }
         }
+      
         public void ValidateRadioOnAdd(RadioToAddDto radioToAddDto )
         {
             if(radioToAddDto.FileMedicalRadio == null || radioToAddDto.Description == null)
