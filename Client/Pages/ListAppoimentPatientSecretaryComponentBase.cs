@@ -3,9 +3,13 @@ using Client.Services.Foundations.MedicalPlanningService;
 using Client.Services.Foundations.OrdreMedicalService;
 using Client.Services.Foundations.SecretaryService;
 using DTO;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.JSInterop;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
 
 namespace Client.Pages
 {
@@ -38,7 +42,8 @@ namespace Client.Pages
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
         [Inject]
-        public IOrdreMedicalService OrdreMedicalService { get; set; }  
+        public IOrdreMedicalService OrdreMedicalService { get; set; }
+        
 
        
         protected override async Task OnInitializedAsync()
@@ -130,6 +135,13 @@ namespace Client.Pages
                 IsLoading = false;
             }
         }
+
+
+       
+
+
+
+
         protected async Task OnValidateOrdreMedical(string OrdreId)
         {
             try

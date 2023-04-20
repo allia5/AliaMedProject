@@ -99,14 +99,14 @@ namespace Server.Services.Foundation.OrdreMedicalService
                    var OrdreMedicalInformationDto = mapperToInformationOrdreMedical(ItemOrdre);
                    if(FileAnalyse != null)
                    {
-                       OrdreMedicalInformationDto.AnalyseFile = FileAnalyse.FileAnalyse;
+                       OrdreMedicalInformationDto.IdAnalyse = EncryptGuid( FileAnalyse.Id);
                    }
                    if(FilePrescription  != null)
                    {
-                       OrdreMedicalInformationDto.PrescriptionFile = FilePrescription.FilePrescription;
+                       OrdreMedicalInformationDto.IdPrescription = EncryptGuid( FilePrescription.Id);
                    }
                    if(FileRadio != null) {
-                       OrdreMedicalInformationDto.RadioFile = FileRadio.FileRadio;
+                       OrdreMedicalInformationDto.IdRadio = EncryptGuid( FileRadio.Id);
                    }
                    var InformationOrdreMedicalItemDto = MapperToInformationOrderMedicalSecritary(InformationPatientDto, FileMedicalInformationDto, OrdreMedicalInformationDto);
                        ListinformationOrderMedicalSecritaries.Add(InformationOrdreMedicalItemDto);
