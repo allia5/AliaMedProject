@@ -25,9 +25,7 @@ namespace DTO
         public DateTime DateCreate { get; set; }
         public StatusOrdreMedicalDto statusOrdreMedical { get; set; }
         public string Summary { get; set; }
-        public string? IdPrescription { get; set; }
-        public string?  IdRadio { get; set; }
-        public string? IdAnalyse { get; set; }
+   
     }
     public enum StatusOrdreMedicalDto
     {

@@ -1,10 +1,13 @@
 ﻿using DTO;
+using Server.Models.Analyse;
 using Server.Models.CabinetMedicals;
 using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.fileMedical;
 using Server.Models.MedicalPlannings;
+using Server.Models.Prescriptions;
+using Server.Models.RadioMedical;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 
@@ -12,6 +15,31 @@ namespace Server.Services.Foundation.FileMedicalService
 {
     public partial class FileMedicalService
     {
+        public void ValidatePrescriptionIsNull(Prescription prescription)
+        {
+            if(prescription == null)
+            {
+                throw new NullException(nameof(prescription));
+            }
+        }
+        public void ValidateRadioIsNull(Radio Radio)
+        {
+            if (Radio == null)
+            {
+                throw new NullException(nameof(Radio));
+            }
+        }
+        public void ValidateAnalyseIsNull(Analyses Analyse)
+        {
+            if (Analyse == null)
+            {
+                throw new NullException(nameof(Analyse));
+            }
+        }
+        public void  ValidateStringIsNull(string Entry)
+        {
+            if(Entry == null) throw new ArgumentNullException(nameof(Entry));
+        }
         public void ValidateCabinetMedicalIsNull(CabinetMedical cabinetMedical)
         {
             if (cabinetMedical == null)

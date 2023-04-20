@@ -93,21 +93,9 @@ namespace Server.Services.Foundation.OrdreMedicalService
                        var InformationPatientDto = MppperToPatientInformationDto(UserAccountPatient);
                        var FileMedicalInformationDto = MapperToInformationFileMedical(FileMedical);
                    
-                   var FilePrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(ItemOrdre.Id);
-                   var FileRadio = await this.radioManager.SelectRadioByIdMedicalOrdre(ItemOrdre.Id);
-                   var FileAnalyse = await this.analyseManager.SelectAnalyseByOrdreMedicalId(ItemOrdre.Id);
+                
                    var OrdreMedicalInformationDto = mapperToInformationOrdreMedical(ItemOrdre);
-                   if(FileAnalyse != null)
-                   {
-                       OrdreMedicalInformationDto.IdAnalyse = EncryptGuid( FileAnalyse.Id);
-                   }
-                   if(FilePrescription  != null)
-                   {
-                       OrdreMedicalInformationDto.IdPrescription = EncryptGuid( FilePrescription.Id);
-                   }
-                   if(FileRadio != null) {
-                       OrdreMedicalInformationDto.IdRadio = EncryptGuid( FileRadio.Id);
-                   }
+                 
                    var InformationOrdreMedicalItemDto = MapperToInformationOrderMedicalSecritary(InformationPatientDto, FileMedicalInformationDto, OrdreMedicalInformationDto);
                        ListinformationOrderMedicalSecritaries.Add(InformationOrdreMedicalItemDto);
                    }

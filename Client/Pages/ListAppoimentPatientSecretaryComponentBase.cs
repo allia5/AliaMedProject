@@ -1,4 +1,5 @@
 ﻿using Client.Services.Exceptions;
+using Client.Services.Foundations.FileMedicalService;
 using Client.Services.Foundations.MedicalPlanningService;
 using Client.Services.Foundations.OrdreMedicalService;
 using Client.Services.Foundations.SecretaryService;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
+using System;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
 
@@ -25,6 +27,7 @@ namespace Client.Pages
         protected string IndexBtnOne = null;
         protected string IndexBtnTwo = null;
         protected string IndexValidateBtn = null;
+        protected string OrdreMedicalId = null;
         protected DateTime DateAppoiment { get; set; } = DateTime.Now;
         protected PatientInformationDto PatientInformationDto = new PatientInformationDto();
         protected List<InformationOrderMedicalSecritary> informationOrderMedicalSecritaries = new List<InformationOrderMedicalSecritary>();
@@ -43,9 +46,13 @@ namespace Client.Pages
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
         [Inject]
         public IOrdreMedicalService OrdreMedicalService { get; set; }
-        
+        [Inject]
+        public IfileMedicalService fileMedicalService { get; set; }
+        [Inject]
+        public IJSRuntime jSRuntime { get; set; }
 
-       
+
+
         protected override async Task OnInitializedAsync()
         {
             try
@@ -139,9 +146,44 @@ namespace Client.Pages
 
        
 
+        protected async Task OnUpdateOrdreMedicalId(string OrdreMedicalId)
+        {
+            this.OrdreMedicalId = OrdreMedicalId;
+        }
+        public byte[] StreamToBytes(Stream stream)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                stream.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+        protected async Task DownloadFilePrescription()
+        {
+            var stream =await this.fileMedicalService.GetMedicalFilePrescription(OrdreMedicalId);
+            var content = StreamToBytes(stream);
+            var contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            var fileName = "sample.docx"; // replace this with the appropriate filename for your file
+            var newstream = new MemoryStream(content);
+           
+            await jSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, newstream, contentType);
+        }
+        protected async Task DownloadFileRadio()
+        {
+            var stream = await this.fileMedicalService.GetMedicalFileRadio(OrdreMedicalId);
+            var contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            var fileName = "sample.pdf"; // replace this with the appropriate filename for your file
 
+            await jSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, stream, contentType);
+        }
+        protected async Task DownloadFileAnalyse()
+        {
+            var stream = await this.fileMedicalService.GetMedicalFileAnalyse(OrdreMedicalId);
+            var contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            var fileName = "sample.pdf"; // replace this with the appropriate filename for your file
 
-
+            await jSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, stream, contentType);
+        }
         protected async Task OnValidateOrdreMedical(string OrdreId)
         {
             try
@@ -179,6 +221,9 @@ namespace Client.Pages
             this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
             this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
             this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+            this.informationOrderMedicalSecritaries = await this.OrdreMedicalService.GetAllOrdreMedicalSecritary(new KeysAppoimentInformationSecretary { CabinetId = CabinetId, IdDoctor = DoctorId, DateAppoiment = DateAppoiment });
+            this.informationOrderMedicalSecritariesNotValidate = this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.statusOrdreMedical == StatusOrdreMedicalDto.NotValidate).ToList();
+            this.informationOrderMedicalSecritariesValidate = this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.statusOrdreMedical == StatusOrdreMedicalDto.validate).ToList();
             IndexBtnSearshloading = false;
         }
         public async Task OnTreated(string IdAppoiment)

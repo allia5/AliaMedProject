@@ -16,6 +16,9 @@ using Server.Managers.Storages.WorkDoctorManager;
 using Server.Managers.Storages.OrdreMedicalManager;
 using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.Storages.CabinetMedicalManager;
+using Server.Managers.Storages.PrescriptionManager;
+using Server.Managers.Storages.RadioManager;
+using Server.Managers.Storages.AnalyseManager;
 
 namespace Server.Services.Foundation.FileMedicalService
 {
@@ -32,9 +35,15 @@ namespace Server.Services.Foundation.FileMedicalService
         public readonly IOrdreMedicalManager ordreMedicalManager;
         public readonly ISpecialitiesManager specialitiesManager;
         public readonly ICabinetMedicalManager cabinetMedicalManager;
+        public readonly IPrescriptionManager prescriptionManager;
+        public readonly IRadioManager radioManager;
+        public readonly IAnalyseManager analyseManager;
         
-        public FileMedicalService(ICabinetMedicalManager cabinetMedicalManager, ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
+        public FileMedicalService(IPrescriptionManager prescriptionManager,IRadioManager radioManager,IAnalyseManager analyseManager,ICabinetMedicalManager cabinetMedicalManager, ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
         {
+            this.prescriptionManager = prescriptionManager;
+            this.radioManager = radioManager;
+            this.analyseManager = analyseManager;
             this.cabinetMedicalManager = cabinetMedicalManager;
             this.ordreMedicalManager=ordreMedicalManager;
             this.specialitiesManager = specialitiesManager;
@@ -166,6 +175,35 @@ namespace Server.Services.Foundation.FileMedicalService
                 await this.fileMedicalManager.UpdateFileMedicalAsync(newFile);
 
             });
-        
+
+        public async Task<byte[]> GetFilePrescriptionByIdOrdreMedical(string OrdreMedicalId) =>
+            await TryCatch(async () =>
+            {
+                ValidateStringIsNull(OrdreMedicalId);
+                var FileMedicalPrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(DecryptGuid(OrdreMedicalId));
+                ValidatePrescriptionIsNull(FileMedicalPrescription);
+                return FileMedicalPrescription.FilePrescription;
+
+
+            });
+
+        public async Task<byte[]> GetFileRadioByIdOrdreMedical(string OrdreMedicalId) =>
+            await TryCatch(async () =>
+            {
+                ValidateStringIsNull(OrdreMedicalId);
+                var FileRadio = await this.radioManager.SelectRadioByIdMedicalOrdre(DecryptGuid(OrdreMedicalId));
+                ValidateRadioIsNull(FileRadio);
+                return FileRadio.FileRadio;
+            });
+       
+
+        public async Task<byte[]> GetFileAnalyseByIdOrdreMedical(string OrdreMedicalId) =>
+            await TryCatch(async () =>
+            {
+                ValidateStringIsNull(OrdreMedicalId);
+                var FileAnalyse = await this.analyseManager.SelectAnalyseByOrdreMedicalId(DecryptGuid(OrdreMedicalId));
+                ValidateAnalyseIsNull(FileAnalyse);
+                return FileAnalyse.FileAnalyse;
+            });
     }
 }
