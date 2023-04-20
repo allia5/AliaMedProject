@@ -6,6 +6,6 @@ namespace Server.Managers.Storages.PrescriptionManager
     {
         public Task<Prescription> InsertPrescriptionAsync(Prescription prescription);
         public Task<Prescription> UpdatePrescriptionAsync(Prescription prescription);
-        public Task SelectPrescriptionByIdMedicalOrdreAsync(Guid MedicalOrdre);
+        public Task<Prescription> SelectPrescriptionByIdMedicalOrdreAsync(Guid MedicalOrdre);
     }
 }

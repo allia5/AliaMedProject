@@ -27,7 +27,7 @@ namespace Server.Managers.Storages.PrescriptionManager
 
         }
 
-        public async Task SelectPrescriptionByIdMedicalOrdreAsync(Guid MedicalOrdre)
+        public async Task<Prescription> SelectPrescriptionByIdMedicalOrdreAsync(Guid MedicalOrdre)
         {
             return await (from ItemPrescription in this.ServerDbContext.prescriptions where ItemPrescription.IdMedicalOrdre == MedicalOrdre select ItemPrescription).FirstOrDefaultAsync();
         }

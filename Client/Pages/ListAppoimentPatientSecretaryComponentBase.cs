@@ -1,5 +1,6 @@
 ﻿using Client.Services.Exceptions;
 using Client.Services.Foundations.MedicalPlanningService;
+using Client.Services.Foundations.OrdreMedicalService;
 using Client.Services.Foundations.SecretaryService;
 using DTO;
 using Microsoft.AspNetCore.Components;
@@ -19,7 +20,12 @@ namespace Client.Pages
         protected bool IsLoading = true;
         protected string IndexBtnOne = null;
         protected string IndexBtnTwo = null;
+        protected string IndexValidateBtn = null;
         protected DateTime DateAppoiment { get; set; } = DateTime.Now;
+        protected PatientInformationDto PatientInformationDto = new PatientInformationDto();
+        protected List<InformationOrderMedicalSecritary> informationOrderMedicalSecritaries = new List<InformationOrderMedicalSecritary>();
+        protected List<InformationOrderMedicalSecritary> informationOrderMedicalSecritariesValidate = new List<InformationOrderMedicalSecritary>();
+        protected List<InformationOrderMedicalSecritary> informationOrderMedicalSecritariesNotValidate = new List<InformationOrderMedicalSecritary>();
         protected List<PlanningDto> planningDtos = new List<PlanningDto>();
         protected List<PlanningDto> planningDtosStill = new List<PlanningDto>();
         protected List<PlanningDto> planningDtosAbsent = new List<PlanningDto>();
@@ -31,6 +37,10 @@ namespace Client.Pages
         protected IMedicalPlanningService medicalPlanningService { get; set; }
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        [Inject]
+        public IOrdreMedicalService OrdreMedicalService { get; set; }  
+
+       
         protected override async Task OnInitializedAsync()
         {
             try
@@ -43,6 +53,9 @@ namespace Client.Pages
                     this.planningDtosStill = planningDtos.Where(e=>e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+                    this.informationOrderMedicalSecritaries = await this.OrdreMedicalService.GetAllOrdreMedicalSecritary(new KeysAppoimentInformationSecretary { CabinetId = CabinetId, IdDoctor = DoctorId, DateAppoiment = DateAppoiment });
+                    this.informationOrderMedicalSecritariesNotValidate = this.informationOrderMedicalSecritaries.Where(e=>e.informationOrdreMedical.statusOrdreMedical== StatusOrdreMedicalDto.NotValidate).ToList();
+                    this.informationOrderMedicalSecritariesValidate = this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.statusOrdreMedical == StatusOrdreMedicalDto.validate).ToList();
                     this.IsLoading = false;
 
                     this.hubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7104/PlanningAppoimentHub").Build();
@@ -116,6 +129,36 @@ namespace Client.Pages
                 ErrorMessage = ex.Message;
                 IsLoading = false;
             }
+        }
+        protected async Task OnValidateOrdreMedical(string OrdreId)
+        {
+            try
+            {
+                IndexValidateBtn = OrdreId;
+                var cabinetId = this.CabinetId.Replace("-", "/");
+                var doctorId = this.DoctorId.Replace("-", "/");
+                await this.OrdreMedicalService.UpdateStatusOrdreMedicalBySecritary(new UpdateOrdreMedicalDto { CabinetId = cabinetId, DoctorId= doctorId, OrdreMedicalId=OrdreId,StatusOrdreMedicalToUpdate=StatusOrdreMedicalDto.validate });
+               var ItemOrdreMedical = this.informationOrderMedicalSecritariesNotValidate.Where(e => e.informationOrdreMedical.Id == OrdreId).FirstOrDefault();
+                if(ItemOrdreMedical != null) {
+                    this.informationOrderMedicalSecritariesNotValidate.Remove(ItemOrdreMedical);
+                }
+               
+                IndexValidateBtn = null;
+                
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage= e.Message;
+            }
+        }
+        protected async Task OnShowAccountPatientOrdreMedical(string IdOrdreMedical)
+        {
+            var ordreMedical = this.informationOrderMedicalSecritariesNotValidate.Where(e=>e.informationOrdreMedical.Id == IdOrdreMedical).FirstOrDefault();
+            if(ordreMedical != null)
+            {
+                this.PatientInformationDto = ordreMedical.PatientInformation;
+            }
+           
         }
         protected async Task OnSearch()
         {

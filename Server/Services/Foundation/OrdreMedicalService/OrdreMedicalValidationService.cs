@@ -1,11 +1,14 @@
 ﻿using DTO;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using Server.Models.CabinetMedicals;
 using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.fileMedical;
+using Server.Models.MedicalOrder;
 using Server.Models.MedicalPlannings;
 using Server.Models.Prescriptions;
+using Server.Models.secretary;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 
@@ -14,6 +17,76 @@ namespace Server.Services.Foundation.OrdreMedicalService
     
     public partial class OrdreMedicalService
     {
+     public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
+        {
+            if(medicalOrdres == null)
+            {
+                throw new NullException(nameof(medicalOrdres));
+            }
+        }
+        public static bool ArePropertiesNull(object obj)
+        {
+            if (obj == null)
+                return true;
+
+            foreach (var prop in obj.GetType().GetProperties())
+            {
+                if (prop.GetValue(obj) == null)
+                    return false;
+            }
+
+            return true;
+        }
+        public void ValidateEntryOnUpdateStatusSecritary(string Email, UpdateOrdreMedicalDto updateOrdreMedicalDto)
+        {
+            if (Email == null)
+            {
+                throw new ArgumentNullException(nameof(Email));
+            }
+           if(updateOrdreMedicalDto != null) 
+            { 
+                if(updateOrdreMedicalDto.OrdreMedicalId == null || updateOrdreMedicalDto.DoctorId ==null || updateOrdreMedicalDto.CabinetId == null)
+                {
+                    throw new ArgumentNullException(nameof(updateOrdreMedicalDto));
+                }
+            }
+        }
+        public void ValidateSecritary(Secretarys secretarys)
+        {
+            if(secretarys != null)
+            {
+                if(secretarys.Status != StatusSecretary.Active)
+                {
+                    throw new StatusValidationException(nameof(secretarys));
+                }
+            }
+            else
+            {
+                throw new NullException(nameof(secretarys));
+            }
+        }
+        public void ValidateEntryOnGetAllAppoimentPatientSecretary(string Email, KeysAppoimentInformationSecretary keysAppoimentInformationSecretary)
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                throw new ArgumentNullException(nameof(Email));
+            }
+            if (keysAppoimentInformationSecretary != null)
+            {
+                if (keysAppoimentInformationSecretary.CabinetId == null)
+                {
+                    throw new ArgumentNullException(nameof(keysAppoimentInformationSecretary.CabinetId));
+                }
+                else if (keysAppoimentInformationSecretary.IdDoctor == null)
+                {
+                    throw new ArgumentNullException(nameof(keysAppoimentInformationSecretary.IdDoctor));
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(keysAppoimentInformationSecretary));
+            }
+        }
         public void ValidateAnalyseOnAdd(AnalyseToAddDto analyseToAddDto)
         {
             if(analyseToAddDto.Description == null || analyseToAddDto.FileMedicalAnalyse ==null)
@@ -64,19 +137,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 throw new NullException(nameof(workDoctors));
             }
         }
-        public static bool ArePropertiesNull(object obj)
-        {
-            if (obj == null)
-                return true;
-
-            foreach (var prop in obj.GetType().GetProperties())
-            {
-                if (prop.GetValue(obj) == null)
-                    return false;
-            }
-
-            return true;
-        }
+        
         public void ValidateOrdreMedicalOnAdd(OrderMedicalToAddDro orderMedicalToAddDro)
         { 
             if(orderMedicalToAddDro == null)

@@ -19,15 +19,67 @@ using Server.Models.PrescriptionLine;
 using Server.Models.RadioMedical;
 using Server.Models.Analyse;
 using Server.Models.UserAccount;
+using Server.Models.fileMedical;
+using Server.Models.secretary;
+using Server.Models.Doctor;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
     public static class OrdreMedicalMapperService
     {
+        public static MailRequest MapperToMailRequestUpdateStatusOrdreMedical(User UserAccountPatient,User UserAccountDoctor)
+        {
+            return new MailRequest
+            {
+                ToEmail = UserAccountPatient.Email,
+                Subject = "Notification",
+                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> AliaMed.Com </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> Ordre Medical status notification  </h5>\r\n        <p class=card-text>Ordre Medical Has been Validate {DateTime.Now }  <br/> by Doctor :{UserAccountDoctor.Firstname} ,{UserAccountDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
+
+            };
+        }
+        public static MedicalOrdres MapperToNewOrdreMedical(MedicalOrdres medicalOrdre , UpdateOrdreMedicalDto updateOrdreMedicalDto,Secretarys secretarys)
+        {
+            medicalOrdre.Status = (StatuseOrdreMedical)updateOrdreMedicalDto.StatusOrdreMedicalToUpdate;
+            medicalOrdre.DateValidation = DateTime.Now;
+            medicalOrdre.IdSecritary = secretarys.Id;
+            return medicalOrdre;
+            
+
+        }
+        public static InformationOrderMedicalSecritary MapperToInformationOrderMedicalSecritary(PatientInformationDto patientInformationDto,InformationFileMedical informationFileMedical,InformationOrdreMedical informationOrdreMedical)
+        {
+            return new InformationOrderMedicalSecritary
+            {
+                PatientInformation = patientInformationDto,
+                informationFile = informationFileMedical,
+                informationOrdreMedical = informationOrdreMedical
+            };
+        }
+        public static InformationOrdreMedical mapperToInformationOrdreMedical(MedicalOrdres medicalOrdres)
+        {
+            return new InformationOrdreMedical
+            {
+                Id = EncryptGuid(medicalOrdres.Id),
+                Summary = medicalOrdres.summary,
+                DateCreate = medicalOrdres.ReleaseDate,
+                statusOrdreMedical = (StatusOrdreMedicalDto)medicalOrdres.Status,
+
+            };
+        }
+
+        public static InformationFileMedical MapperToInformationFileMedical(fileMedicals fileMedicals)
+        {
+            return new InformationFileMedical
+            {
+                DateBirth = fileMedicals.DateOfBirth,
+                FirstName = fileMedicals.firstname,
+                LastName = fileMedicals.Lastname,
+                sexe = (Sexe)fileMedicals.Sexe
+            };
+        }
 
 
-
-     
 
 public static byte[] AjouterCodeQRDansFichierDocx(byte[] fichierDocx, string codeQR)
     {

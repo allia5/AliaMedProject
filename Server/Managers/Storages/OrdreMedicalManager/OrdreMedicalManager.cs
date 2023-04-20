@@ -31,5 +31,21 @@ namespace Server.Managers.Storages.OrdreMedicalManager
         {
             return await (from Order in this.ServerDbContext.MedicalOrdres where Order.IdCabinetMedical == CabinetId && Order.IdDoctor == DoctorId && Order.ReleaseDate.Date == Date.Date select Order).ToListAsync();
         }
+
+        public async Task<MedicalOrdres> SelectMedicalOrdreByIdByIdDoctorByIdCabinet(Guid OrdreMedicalId, Guid DoctorId, Guid CabinetId)
+        {
+            return await (from ItemOrdreMedical in this.ServerDbContext.MedicalOrdres
+                          where ItemOrdreMedical.IdCabinetMedical == CabinetId
+                          && ItemOrdreMedical.IdDoctor == DoctorId
+                          && ItemOrdreMedical.Id == OrdreMedicalId
+                          select ItemOrdreMedical).FirstOrDefaultAsync();
+        }
+
+        public async Task<MedicalOrdres> UpdateMedicalOrdreAsync(MedicalOrdres MedicalOrdres)
+        {
+            var result =  this.ServerDbContext.Update(MedicalOrdres);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }

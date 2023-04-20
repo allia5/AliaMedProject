@@ -20,6 +20,67 @@ namespace Server.Controllers
         {
             this.ordreMedicalService = ordreMedicalService;
         }
+
+        [HttpPatch("PatchMedicalOrdre")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE")]
+        public async Task<ActionResult> UpdateStatusMedicalOrdre(UpdateOrdreMedicalDto updateFileMedicalDto)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.ordreMedicalService.UpdateStatusOrdreMedicalService(Email, updateFileMedicalDto);
+                transaction.Complete();
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+
+            }
+            catch (Exception Ex)
+            {
+                return Problem(Ex.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
+          
+        }
+
+        [HttpGet("GetAllMedicalOrdreSecritary/{CabinetId}/{DoctorId}/{DateOrdreMedical}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE")]
+        public async Task<ActionResult<List<InformationOrderMedicalSecritary>>> GetAllMedicalOrdreSecritary(string CabinetId,string DoctorId,string DateOrdreMedical)
+        {
+
+            try
+            {
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                CabinetId = CabinetId.Replace("-", "/");
+                DoctorId = DoctorId.Replace("-", "/");
+                DateOrdreMedical = System.Web.HttpUtility.UrlDecode(DateOrdreMedical);
+                var result = await this.ordreMedicalService.SelectAllMedicalOrdreSecritary(Email, new KeysAppoimentInformationSecretary { CabinetId = CabinetId, DateAppoiment = DateTime.Parse(DateOrdreMedical), IdDoctor = DoctorId });
+                return result;
+
+            }catch(ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch(ServiceException Ex)
+            {
+                return StatusCode(412);
+
+            }catch(Exception Ex)
+            {
+                return Problem(Ex.Message);
+            }
+        }
+
         [HttpPost]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
         public async Task<ActionResult<OrdreMedicalDto>> PostNewOrdreMedical( OrderMedicalToAddDro orderMedicalToAddDro)
