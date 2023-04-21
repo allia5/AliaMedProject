@@ -4,14 +4,20 @@ using Client.Services.Foundations.MedicalPlanningService;
 using Client.Services.Foundations.OrdreMedicalService;
 using Client.Services.Foundations.SecretaryService;
 using DTO;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using System;
+using System.Net.Http;
+using System.Net.Mime;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Pipes;
 
 namespace Client.Pages
 {
@@ -52,7 +58,13 @@ namespace Client.Pages
         public IJSRuntime jSRuntime { get; set; }
 
 
-
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await jSRuntime.InvokeVoidAsync("import", "/Js/ScripteFileMedical.js");
+            }
+        }
         protected override async Task OnInitializedAsync()
         {
             try
@@ -160,13 +172,32 @@ namespace Client.Pages
         }
         protected async Task DownloadFilePrescription()
         {
-            var stream =await this.fileMedicalService.GetMedicalFilePrescription(OrdreMedicalId);
-            var content = StreamToBytes(stream);
-            var contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            var fileName = "sample.docx"; // replace this with the appropriate filename for your file
-            var newstream = new MemoryStream(content);
+            try
+            {
+              
+               
+                // Save the file
+                var stream = await this.fileMedicalService.GetMedicalFilePrescription(OrdreMedicalId);
+                using var streamRef = new DotNetStreamReference(stream: stream);
+                var fileName = "File.txt";
+                await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+                
+               
+               
+                //Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+                /* var content = StreamToBytes(stream);
+                  var contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                  var fileName = "file.docx"; // replace this with the appropriate filename for your file
+                  var newstream = new MemoryStream(content);
+                  await jSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, newstream, contentType);*/
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            
            
-            await jSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, newstream, contentType);
+           
         }
         protected async Task DownloadFileRadio()
         {

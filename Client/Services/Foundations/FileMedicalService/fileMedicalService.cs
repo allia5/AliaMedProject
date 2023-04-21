@@ -134,6 +134,7 @@ namespace Client.Services.Foundations.FileMedicalService
         public async Task<Stream> GetMedicalFilePrescription(string OrdreId)
         {
             OrdreId = System.Web.HttpUtility.UrlEncode(OrdreId);
+            
             var result = await this.httpClient.GetAsync($"/api/FileMedical/DownloadFilePrescription/{OrdreId}");
             if(result.StatusCode == HttpStatusCode.OK)
             {
