@@ -30,7 +30,7 @@ namespace Server.Controllers
         {
             try
             {
-                Id=System.Web.HttpUtility.UrlDecode(Id);
+                Id = Id.Replace("-", "/");
                 var FilePrescription = await this.FileMedicalService.GetFilePrescriptionByIdOrdreMedical(Id);
                 using (MemoryStream pdfStream = new())
                 {

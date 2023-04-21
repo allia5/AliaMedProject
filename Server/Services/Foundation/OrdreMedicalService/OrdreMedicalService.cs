@@ -149,11 +149,12 @@ namespace Server.Services.Foundation.OrdreMedicalService
                         ValidatePrecriptionLineOnAdd(item);
                        var prescriptionLineInsert = MapperToPrescriptionLine(PrescriptionInsert.Id, item);
                         await this.PrescriptionLineManager.InsertPrescriptionLineAsync(prescriptionLineInsert);
-                        PrescriptionInsert.FilePrescription = AjouterStringDansFichierDocx(orderMedicalToAdd.Prescription.PrescriptionFile, item.MedicamentName);
+                        //PrescriptionInsert.FilePrescription = AjouterStringDansFichierDocx(orderMedicalToAdd.Prescription.PrescriptionFile, item.MedicamentName);
                        
                     }
-                    PrescriptionInsert.FilePrescription = AjouterCodeQRDansFichierDocx(PrescriptionInsert.FilePrescription, Prescription.qrCode);
-                    await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
+                    // PrescriptionInsert.FilePrescription = AjouterCodeQRDansFichierDocx(PrescriptionInsert.FilePrescription, Prescription.qrCode);
+                    PrescriptionInsert.FilePrescription = orderMedicalToAdd.Prescription.PrescriptionFile;
+                     await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
                     OrdreMedicalResult.Lines = orderMedicalToAdd.Prescription.prescriptionLines;
                 }
                 if (orderMedicalToAdd.RadioToAdd != null)
@@ -161,10 +162,10 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     ValidateRadioOnAdd(orderMedicalToAdd.RadioToAdd);
                    var Radio = MapperToRadio(orderMedicalToAdd.RadioToAdd, OddreMedicalInsertResult.Id);
                     Radio.QrCode = GenerateQRCodeStringFromGuid(Radio.Id);
-                    Radio.FileRadio = AjouterStringDansFichierDocx(orderMedicalToAdd.RadioToAdd.FileMedicalRadio, orderMedicalToAdd.RadioToAdd.Description);
-                    Radio.FileRadio = AjouterStringDansFichierDocx(orderMedicalToAdd.RadioToAdd.FileMedicalRadio, orderMedicalToAdd.RadioToAdd.Instruction);
-                    Radio.FileRadio = AjouterStringDansFichierDocx(orderMedicalToAdd.RadioToAdd.FileMedicalRadio, DateTime.Now.ToString());
-                    Radio.FileRadio = AjouterCodeQRDansFichierDocx(Radio.FileRadio, Radio.QrCode);
+                   // Radio.FileRadio = AjouterStringDansFichierDocx(orderMedicalToAdd.RadioToAdd.FileMedicalRadio, orderMedicalToAdd.RadioToAdd.Description);
+                   // Radio.FileRadio = AjouterStringDansFichierDocx(orderMedicalToAdd.RadioToAdd.FileMedicalRadio, orderMedicalToAdd.RadioToAdd.Instruction);
+                   // Radio.FileRadio = AjouterStringDansFichierDocx(orderMedicalToAdd.RadioToAdd.FileMedicalRadio, DateTime.Now.ToString());
+                    //Radio.FileRadio = AjouterCodeQRDansFichierDocx(Radio.FileRadio, Radio.QrCode);
                     var RadioInsert =  await this.radioManager.InsertRadioAsync(Radio);
                     OrdreMedicalResult.ResultFileMedicalRadio = RadioInsert.FileRadio;
                 }
@@ -173,10 +174,10 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     ValidateAnalyseOnAdd(orderMedicalToAdd.AnalyseToAdd);
                     var Analyse =MapperToAnalyse(orderMedicalToAdd.AnalyseToAdd, OddreMedicalInsertResult.Id);
                     Analyse.QrCode = GenerateQRCodeStringFromGuid(Analyse.Id);
-                    Analyse.FileAnalyse = AjouterStringDansFichierDocx(orderMedicalToAdd.AnalyseToAdd.FileMedicalAnalyse,orderMedicalToAdd.AnalyseToAdd.Description);
-                    Analyse.FileAnalyse = AjouterStringDansFichierDocx(orderMedicalToAdd.AnalyseToAdd.FileMedicalAnalyse, orderMedicalToAdd.AnalyseToAdd.Instruction);
-                    Analyse.FileAnalyse = AjouterStringDansFichierDocx(orderMedicalToAdd.AnalyseToAdd.FileMedicalAnalyse, DateTime.Now.ToString());
-                    Analyse.FileAnalyse = AjouterCodeQRDansFichierDocx(Analyse.FileAnalyse, Analyse.QrCode);
+                 //   Analyse.FileAnalyse = AjouterStringDansFichierDocx(orderMedicalToAdd.AnalyseToAdd.FileMedicalAnalyse,orderMedicalToAdd.AnalyseToAdd.Description);
+                 //   Analyse.FileAnalyse = AjouterStringDansFichierDocx(orderMedicalToAdd.AnalyseToAdd.FileMedicalAnalyse, orderMedicalToAdd.AnalyseToAdd.Instruction);
+                 //   Analyse.FileAnalyse = AjouterStringDansFichierDocx(orderMedicalToAdd.AnalyseToAdd.FileMedicalAnalyse, DateTime.Now.ToString());
+                    //Analyse.FileAnalyse = AjouterCodeQRDansFichierDocx(Analyse.FileAnalyse, Analyse.QrCode);
                     var AnalyseInsert = await this.analyseManager.InsertAnalyseAsync(Analyse);
                     OrdreMedicalResult.ResultFileMedicalAnalyse = Analyse.FileAnalyse;
                 }
