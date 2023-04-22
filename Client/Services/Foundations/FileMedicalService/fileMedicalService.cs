@@ -157,7 +157,7 @@ namespace Client.Services.Foundations.FileMedicalService
 
         public async Task<Stream> GetMedicalFileRadio(string OrdreId)
         {
-           // OrdreId = System.Web.HttpUtility.UrlEncode(OrdreId);
+            OrdreId = OrdreId.Replace("/", "-");
             var result = await this.httpClient.GetAsync($"/api/FileMedical/DownloadFileRadio/{OrdreId}");
             if (result.StatusCode == HttpStatusCode.OK)
             {
@@ -183,8 +183,8 @@ namespace Client.Services.Foundations.FileMedicalService
 
         public async  Task<Stream> GetMedicalFileAnalyse(string OrdreId)
         {
-            OrdreId = System.Web.HttpUtility.UrlEncode(OrdreId);
-            var result = await this.httpClient.GetAsync($"/api/FileMedical/DownloadFileAnalyse/{OrdreId}");
+            OrdreId = OrdreId.Replace("/", "-");
+           var result = await this.httpClient.GetAsync($"/api/FileMedical/DownloadFileAnalyse/{OrdreId}");
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 return await result.Content.ReadAsStreamAsync();

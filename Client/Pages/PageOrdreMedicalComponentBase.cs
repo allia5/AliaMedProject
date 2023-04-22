@@ -47,7 +47,7 @@ namespace Client.Pages
         }
         public async Task OnSkipePrescription()
         {
-
+            this.PrescriptionDto = null;
         }
         public async Task OnAddRadio()
         {
@@ -55,7 +55,7 @@ namespace Client.Pages
         }
         public async Task OnSkipRadio()
         {
-
+            this.RadioToAddDto = null;
         }
         public async Task OnUpdateAnalyse()
         {
@@ -63,7 +63,7 @@ namespace Client.Pages
         }
         public async Task OnSkipAnalyse()
         {
-
+            this.AnalyseToAddDto = null;
         }
         public async Task OnAddLine()
         {
@@ -110,14 +110,47 @@ namespace Client.Pages
                 this.isLoading = true;
                 this.OrderMedicalToAddDro.AppointmentId = this.AppointmentId;
                 this.OrderMedicalToAddDro.FileId = this.FileId;
-                this.OrderMedicalToAddDro.RadioToAdd = this.RadioToAddDto;
-                this.OrderMedicalToAddDro.AnalyseToAdd = this.AnalyseToAddDto;
-                this.PrescriptionDto.prescriptionLines = ListPrescriptionLineDto;
-                this.OrderMedicalToAddDro.Prescription =this.PrescriptionDto;
-                await this.OrdreMedicalService.PostOrdreMedicalPatient(OrderMedicalToAddDro);
+                if(PrescriptionDto == null && RadioToAddDto ==null && AnalyseToAddDto == null)
+                {
+              
+                    throw new Exception("Error Save Ordre Medical");
+               
+                }
+
+
+                    if (RadioToAddDto != null)
+                    {
+                        this.OrderMedicalToAddDro.RadioToAdd = this.RadioToAddDto;
+                    }
+                    else
+                    {
+                        this.OrderMedicalToAddDro.RadioToAdd = null;
+                    }
+                    if (AnalyseToAddDto != null)
+                    {
+                        this.OrderMedicalToAddDro.AnalyseToAdd = this.AnalyseToAddDto;
+                    }
+                    else
+                    {
+                        this.AnalyseToAddDto = null;
+                    }
+
+                    if (PrescriptionDto != null   /*.PrescriptionFile != null || PrescriptionDto.Instruction!=null || PrescriptionDto.prescriptionLines.Count() !=0*/  )
+                    {
+                        this.PrescriptionDto.prescriptionLines = ListPrescriptionLineDto;
+                        this.OrderMedicalToAddDro.Prescription = this.PrescriptionDto;
+                    }
+                    else
+                    {
+                        OrderMedicalToAddDro.Prescription = null;
+                    }
+
+                    await this.OrdreMedicalService.PostOrdreMedicalPatient(OrderMedicalToAddDro);
+
+                    SuccessMessage = "Operation Success";
+                    this.isLoading = false;
+
                 
-                SuccessMessage = "Operation Success";
-                this.isLoading = false;
             }
             catch (Exception e)
             {

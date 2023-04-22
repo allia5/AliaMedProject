@@ -176,6 +176,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
 
+
         public static byte[] AddTextToPdf(byte[] pdfBytes, string text,float k)
         {
             using (MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
@@ -197,8 +198,33 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 }
             }
         }
-     
-       
+
+
+        public static byte[] AddTextToPdfAnalyseRadio(byte[] pdfBytes, string Description, string Instruction)
+        {
+            using (MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
+            {
+                using (MemoryStream outputPdfStream = new MemoryStream())
+                {
+                    PdfReader pdfReader = new PdfReader(inputPdfStream);
+                    PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
+                    PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
+
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                    pdfContentByte.BeginText();
+                    pdfContentByte.SetFontAndSize(baseFont, 12);
+                    Description = "Description :" + Description;
+                    Instruction = "Instruction :" + Instruction;
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, Description, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (2), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, Instruction, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (float)(2 + 0.5), 0);
+                    pdfContentByte.EndText();
+                    pdfStamper.Close();
+                    return outputPdfStream.ToArray();
+                }
+            }
+        }
+
+
 
 
 
@@ -230,6 +256,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 Instruction = analyseToAddDto.Instruction,
                 Status = StatusAnalyse.validate,
                 DateValidation = null,
+                FileAnalyse = analyseToAddDto.FileMedicalAnalyse
             };
         }
 
@@ -245,10 +272,11 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 Instruction=radioDto.Instruction,
                 Status=StatusRadio.notValidate,
                 DateValidation=null,
-                
-                
+                FileRadio= radioDto.FileMedicalRadio
 
-                
+
+
+
             };
         }
         public static PrescriptionLines MapperToPrescriptionLine(Guid PrescriptionId , PrescriptionLineDto prescriptionDto)

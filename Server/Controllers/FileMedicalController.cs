@@ -56,7 +56,7 @@ namespace Server.Controllers
         [HttpGet("DownloadFileRadio/{Id}")]
         public async Task<IActionResult> GetFileRadio(string Id)
         {
-
+            Id = Id.Replace("-", "/");
             var FileRadio = await this.FileMedicalService.GetFileRadioByIdOrdreMedical(Id);
             using (MemoryStream pdfStream = new())
             {
@@ -70,6 +70,7 @@ namespace Server.Controllers
         [HttpGet("DownloadFileAnalyse/{Id}")]
         public async Task<IActionResult> GetFileAnalyse(string Id)
         {
+            Id = Id.Replace("-", "/");
             var FileAnalyse = await this.FileMedicalService.GetFileAnalyseByIdOrdreMedical(Id);
             using (MemoryStream pdfStream = new())
             {

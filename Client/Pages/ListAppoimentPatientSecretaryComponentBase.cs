@@ -161,6 +161,8 @@ namespace Client.Pages
         protected async Task OnUpdateOrdreMedicalId(string OrdreMedicalId)
         {
             this.OrdreMedicalId = OrdreMedicalId;
+            
+
         }
         public byte[] StreamToBytes(Stream stream)
         {
@@ -202,18 +204,16 @@ namespace Client.Pages
         protected async Task DownloadFileRadio()
         {
             var stream = await this.fileMedicalService.GetMedicalFileRadio(OrdreMedicalId);
-            var contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            var fileName = "sample.pdf"; // replace this with the appropriate filename for your file
-
-            await jSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, stream, contentType);
+            using var streamRef = new DotNetStreamReference(stream: stream);
+            var fileName = "FileRadio.pdf";
+            await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
         }
         protected async Task DownloadFileAnalyse()
         {
             var stream = await this.fileMedicalService.GetMedicalFileAnalyse(OrdreMedicalId);
-            var contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            var fileName = "sample.pdf"; // replace this with the appropriate filename for your file
-
-            await jSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, stream, contentType);
+            using var streamRef = new DotNetStreamReference(stream: stream);
+            var fileName = "FileAnalyse.pdf";
+            await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
         }
         protected async Task OnValidateOrdreMedical(string OrdreId)
         {
