@@ -61,13 +61,12 @@
                     
                 }
               
-                @if (PrescriptionDto != null)
-                {
+               
                     <div class="form-control d-flex">
                         <input class="form-control w-50" @bind="PrescriptionLineDto.MedicamentName" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="PrescriptionLineDto.Description" type="text" placeholder="Description">   <input @bind="PrescriptionLineDto.Quantity" class="form-control w-25" type="number" min="0" placeholder="Quantity">
                     </div>
                     <input class="form-control" @bind="PrescriptionDto.Instruction" type="text" placeholder="Instruction">
-                }
+                
               
                 <div class="form-control">
                     <button class="btn btn-success" style="width:100%;" @onclick="OnAddLine" data-bs-toggle="modal">+ Add Prescription</button>
@@ -80,7 +79,7 @@
             <div class="modal-footer">
 
                 <button class="btn btn-danger" data-bs-target="#exampleModalToggle2" @onclick="OnSkipePrescription" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" @onclick="OnAddPrescription" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
             </div>
         </div>
     </div>
@@ -117,7 +116,7 @@
             <div class="modal-footer">
                 <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
                 <button class="btn btn-danger" data-bs-target="#exampleModalToggle3" @onclick="OnSkipRadio" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" @onclick="OnAddRadio" data-bs-dismiss="modal">Next</button>
                
             </div>
         </div>
@@ -152,7 +151,7 @@
 
                 <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
                 <button class="btn btn-danger" data-bs-target="#exampleModalToggle4" @onclick="OnSkipAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle4" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
+                <button class="btn btn-primary" data-bs-target="#exampleModalToggle4" @onclick="OnUpdateAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
             </div>
         </div>
     </div>

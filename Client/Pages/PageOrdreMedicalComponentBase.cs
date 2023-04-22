@@ -43,32 +43,35 @@ namespace Client.Pages
 
         public async Task OnAddPrescription()
         {
-           
+            this.OrderMedicalToAddDro.Prescription = PrescriptionDto;
+
+            OrderMedicalToAddDro.Prescription.prescriptionLines = ListPrescriptionLineDto;
         }
         public async Task OnSkipePrescription()
         {
-            this.PrescriptionDto = null;
+            this.OrderMedicalToAddDro.Prescription = null;
         }
         public async Task OnAddRadio()
         {
-           
+            this.OrderMedicalToAddDro.RadioToAdd = RadioToAddDto;
         }
         public async Task OnSkipRadio()
         {
-            this.RadioToAddDto = null;
+            this.OrderMedicalToAddDro.RadioToAdd = null;
         }
         public async Task OnUpdateAnalyse()
         {
-      
+            this.OrderMedicalToAddDro.AnalyseToAdd = AnalyseToAddDto;
         }
         public async Task OnSkipAnalyse()
         {
-            this.AnalyseToAddDto = null;
+            this.OrderMedicalToAddDro.AnalyseToAdd = null;
         }
         public async Task OnAddLine()
         {
            
             this.ListPrescriptionLineDto.Add(PrescriptionLineDto);
+            
             PrescriptionLineDto = new PrescriptionLineDto ();
 
 
@@ -110,40 +113,12 @@ namespace Client.Pages
                 this.isLoading = true;
                 this.OrderMedicalToAddDro.AppointmentId = this.AppointmentId;
                 this.OrderMedicalToAddDro.FileId = this.FileId;
-                if(PrescriptionDto == null && RadioToAddDto ==null && AnalyseToAddDto == null)
+                if(OrderMedicalToAddDro.Prescription == null && OrderMedicalToAddDro.RadioToAdd == null && OrderMedicalToAddDro.AnalyseToAdd == null)
                 {
               
                     throw new Exception("Error Save Ordre Medical");
                
                 }
-
-
-                    if (RadioToAddDto != null)
-                    {
-                        this.OrderMedicalToAddDro.RadioToAdd = this.RadioToAddDto;
-                    }
-                    else
-                    {
-                        this.OrderMedicalToAddDro.RadioToAdd = null;
-                    }
-                    if (AnalyseToAddDto != null)
-                    {
-                        this.OrderMedicalToAddDro.AnalyseToAdd = this.AnalyseToAddDto;
-                    }
-                    else
-                    {
-                        this.AnalyseToAddDto = null;
-                    }
-
-                    if (PrescriptionDto != null   /*.PrescriptionFile != null || PrescriptionDto.Instruction!=null || PrescriptionDto.prescriptionLines.Count() !=0*/  )
-                    {
-                        this.PrescriptionDto.prescriptionLines = ListPrescriptionLineDto;
-                        this.OrderMedicalToAddDro.Prescription = this.PrescriptionDto;
-                    }
-                    else
-                    {
-                        OrderMedicalToAddDro.Prescription = null;
-                    }
 
                     await this.OrdreMedicalService.PostOrdreMedicalPatient(OrderMedicalToAddDro);
 
