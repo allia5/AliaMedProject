@@ -138,23 +138,32 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 OrdreMedicalResult.cabinetInformation = CabinetInformation;
                var OrdreMedical = MapperToMedicalOrdre(Doctor.Id, Cabinet.Id, orderMedicalToAdd);
                 var OddreMedicalInsertResult = await this.ordreMedicalManager.InsertOrdreMedicalAsync(OrdreMedical);
+                
                 if(orderMedicalToAdd.Prescription != null)
                 {
                     ValidatePrescriptionOnAdd(orderMedicalToAdd.Prescription);
                     var Prescription =MapperToPrescription(orderMedicalToAdd, OddreMedicalInsertResult);
                     Prescription.qrCode = GenerateQRCodeStringFromGuid(Prescription.Id);
                     var PrescriptionInsert = await this.prescriptionManager.InsertPrescriptionAsync(Prescription);
-                    foreach(var item in orderMedicalToAdd.Prescription.prescriptionLines)
+                    var stringToAddFile = "";
+                    var ItemsAdd = "name Medicament" + "..............................................................." + "Quantity";
+                    PrescriptionInsert.FilePrescription = AddTextToPdf(PrescriptionInsert.FilePrescription, ItemsAdd, 0);
+                    float k = (float)0.5;
+                    foreach (var item in orderMedicalToAdd.Prescription.prescriptionLines)
                     {
                         ValidatePrecriptionLineOnAdd(item);
                        var prescriptionLineInsert = MapperToPrescriptionLine(PrescriptionInsert.Id, item);
                         await this.PrescriptionLineManager.InsertPrescriptionLineAsync(prescriptionLineInsert);
-                        //PrescriptionInsert.FilePrescription = AjouterStringDansFichierDocx(orderMedicalToAdd.Prescription.PrescriptionFile, item.MedicamentName);
-                       
+                         stringToAddFile =item.MedicamentName + "..............................................................." + item.Quantity + Environment.NewLine;
+                        PrescriptionInsert.FilePrescription = AddTextToPdf(PrescriptionInsert.FilePrescription, stringToAddFile,k);
+                        k = (float)(k + 0.5);
+
+
                     }
-                    // PrescriptionInsert.FilePrescription = AjouterCodeQRDansFichierDocx(PrescriptionInsert.FilePrescription, Prescription.qrCode);
-                    PrescriptionInsert.FilePrescription = orderMedicalToAdd.Prescription.PrescriptionFile;
-                     await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
+                   
+                    // PrescriptionInsert.FilePrescription = AddQRCodeToTextFile(PrescriptionInsert.FilePrescription, Prescription.qrCode);
+                    //PrescriptionInsert.FilePrescription = orderMedicalToAdd.Prescription.PrescriptionFile;
+                    await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
                     OrdreMedicalResult.Lines = orderMedicalToAdd.Prescription.prescriptionLines;
                 }
                 if (orderMedicalToAdd.RadioToAdd != null)

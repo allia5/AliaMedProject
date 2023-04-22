@@ -179,7 +179,7 @@ namespace Client.Pages
                 // Save the file
                 var stream = await this.fileMedicalService.GetMedicalFilePrescription(OrdreMedicalId);
                 using var streamRef = new DotNetStreamReference(stream: stream);
-                var fileName = "File.docx";
+                var fileName = "File.pdf";
                 await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
                 
                

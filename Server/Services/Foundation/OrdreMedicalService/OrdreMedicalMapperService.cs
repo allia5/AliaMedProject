@@ -1,28 +1,20 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Packaging;
+﻿
 using DTO;
 using QRCoder;
 using Server.Models.MedicalOrder;
-using System.Drawing;
 using static Server.Utility.Utility;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System.Drawing.Imaging;
-using System.IO;
-using DocumentFormat.OpenXml.Drawing.Wordprocessing;
-using BarcodeLib;
-using System.Net.Mime;
 using Server.Models.Prescriptions;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using Server.Models;
 using Server.Models.PrescriptionLine;
 using Server.Models.RadioMedical;
 using Server.Models.Analyse;
 using Server.Models.UserAccount;
 using Server.Models.fileMedical;
 using Server.Models.secretary;
-using Server.Models.Doctor;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 using DocumentFormat.OpenXml.Spreadsheet;
+using iTextSharp.text.pdf.parser;
+using AngleSharp.Text;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -81,119 +73,48 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
 
-public static byte[] AjouterCodeQRDansFichierDocx(byte[] fichierDocx, string codeQR)
-    {
-            try
-            {
-                // Générer le code QR à partir de la chaîne de caractères
-                BarcodeLib.Barcode qrCode = new BarcodeLib.Barcode();
-                qrCode.IncludeLabel = true;
-                qrCode.Encode(BarcodeLib.TYPE.Codabar, codeQR, System.Drawing.Color.Black, System.Drawing.Color.White, 300, 300);
 
-                // Convert the QR code to a byte array
-                byte[] codeQRBytes;
-                using (MemoryStream ms = new MemoryStream(0))
-                {
-                    qrCode.SaveImage(ms, SaveTypes.PNG);
-                    codeQRBytes = ms.ToArray();
-                }
-
-                // Open the Word document in a memory stream
-                using (MemoryStream docStream = new MemoryStream(fichierDocx))
-                using (WordprocessingDocument doc = WordprocessingDocument.Open(docStream, true))
-                {
-                    MainDocumentPart mainPart = doc.MainDocumentPart;
-
-                    if (mainPart == null)
-                    {
-                        mainPart = doc.AddMainDocumentPart();
-                        new Document(new Body()).Save(mainPart);
-                    }
-
-                    // Add the QR code image to the document
-                    ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Png);
-                    using (MemoryStream imageStream = new MemoryStream())
-                    {
-                        imagePart.FeedData(imageStream);
-                    }
-
-                    // Add a new paragraph to the document with the QR code image
-                    var paragraph = new DocumentFormat.OpenXml.Wordprocessing.Paragraph();
-                    var run = new DocumentFormat.OpenXml.Wordprocessing.Run();
-                    var drawing = new DocumentFormat.OpenXml.Drawing.Paragraph(
-                        new DocumentFormat.OpenXml.Drawing.Wordprocessing.Anchor(
-                            new DocumentFormat.OpenXml.Drawing.Wordprocessing.SimplePosition() { X = 0, Y = 0 },
-                            new DocumentFormat.OpenXml.Drawing.Wordprocessing.Extent() { Cx = 3000000L, Cy = 3000000L },
-                            new DocumentFormat.OpenXml.Drawing.Wordprocessing.DocProperties() { Id = 1, Name = "CodeQR" },
-                            new DocumentFormat.OpenXml.Drawing.Wordprocessing.NonVisualGraphicFrameDrawingProperties(
-                                new DocumentFormat.OpenXml.Drawing.GraphicData(
-                                    new DocumentFormat.OpenXml.Drawing.Pictures.Picture(
-                                        new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualPictureProperties(
-                                            new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualDrawingProperties() { Id = 0, Name = "CodeQR.png" },
-                                            new DocumentFormat.OpenXml.Drawing.Pictures.NonVisualPictureDrawingProperties()),
-                                        new DocumentFormat.OpenXml.Drawing.Pictures.BlipFill(
-                                            new DocumentFormat.OpenXml.Drawing.Blip() { Embed = mainPart.GetIdOfPart(imagePart) },
-                                            new DocumentFormat.OpenXml.Drawing.Stretch(new DocumentFormat.OpenXml.Drawing.FillRectangle())),
-                                        new DocumentFormat.OpenXml.Drawing.Pictures.ShapeProperties())))));
-                    run.AppendChild(drawing);
-                    paragraph.AppendChild(run);
-                    mainPart.Document.Body.AppendChild(paragraph);
-
-                    // Save the document to the same memory stream
-                    mainPart.Document.Save();
-                }
-
-                // Return the modified document as a byte array
-                return fichierDocx;
-            }
-            catch(Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-      
-    }
-
-
-
-
-    public static byte[] AjouterStringDansFichierDocx(byte[] fichierDocx, string chaine)
+        public static byte[] AddTextToPdf(byte[] pdfBytes, string text,float k)
         {
-            try
+            using (MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
             {
-                using (MemoryStream ms = new MemoryStream())
+                using (MemoryStream outputPdfStream = new MemoryStream())
                 {
-                    ms.Write(fichierDocx, 0, fichierDocx.Length);
+                    PdfReader pdfReader = new PdfReader(inputPdfStream);
+                    PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
+                    PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
+                    
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                    pdfContentByte.BeginText();
+                    pdfContentByte.SetFontAndSize(baseFont, 12);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height /(2+k), 0);
 
-                    using (WordprocessingDocument doc = WordprocessingDocument.Open(ms, true))
-                    {
-                        MainDocumentPart mainPart = doc.MainDocumentPart;
-
-                        if (mainPart == null)
-                        {
-                            mainPart = doc.AddMainDocumentPart();
-                            new Document(new Body()).Save(mainPart);
-                        }
-
-                        // mainPart.Document.Body.Append(new DocumentFormat.OpenXml.Drawing.Paragraph(new DocumentFormat.OpenXml.Drawing.Run(MediaTypeNames.Text(chaine))));
-                        DocumentFormat.OpenXml.Drawing.Paragraph paragraph = new DocumentFormat.OpenXml.Drawing.Paragraph(
-        new DocumentFormat.OpenXml.Drawing.Run(
-            new DocumentFormat.OpenXml.Drawing.Text(chaine)
-        )
-    );
-                        mainPart.Document.Body.Append(paragraph);
-
-                        mainPart.Document.Save();
-                    }
-
-                    return ms.ToArray();
+                    pdfContentByte.EndText();
+                    pdfStamper.Close();
+                    return outputPdfStream.ToArray();
                 }
             }
-            catch(Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-           
         }
+     
+       
+
+
+
+
+
+
+
+
+
+
+
+        public static byte[] AddStringToFile(byte[] fileBytes, string stringToAdd)
+        {
+            string fileString = System.Text.Encoding.Default.GetString(fileBytes);
+            fileString += stringToAdd;
+            return System.Text.Encoding.Default.GetBytes(fileString);
+        }
+      
 
 
 
@@ -272,6 +193,7 @@ public static byte[] AjouterCodeQRDansFichierDocx(byte[] fichierDocx, string cod
 
                 IdMedicalOrdre = medicalOrdres.Id,
                 instruction = orderMedicalToAddDro.Prescription.Instruction,
+                FilePrescription = orderMedicalToAddDro.Prescription.PrescriptionFile
 
 
             };
