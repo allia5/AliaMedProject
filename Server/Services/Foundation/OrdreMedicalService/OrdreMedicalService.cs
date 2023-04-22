@@ -160,8 +160,9 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
                     }
-                   
-                    // PrescriptionInsert.FilePrescription = AddQRCodeToTextFile(PrescriptionInsert.FilePrescription, Prescription.qrCode);
+
+                     
+                    PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription, Prescription.qrCode);
                     //PrescriptionInsert.FilePrescription = orderMedicalToAdd.Prescription.PrescriptionFile;
                     await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
                     OrdreMedicalResult.Lines = orderMedicalToAdd.Prescription.prescriptionLines;
