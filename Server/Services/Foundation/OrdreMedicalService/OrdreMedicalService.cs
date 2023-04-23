@@ -96,8 +96,35 @@ namespace Server.Services.Foundation.OrdreMedicalService
                    
                 
                    var OrdreMedicalInformationDto = mapperToInformationOrdreMedical(ItemOrdre);
-                 
-                   var InformationOrdreMedicalItemDto = MapperToInformationOrderMedicalSecritary(InformationPatientDto, FileMedicalInformationDto, OrdreMedicalInformationDto);
+                       var fileRadio = await this.radioManager.SelectRadioByIdMedicalOrdre(ItemOrdre.Id);
+                       if(fileRadio?.FileRadio == null)
+                       {
+                           OrdreMedicalInformationDto.FileRadio = false;
+                       }
+                       else
+                       {
+                           OrdreMedicalInformationDto.FileRadio = true;
+                       }
+                       var filePrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(ItemOrdre.Id);
+                       if (filePrescription?.FilePrescription == null)
+                       {
+                           OrdreMedicalInformationDto.FilePrescription = false;
+                       }
+                       else
+                       {
+                           OrdreMedicalInformationDto.FilePrescription = true;
+                       }
+                       var FileAnalyse = await this.analyseManager.SelectAnalyseByOrdreMedicalId(ItemOrdre.Id);
+                       if (FileAnalyse?.FileAnalyse == null)
+                       {
+                           OrdreMedicalInformationDto.fileAnalyse = false;
+                       }
+                       else
+                       {
+                           OrdreMedicalInformationDto.fileAnalyse = true;
+                       }
+
+                       var InformationOrdreMedicalItemDto = MapperToInformationOrderMedicalSecritary(InformationPatientDto, FileMedicalInformationDto, OrdreMedicalInformationDto);
                        ListinformationOrderMedicalSecritaries.Add(InformationOrdreMedicalItemDto);
                    }
                  

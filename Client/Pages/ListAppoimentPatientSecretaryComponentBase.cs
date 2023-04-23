@@ -35,6 +35,7 @@ namespace Client.Pages
         protected string IndexValidateBtn = null;
         protected string OrdreMedicalId = null;
         protected DateTime DateAppoiment { get; set; } = DateTime.Now;
+        protected InformationOrdreMedical ItemOrdreMedicalToView = null;
         protected PatientInformationDto PatientInformationDto = new PatientInformationDto();
         protected List<InformationOrderMedicalSecritary> informationOrderMedicalSecritaries = new List<InformationOrderMedicalSecritary>();
         protected List<InformationOrderMedicalSecritary> informationOrderMedicalSecritariesValidate = new List<InformationOrderMedicalSecritary>();
@@ -161,7 +162,14 @@ namespace Client.Pages
         protected async Task OnUpdateOrdreMedicalId(string OrdreMedicalId)
         {
             this.OrdreMedicalId = OrdreMedicalId;
-            
+            var OrdreMedicalToView =this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.Id == OrdreMedicalId).FirstOrDefault();
+            if(OrdreMedicalToView != null)
+            {
+                this.ItemOrdreMedicalToView = OrdreMedicalToView.informationOrdreMedical;
+            }
+           
+
+
 
         }
         public byte[] StreamToBytes(Stream stream)
