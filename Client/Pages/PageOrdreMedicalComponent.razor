@@ -50,10 +50,13 @@
                 <h5 class="modal-title" id="exampleModalToggleLabel">Prescription</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <EditForm Model="PrescriptionLineDto">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
             <div class="modal-body">
                @foreach(var PrescriptionItem in ListPrescriptionLineDto)
                 {
-                
+                    
                         <div class="form-control d-flex">
                         <input class="form-control w-50" @bind="PrescriptionItem.MedicamentName" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="PrescriptionItem.Description" type="text" placeholder="Description">   <input @bind="PrescriptionItem.Quantity" class="form-control w-25" type="number" min="0" placeholder="Quantity">
                         </div>
@@ -63,7 +66,7 @@
               
                
                     <div class="form-control d-flex">
-                        <input class="form-control w-50" @bind="PrescriptionLineDto.MedicamentName" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="PrescriptionLineDto.Description" type="text" placeholder="Description">   <input @bind="PrescriptionLineDto.Quantity" class="form-control w-25" type="number" min="0" placeholder="Quantity">
+                        <input class="form-control w-50" @bind="PrescriptionLineDto.MedicamentName" type="text" placeholder="Description">  <input class="form-control w-25" @bind="PrescriptionLineDto.Description" type="text" placeholder="Description">   <input @bind="PrescriptionLineDto.Quantity" class="form-control w-25" type="number" min="0" placeholder="Quantity">
                     </div>
                     <input class="form-control" @bind="PrescriptionDto.Instruction" type="text" placeholder="Instruction">
                 
@@ -76,11 +79,14 @@
                     <InputFile class="form-control" type="file" OnChange="HandleFilePrescriptionSelected" />
                 </div>
             </div>
+            
             <div class="modal-footer">
 
-                <button class="btn btn-danger" data-bs-target="#exampleModalToggle2" @onclick="OnSkipePrescription" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" @onclick="OnAddPrescription" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
+                <button type="button" class="btn btn-danger" data-bs-target="#exampleModalToggle2" @onclick="OnSkipePrescription" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
+                <button type="submit" class="btn btn-primary" data-bs-target="#exampleModalToggle2" @onclick="OnAddPrescription" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
+
             </div>
+            </EditForm>
         </div>
     </div>
 </div>
@@ -93,11 +99,12 @@
                 <h5 class="modal-title" id="exampleModalToggleLabel2">Radio</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <EditForm Model="RadioToAddDto">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
             <div class="modal-body">
 
-                <EditForm Model="RadioToAddDto">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
+               
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Radio Instruction:</label>
                         <input type="text" @bind="RadioToAddDto.Instruction" class="form-control" id="recipient-name">
@@ -110,15 +117,16 @@
                         <label for="formFile" class="form-label">Default file input example</label>
                         <InputFile class="form-control" type="file" OnChange="HandleFileRadioSelected" />
                     </div>
-                </EditForm>
+              
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
-                <button class="btn btn-danger" data-bs-target="#exampleModalToggle3" @onclick="OnSkipRadio" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" @onclick="OnAddRadio" data-bs-dismiss="modal">Next</button>
+                    <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
+                <button type="button" class="btn btn-danger" data-bs-target="#exampleModalToggle3" @onclick="OnSkipRadio" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
+                <button type="submit" class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" @onclick="OnAddRadio" data-bs-dismiss="modal">Next</button>
                
             </div>
+              </EditForm>
         </div>
     </div>
 </div>
@@ -129,10 +137,11 @@
                 <h5 class="modal-title" id="exampleModalToggleLabel2">Analyse</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <EditForm Model="AnalyseToAddDto">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
             <div class="modal-body">
-                <EditForm Model="AnalyseToAddDto">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
+               
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Analyse Instruction:</label>
                         <input @bind="AnalyseToAddDto.Instruction" type="text" class="form-control" id="recipient-name">
@@ -145,14 +154,15 @@
                         <label for="formFile" class="form-label">Default file input example</label>
                         <InputFile class="form-control" type="file" OnChange="HandleFileAnalyseSelected" />
                     </div>
-                </EditForm>
+            
             </div>
             <div class="modal-footer">
 
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
-                <button class="btn btn-danger" data-bs-target="#exampleModalToggle4" @onclick="OnSkipAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle4" @onclick="OnUpdateAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
+                    <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
+                <button type="button" class="btn btn-danger" data-bs-target="#exampleModalToggle4" @onclick="OnSkipAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
+                <button type="submit" class="btn btn-primary" data-bs-target="#exampleModalToggle4" @onclick="OnUpdateAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal">Next</button>
             </div>
+            </EditForm>
         </div>
     </div>
 </div>
@@ -163,11 +173,12 @@
                 <h5 class="modal-title" id="exampleModalToggleLabel2">Modal 2</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <EditForm Model="OrderMedicalToAddDro">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
             <div class="modal-body">
 
-                <EditForm Model="OrderMedicalToAddDro">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+               
                     <div class="form-floating">
                         <InputSelect class="form-control" @bind-Value="@OrderMedicalToAddDro.Visibility">
 
@@ -182,15 +193,16 @@
                     <label for="message-text" class="col-form-label">Summary:</label>
                     <textarea class="form-control" @bind="OrderMedicalToAddDro.Summary" id="message-text"></textarea>
                 </div>
-                </EditForm>
+               
 
 
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
-                <button class="btn btn-primary" @onclick="Done" data-bs-toggle="modal" data-bs-dismiss="modal">Done</button>
+                <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
+                <button type="submit" class="btn btn-primary" @onclick="Done" data-bs-toggle="modal" data-bs-dismiss="modal">Done</button>
             </div>
+            </EditForm>
         </div>
     </div>
 </div>

@@ -164,7 +164,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
 
             else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
-                throw new BadRequestException(result.ToString());
+                throw new BadRequestException("Bad Request Check Field");
             }
             else if (result.StatusCode == HttpStatusCode.Unauthorized)
             {
