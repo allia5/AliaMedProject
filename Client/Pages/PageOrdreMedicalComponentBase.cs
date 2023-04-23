@@ -40,7 +40,7 @@ namespace Client.Pages
         protected IfileMedicalService fileMedicalService { get; set; }  
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
+          
         public async Task OnAddPrescription()
         {
             this.OrderMedicalToAddDro.Prescription = PrescriptionDto;

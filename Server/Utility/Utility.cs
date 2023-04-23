@@ -14,6 +14,62 @@ namespace Server.Utility
 
 
 
+        private static readonly byte[] Salt = Encoding.ASCII.GetBytes("ASJCXLlJDTqJDHDRvcSEAHbc==");
+
+        public static string EncryptString(string plainText, string key)
+        {
+            byte[] keyBytes = new Rfc2898DeriveBytes(key, Salt).GetBytes(256 / 8);
+
+            using Aes aes = Aes.Create();
+            aes.Key = keyBytes;
+            aes.GenerateIV();
+
+            byte[] iv = aes.IV;
+
+            using MemoryStream memoryStream = new MemoryStream();
+            using CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write);
+            using StreamWriter streamWriter = new StreamWriter(cryptoStream);
+            streamWriter.Write(plainText);
+            streamWriter.Close();
+            cryptoStream.Close();
+            byte[] cipherTextBytes = memoryStream.ToArray();
+
+            byte[] combinedBytes = new byte[iv.Length + cipherTextBytes.Length];
+            Array.Copy(iv, 0, combinedBytes, 0, iv.Length);
+            Array.Copy(cipherTextBytes, 0, combinedBytes, iv.Length, cipherTextBytes.Length);
+
+            string cipherText = Convert.ToBase64String(combinedBytes);
+            return cipherText;
+        }
+
+        public static string DecryptString(string cipherText, string key)
+        {
+            byte[] combinedBytes = Convert.FromBase64String(cipherText);
+
+            byte[] iv = new byte[16];
+            byte[] cipherTextBytes = new byte[combinedBytes.Length - 16];
+
+            Array.Copy(combinedBytes, 0, iv, 0, 16);
+            Array.Copy(combinedBytes, 16, cipherTextBytes, 0, cipherTextBytes.Length);
+
+            byte[] keyBytes = new Rfc2898DeriveBytes(key, Salt).GetBytes(256 / 8);
+
+            using Aes aes = Aes.Create();
+            aes.Key = keyBytes;
+            aes.IV = iv;
+
+            using MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
+            using CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read);
+            using StreamReader streamReader = new StreamReader(cryptoStream);
+            string plainText = streamReader.ReadToEnd();
+            return plainText;
+        }
+
+
+
+
+
+
         public static string GenerateQRCodeStringFromGuid(Guid guid)
         {
             var bytes = guid.ToByteArray();
@@ -74,6 +130,8 @@ namespace Server.Utility
                 return Convert.ToBase64String(encryptedBytes);
             }
         }
+
+     
         public static Guid DecryptGuid(string encryptedGuid)
         {
             // Convertir les données encryptées en bytes
