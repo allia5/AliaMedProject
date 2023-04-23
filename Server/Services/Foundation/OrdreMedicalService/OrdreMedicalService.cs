@@ -190,7 +190,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
                     PrescriptionInsert.FilePrescription = AddInfromationDoctorToToPdf(PrescriptionInsert.FilePrescription, UserAccountDoctor, k);
                     PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription, FileMedical.MedicalIdentification, 100, 0);
-                    PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription,EncryptString( Prescription.qrCode, PrescriptionInsert.Id.ToString()),0,0);
+                    PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription,EncryptString( Prescription.qrCode,"AJFNJjfjJZFJNdzj=="),0,0);
                     await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
                     OrdreMedicalResult.Lines = orderMedicalToAdd.Prescription.prescriptionLines;
                 }
@@ -203,7 +203,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     Radio.FileRadio = AddTextToPdfAnalyseRadio(Radio.FileRadio,Radio.Description ,Radio.Instruction);
                     Radio.FileRadio = AddInfromationDoctorToToPdf(Radio.FileRadio, UserAccountDoctor, (float)1.5);
                     Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio, FileMedical.MedicalIdentification, 100, 0);
-                    Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString( Radio.QrCode, Radio.Id.ToString()), 0, 0);
+                    Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString( Radio.QrCode, "AJFNJjfjJZFJNdzj=="), 0, 0);
                     var RadioInsert =  await this.radioManager.InsertRadioAsync(Radio);
                     OrdreMedicalResult.ResultFileMedicalRadio = RadioInsert.FileRadio;
                 }
@@ -216,7 +216,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     Analyse.FileAnalyse = AddTextToPdfAnalyseRadio(Analyse.FileAnalyse, Analyse.description, Analyse.Instruction);
                     Analyse.FileAnalyse = AddInfromationDoctorToToPdf(Analyse.FileAnalyse, UserAccountDoctor, (float)1.5);
                     Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse, FileMedical.MedicalIdentification, 100, 0);
-                    Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( Analyse.QrCode,Analyse.Id.ToString()), 0, 0);
+                    Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( Analyse.QrCode, "AJFNJjfjJZFJNdzj=="), 0, 0);
                     var AnalyseInsert = await this.analyseManager.InsertAnalyseAsync(Analyse);
                     OrdreMedicalResult.ResultFileMedicalAnalyse = Analyse.FileAnalyse;
                 }

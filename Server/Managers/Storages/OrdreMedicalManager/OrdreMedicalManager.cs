@@ -47,5 +47,10 @@ namespace Server.Managers.Storages.OrdreMedicalManager
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task<MedicalOrdres> SelectMedicalOrdreByIdAsync(Guid OrdreMedicalId)
+        {
+            return await (from OrdreItem in this.ServerDbContext.MedicalOrdres where OrdreItem.Id == OrdreMedicalId select OrdreItem).FirstOrDefaultAsync();
+        }
     }
 }

@@ -30,5 +30,10 @@ namespace Server.Managers.Storages.RadioManager
         {
             return await (from ItemRadio in this.ServerDbContext.Radio where ItemRadio.IdOrdreMedical == MedicalOrdre select ItemRadio).FirstOrDefaultAsync();
         }
+
+        public async Task<Radio> SelectRadioByCodeAsync(string Code)
+        {
+            return await (from RadioItem in this.ServerDbContext.Radio where RadioItem.QrCode == Code && RadioItem.Status== StatusRadio.notValidate select RadioItem).FirstOrDefaultAsync();
+        }
     }
 }

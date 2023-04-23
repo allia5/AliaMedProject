@@ -33,6 +33,7 @@ using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
 using Server.Services.Foundation.OrdreMedicalService;
 using Server.Services.Foundation.PlanningAppoimentService;
+using Server.Services.Foundation.RadioMedicalService;
 using Server.Services.Foundation.SecretaryService;
 using Server.Services.Foundation.WorkDoctorService;
 using Server.Services.UserService;
@@ -117,6 +118,7 @@ builder.Services.AddScoped<IPrescriptionLineManager, PrescriptionLineManager>();
 builder.Services.AddScoped<IRadioManager, RadioManager>();
 builder.Services.AddScoped<IAnalyseManager, AnalyseManager>();
 builder.Services.AddScoped<IOrdreMedicalService, OrdreMedicalService>();
+builder.Services.AddScoped<IRadioMedicalService, RadioMedicalService>();
 
 builder.Services.AddSignalR();
 
