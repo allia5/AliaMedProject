@@ -15,6 +15,8 @@ using iTextSharp.text;
 using System.Drawing.Imaging;
 using iTextSharp.text.pdf.qrcode;
 using ZXing.QrCode.Internal;
+using System.Runtime.InteropServices;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -73,7 +75,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
 
-        public static byte[] InsertCodeQrIntoPdf(byte[] pdfBytes,string CodeQr)
+        public static byte[] InsertCodeQrIntoPdf(byte[] pdfBytes,string CodeQr,int x,int y)
         {
             // Créer un MemoryStream à partir du tableau de bytes PDF en entrée
             using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
@@ -98,10 +100,12 @@ namespace Server.Services.Foundation.OrdreMedicalService
                            // Image image = Image.GetInstance(imageBytes);
 
                             // Positionner l'image dans le coin supérieur gauche de la première page
-                            image.SetAbsolutePosition(0,0);
+                            image.SetAbsolutePosition(x,y);
+                    
 
-                            // Ajouter l'image à la première page
-                            pdfContentByte.AddImage(image);
+                        // Ajouter l'image à la première page
+                        pdfContentByte.AddImage(image);
+                            
 
                             // Fermer le PdfStamper
                             pdfStamper.Close();
@@ -117,65 +121,66 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
 
-        public static byte[] AddQRCodeToPdf(byte[] pdfBytes, string qrCode)
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public static byte[] AddInfromationFileToToPdf(byte[] pdfBytes, fileMedicals fileMedicals)
         {
-            // Créer un MemoryStream à partir du tableau de bytes PDF en entrée
-            using (MemoryStream ms = new MemoryStream(pdfBytes))
+            using (MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
             {
-                // Créer un MemoryStream pour le nouveau fichier PDF
-                using (MemoryStream outputMs = new MemoryStream())
+                using (MemoryStream outputPdfStream = new MemoryStream())
                 {
-                    // Ouvrir le fichier PDF existant avec iTextSharp
-                    PdfReader reader = new PdfReader(ms);
+                    PdfReader pdfReader = new PdfReader(inputPdfStream);
+                    PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
+                    PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
+                    var text = "First name:  " + fileMedicals.firstname + "   Last Name:" + fileMedicals.Lastname + "   date Birth:" + fileMedicals.DateOfBirth + "   Sexe:" + fileMedicals.Sexe;
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                    pdfContentByte.BeginText();
+                    pdfContentByte.SetFontAndSize(baseFont, 12);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (2), 0);
 
-                    // Créer un nouveau document PDF avec iTextSharp
-                    using (Document doc = new Document(reader.GetPageSizeWithRotation(1)))
-                    {
-                        // Créer un PdfCopy pour écrire dans le nouveau document PDF
-                        PdfCopy copy = new PdfCopy(doc, outputMs);
-
-                        // Ouvrir le document PDF
-                        doc.Open();
-
-                        // Récupérer la première page du document PDF existant
-                        PdfImportedPage page = copy.GetImportedPage(reader, 1);
-
-                        // Ajouter le code QR à la première page
-                        BarcodeQRCode qrcode = new BarcodeQRCode(qrCode, 1000, 1000, null);
-                        Image img = qrcode.GetImage();
-                        img.SetAbsolutePosition(100f, 100f);
-                        copy.DirectContent.AddImage(img);
-
-                        // Ajouter la page actuelle au nouveau document PDF
-                        PdfCopy.PageStamp stamp = copy.CreatePageStamp(page);
-                        stamp.AlterContents();
-                        copy.AddPage(page);
-
-                        // Fermer le document PDF
-                        doc.Close();
-
-                        // Retourner le tableau de bytes du nouveau document PDF
-                        return outputMs.ToArray();
-                    }
+                    pdfContentByte.EndText();
+                    pdfStamper.Close();
+                    return outputPdfStream.ToArray();
                 }
             }
         }
+        public static byte[] AddInfromationDoctorToToPdf(byte[] pdfBytes, User UserAccountDoctor ,float k)
+        {
+            using (MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
+            {
+                using (MemoryStream outputPdfStream = new MemoryStream())
+                {
+                    PdfReader pdfReader = new PdfReader(inputPdfStream);
+                    PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
+                    PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
+                    
+                    var text =   UserAccountDoctor.Firstname + "         " + UserAccountDoctor.LastName+"    "+ DateTime.Now;
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                    pdfContentByte.BeginText();
+                    pdfContentByte.SetFontAndSize(baseFont, 12);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, "By Doctor :", pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (2 + k+1), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (2+k+1.5)), 0);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    pdfContentByte.EndText();
+                    pdfStamper.Close();
+                    return outputPdfStream.ToArray();
+                }
+            }
+        }
 
         public static byte[] AddTextToPdf(byte[] pdfBytes, string text,float k)
         {
@@ -215,8 +220,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     pdfContentByte.SetFontAndSize(baseFont, 12);
                     Description = "Description :" + Description;
                     Instruction = "Instruction :" + Instruction;
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, Description, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (2), 0);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, Instruction, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (float)(2 + 0.5), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, Description, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (2+0.5)), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, Instruction, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (float)(2 + 1), 0);
                     pdfContentByte.EndText();
                     pdfStamper.Close();
                     return outputPdfStream.ToArray();
