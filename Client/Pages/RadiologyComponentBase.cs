@@ -11,6 +11,7 @@ namespace Client.Pages
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
         protected string CodeQr = null;
+        protected bool ButtonAddIsLoding = false;
         protected InformationRadioResultDto InformationRadioResultDto = new InformationRadioResultDto();
         [Inject]
         public IRadiologyService RadiologyService { get; set; }
@@ -22,22 +23,36 @@ namespace Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            try
+          var UserStat = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if(UserStat.User.Identity?.IsAuthenticated??false)
             {
-                this.IsLoading = true;
-                this.InformationRadioResultDto = await this.RadiologyService.GetInformationRadioResultAsync(CodeQr);
-                this.IsLoading = false;
 
-
-            }catch(Exception ex)
+            }
+            else
             {
-                ErrorMessage = ex.Message;
-                this.IsLoading = false;
+                this.NavigationManager.NavigateTo("Login/RadiologistOperations");
             }
         }
         protected async Task OnAddCodeQr(string CodeQr)
         {
-            this.CodeQr = CodeQr;
+            try
+            {
+                ButtonAddIsLoding = true;
+                this.IsLoading = true;
+                this.CodeQr = CodeQr;
+                this.InformationRadioResultDto = await this.RadiologyService.GetInformationRadioResultAsync(CodeQr);
+                this.IsLoading = false;
+                ButtonAddIsLoding = false;
+
+
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+                this.IsLoading = false;
+                ButtonAddIsLoding = false;
+            }
+            
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Client.Services.Foundations.RadiologyService
         }
         public async Task<InformationRadioResultDto> GetInformationRadioResultAsync(string CodeQr)
         {
-            CodeQr.Replace("/", "-");
+           CodeQr= CodeQr.Replace("/", "-");
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/Radiology/GetRadioInformation/{CodeQr}");
             var JwtBearer = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
@@ -46,7 +46,7 @@ namespace Client.Services.Foundations.RadiologyService
                 throw new PreconditionFailedException("Denied User Account");
             }else if (result.StatusCode == HttpStatusCode.NoContent)
             {
-                throw new NoContentException("Data Has Been Canfirmed By Auther Radiology")
+                throw new NoContentException("Data Has Been Canfirmed By Auther Radiology");
             }
             else
             {

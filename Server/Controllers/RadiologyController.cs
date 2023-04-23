@@ -20,7 +20,7 @@ namespace Server.Controllers
             this.radioMedicalService = radioMedicalService;
         }
         [HttpGet("GetRadioInformation/{CodeQr}")]
-        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "Radiologue")]
+         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "RADIOLOGUE")]
         public async Task<ActionResult<InformationRadioResultDto>> GetInformationRadio(string CodeQr)
         {
             try

@@ -1,5 +1,78 @@
-﻿<h3>RadiologyComponent</h3>
+﻿@page "/RadiologistOperations"
+@inherits RadiologyComponentBase
 
-@code {
+
+
+
+@if (ErrorMessage != null)
+{
+    <ErrorRoutingMessage Message=@ErrorMessage></ErrorRoutingMessage>
+}
+@if (SuccessMessage != null)
+{
+    <CorrectRoutingMessage></CorrectRoutingMessage>
+}
+
+<div class="d-flex justify-content-center">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="">CodeQr Radio</span>
+        </div>
+        <input type="text" @bind="CodeQr" placeholder="CodeQr" style="border-radius:25px;" class="form-control w-50">
+        <button @onclick="()=>OnAddCodeQr(CodeQr)" class="btn btn-success">
+            Add
+            @if (ButtonAddIsLoding == true)
+            {
+
+
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="sr-only">Loading...</span>
+            }
+        </button>
+    </div>
+</div>
+
+@if(this.InformationRadioResultDto != null){
+    <div class="card border-secondary mb-3" style="max-width: 50rem;">
+        <div class="card-header">Information File Medical</div>
+        <div class="card-body text-secondary">
+            <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.FirstName</p>
+            <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.LastName</p>
+            <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.DateOfBirth</p>
+            <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.Sexe</p>
+        </div>
+    </div>
+
+    <div class="card border-secondary mb-3" style="max-width: 50rem;">
+        <div class="card-header">Infourmation Account File Medical</div>
+        <div class="card-body text-secondary">
+
+            <p class="card-text">@InformationRadioResultDto.PatientInformation.FirstName</p>
+            <p class="card-text">@InformationRadioResultDto.PatientInformation.LastName</p>
+            <p class="card-text">@InformationRadioResultDto.PatientInformation.NationalNumber</p>
+            <p class="card-text">@InformationRadioResultDto.PatientInformation.DateOfBirth</p>
+            <p class="card-text">@InformationRadioResultDto.PatientInformation.Sexe</p>
+        </div>
+    </div>
+
+
+    <div class="card border-secondary mb-3" style="max-width: 50rem;">
+        <div class="card-header">Information Doctor</div>
+        <div class="card-body text-secondary">
+            <p class="card-text">@InformationRadioResultDto.DoctorInformation.FirstName</p>
+            <p class="card-text">@InformationRadioResultDto.DoctorInformation.LastName</p>
+            <p class="card-text">@InformationRadioResultDto.DoctorInformation.Email</p>
+            
+        </div>
+    </div>
+    <div class="card border-secondary mb-3" style="max-width: 50rem;">
+        <div class="card-header">Information Radio</div>
+        <div class="card-body text-secondary">
+            <h5 class="card-title">Secondary card title</h5>
+            <p class="card-text">>@InformationRadioResultDto.RadioInformation.Description</p>
+            <p class="card-text">>@InformationRadioResultDto.RadioInformation.Instruction</p>
+            <input class="form-control" type="file" placeholder="telecharger resultat ">
+        </div>
+    </div>
 
 }
