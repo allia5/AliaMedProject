@@ -21,6 +21,9 @@ using static Server.Utility.Utility;
 using static Server.Services.Foundation.PlanningAppoimentService.PlanningAppoimentMapperService;
 using static Server.Services.Foundation.DoctorService.DoctorServiceMapper;
 using static Server.Services.Foundation.RadioMedicalService.RadioMedicalMapperService;
+using Server.Models.LineRadioMedical;
+using System.Collections.Generic;
+using Server.Managers.Storages.LineRadioMedicalManager;
 
 namespace Server.Services.Foundation.RadioMedicalService
 {
@@ -35,9 +38,11 @@ namespace Server.Services.Foundation.RadioMedicalService
         public readonly IFileChronicDiseasesManager fileChronicDiseasesManager;
         public readonly IChronicDiseasesManager chronicDiseasesManager;
         public readonly ISpecialitiesManager specialitiesManager;
+        public readonly ILineRadioMedicalManager lineRadioMedicalManager;
         
-        public RadioMedicalService(ISpecialitiesManager specialitiesManager,IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IRadioManager radioManager)
+        public RadioMedicalService(ILineRadioMedicalManager lineRadioMedicalManager,ISpecialitiesManager specialitiesManager,IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IRadioManager radioManager)
         {
+            this.lineRadioMedicalManager = lineRadioMedicalManager;
             this.specialitiesManager = specialitiesManager;
             this.doctorManager = doctorManager;
             this.userManager = userManager;
@@ -49,11 +54,13 @@ namespace Server.Services.Foundation.RadioMedicalService
             this.fileChronicDiseasesManager= fileChronicDiseasesManager;
 
         }
-        public async Task<InformationRadioResultDto> GetInformationRadioMedicalResult(string Email, string CodeQr) =>
+        public async Task<InformationRadioResultDto> GetInformationRadioMedicalResult(string Email, string CodeQr)=>
+       
             await TryCatch(async () =>
             {
                 List<string> ListChronicDeasses = new List<string>();
                 List<string> ListSpecialitiesDoctor = new List<string>();
+                List<LineRadioMedicalResultDto>  LinesResultRadio = new List<LineRadioMedicalResultDto>();  
 
                 ValidateEntryOnGetRadioInformation(Email, CodeQr);
                 var UserAcccountRadiology = await this._UserManager.FindByEmailAsync(Email);
@@ -63,6 +70,8 @@ namespace Server.Services.Foundation.RadioMedicalService
                 var codeQr = DecryptString(CodeQr, "AJFNJjfjJZFJNdzj==");
                 var Radio = await this.radioManager.SelectRadioByCodeAsync(codeQr);
                 ValidateRadioIsNull(Radio);
+                var LinesRadio = await this.lineRadioMedicalManager.SelectAllLineMedicalByIdRadio(Radio.Id);
+                
                 var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Radio.IdOrdreMedical);
                 ValidateOrdreMedicalIsNull(OrdreMedical);
                 var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdAsync(OrdreMedical.IdFileMedical);
@@ -78,23 +87,19 @@ namespace Server.Services.Foundation.RadioMedicalService
                 var UserAccountDoctor = await this.userManager.SelectUserByIdDoctor(FileMedical.IdDoctor);
                 validationPatientIsNull(UserAccountDoctor);
                 var specialities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(FileMedical.IdDoctor);
-                
+                foreach(var item in LinesRadio)
+                {
+                    var LineRadioMapper = MapperTolineRadioMedicalResultDto(item);
+                    LinesResultRadio.Add(LineRadioMapper);
+                }
                 var InformationPatient = MppperToPatientInformationDto(UserAccountPatient);
                 var informationDoctor = MapperToDoctorInformationDto(specialities,UserAccountDoctor);
                 var FileInformation = MapperToFileInformationDto(FileMedical, ListChronicDeasses);
-                var radioInformation = MapperToRadioInformation(Radio);
+                
+                var radioInformation = MapperToRadioInformation(Radio, LinesResultRadio);
                 var Result = MapperToInformationRadioResult(radioInformation, FileInformation,InformationPatient, informationDoctor);
                 return Result;
-
-
-
-
-
-
-
-
-
-
+          
             });
       
     }

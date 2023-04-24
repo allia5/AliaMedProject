@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,8 +29,14 @@ namespace DTO
     public class RadioInformation
     {
         public string Id { get; set; }
-        public string Description { get; set; }
-        public string Instruction { get; set; }
+        public List<LineRadioMedicalResultDto> linesRadioMedicals { get; set; }
       
+    }
+    public class LineRadioMedicalResultDto
+    {
+        public string Id { get; set; }
+        public string Description { get; set; }
+       
+        public string Instruction { get; set; }
     }
 }

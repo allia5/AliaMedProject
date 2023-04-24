@@ -13,23 +13,23 @@ namespace DTO
     public class OrderMedicalToAddDro
     {
         public string AppointmentId { get; set; }
-        public string FileId { get; set;}
+        public string FileId { get; set; }
         public string? Summary { get; set; }
         [Required]
-       public StatusVisibility Visibility { get; set; }
+        public StatusVisibility Visibility { get; set; }
         public AnalyseToAddDto? AnalyseToAdd { get; set; }
         public RadioToAddDto? RadioToAdd { get; set; }
         public PrescriptionDto? Prescription { get; set; }
     }
     public enum StatusVisibility
     {
-        Public =1,
-        Privet =0
+        Public = 1,
+        Privet = 0
     }
-    public class PrescriptionDto 
+    public class PrescriptionDto
     {
         //  [JsonConverter(typeof(ByteArrayConverter))]
-        [Required] 
+        [Required]
         public byte[] PrescriptionFile { get; set; }
         public string? Instruction { get; set; }
         [Required]
@@ -52,6 +52,12 @@ namespace DTO
         [Required]
         public byte[] FileMedicalRadio { get; set; }
         [Required]
+        public List<LineRadioMedicalDto> LineRadioMedicals { get; set; }
+
+    }
+    public class LineRadioMedicalDto
+    {
+        [Required]
         public string Description { get; set; }
         [Required]
         public string Instruction { get; set; }
@@ -62,6 +68,11 @@ namespace DTO
         // [JsonConverter(typeof(ByteArrayConverter))]
         [Required]
         public byte[] FileMedicalAnalyse { get; set; }
+        public List<LineAnalyseMedicalDto> LineAnalyseMedicals { get; set; }
+       
+    }
+    public class LineAnalyseMedicalDto
+    {
         [Required]
         public string Description { get; set; }
         [Required]

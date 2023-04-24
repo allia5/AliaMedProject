@@ -1,4 +1,5 @@
 ﻿using Server.Models.Analyse;
+using Server.Models.LineRadioMedical;
 using Server.Models.RadioMedical;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,8 +16,8 @@ namespace Server.Models.ResultsRadio
         public byte[]? FileResult { get; set; }
         [Required]
         public string fileType { get; set; }
-        [ForeignKey("Radio")]
-        public Guid IdRadio { get; set; }
-        public Radio Radio { get; set; }
+        [ForeignKey("LineRadioMedicals")]
+        public Guid IdLineRadio { get; set; }
+        public LineRadioMedicals LineRadioMedicals { get; set; }
     }
 }

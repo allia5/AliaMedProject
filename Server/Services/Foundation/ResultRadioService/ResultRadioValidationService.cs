@@ -26,7 +26,7 @@ namespace Server.Services.Foundation.ResultRadioService
         {
             if (PatientUser == null) throw new ArgumentNullException(nameof(PatientUser));
         }
-        public void ValidateResultRadioOnAdd(string Email,RadioResultToAddDto radioResultToAddDto)
+       /* public void ValidateResultRadioOnAdd(string Email,RadioResultToAddDto radioResultToAddDto)
         {
             if(Email == null)
             {
@@ -43,7 +43,7 @@ namespace Server.Services.Foundation.ResultRadioService
             {
                 throw new ArgumentNullException(nameof(radioResultToAddDto));
             }
-        }
+        }*/
         public static bool ArePropertiesNull(object obj)
         {
             if (obj == null)

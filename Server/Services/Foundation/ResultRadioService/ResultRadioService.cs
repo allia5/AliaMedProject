@@ -36,7 +36,7 @@ namespace Server.Services.Foundation.ResultRadioService
         public async Task AddRadioResultService(string Email, RadioResultToAddDto RadioResultToAddDto) =>
             await TryCatch(async () =>
             {
-                ValidateResultRadioOnAdd(Email, RadioResultToAddDto);
+               // ValidateResultRadioOnAdd(Email, RadioResultToAddDto);
                 var UserAccountRadiology = await this._UserManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(UserAccountRadiology);
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAccountRadiology.Id);
@@ -48,7 +48,7 @@ namespace Server.Services.Foundation.ResultRadioService
                 var UserAccountPatient = await this._UserManager.FindByIdAsync(FileMedical.IdUser);
                 validationPatientIsNull(UserAccountPatient);
                 var TypeFileUpload =GetFileType(RadioResultToAddDto.FileUpload);
-                var RadioResultMapper = MapperToResultRadio();
+               // var RadioResultMapper = MapperToResultRadio();
 
 
             });

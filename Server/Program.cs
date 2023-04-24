@@ -13,6 +13,8 @@ using Server.Managers.Storages.ChronicDiseasesManager;
 using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.FileChronicDiseasesManager;
 using Server.Managers.Storages.FileMedicalManager;
+using Server.Managers.Storages.LineAnalyseMedicalManager;
+using Server.Managers.Storages.LineRadioMedicalManager;
 using Server.Managers.Storages.OrdreMedicalManager;
 using Server.Managers.Storages.PlanningAppoimentManager;
 using Server.Managers.Storages.PrescriptionLineManager;
@@ -125,6 +127,9 @@ builder.Services.AddScoped<IRadioMedicalService, RadioMedicalService>();
 builder.Services.AddScoped<IRadioResultManager, RadioResultManager>();
 builder.Services.AddScoped<IResultRadioService,ResultRadioService>();
 builder.Services.AddScoped<IRadiologyManager, RadiologyManager>();
+builder.Services.AddScoped<ILineRadioMedicalManager, LineRadioMedicalManager>();
+
+builder.Services.AddScoped<ILineAnalyseMedicalManager, LineAnalyseMedicalManager>();
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers();

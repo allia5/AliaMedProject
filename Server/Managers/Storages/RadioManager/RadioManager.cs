@@ -33,13 +33,13 @@ namespace Server.Managers.Storages.RadioManager
 
         public async Task<Radio> SelectRadioByCodeAsync(string Code)
         {
-            return await (from RadioItem in this.ServerDbContext.Radio where RadioItem.QrCode == Code && RadioItem.Status== StatusRadio.notValidate select RadioItem).FirstOrDefaultAsync();
+            return await (from RadioItem in this.ServerDbContext.Radio where RadioItem.QrCode == Code  select RadioItem).FirstOrDefaultAsync();
         }
 
         public async Task<Radio> SelectRadioByIdAsync(Guid RadioId)
         {
             return await (from itemRadio in this.ServerDbContext.Radio 
-                          where itemRadio.Id == RadioId && itemRadio.Status == StatusRadio.notValidate
+                          where itemRadio.Id == RadioId 
                           select itemRadio).FirstOrDefaultAsync();
         }
     }

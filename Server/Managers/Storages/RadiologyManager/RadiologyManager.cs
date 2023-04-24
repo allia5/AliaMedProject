@@ -13,7 +13,7 @@ namespace Server.Managers.Storages.RadiologyManager
 
         public async Task<Radiology> SelectRadiologyByIdDoctor(Guid DoctorId)
         {
-            return await (from RadiologyItem in this.serverDbContext.radiologies where RadiologyItem.IdDoctor ==)
+            throw new NullReferenceException();//  return await (from RadiologyItem in this.serverDbContext.radiologies where RadiologyItem.IdDoctor ==)
         }
     }
 }

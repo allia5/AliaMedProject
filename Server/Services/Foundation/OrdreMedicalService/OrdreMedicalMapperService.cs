@@ -17,6 +17,8 @@ using iTextSharp.text.pdf.qrcode;
 using ZXing.QrCode.Internal;
 using System.Runtime.InteropServices;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Server.Models.LineRadioMedical;
+using Server.Models.LineAnalyseMedical;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -248,19 +250,47 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
 
+        public static LineRadioMedicals MapperToRadioLine(Guid RadioId, LineRadioMedicalDto lineRadioMedical)
+        {
+            return new LineRadioMedicals
+            {
+                Id = Guid.NewGuid(),
+                DateValidation = null,
+                Description = lineRadioMedical.Description,
+                IdRadio = RadioId,
+                IdRadiology = null,
+                Instruction=lineRadioMedical.Instruction,
+                resultRadios=null,
+                Status=StatusRadio.notValidate,
+                
+            };
+        }
 
+        public static LineAnalyseMedicals MapperToAnalyseLine(Guid AnalyseId,LineAnalyseMedicalDto lineAnalyse)
+        {
+            return new LineAnalyseMedicals
+            {
+                Id = Guid.NewGuid(),
+                DateValidation = null,
+                description = lineAnalyse.Description,
+                Instruction = lineAnalyse.Instruction,
+                IdMedicalAnalyse = null,
+                ResultAnalyse = null,
+                Status = StatusAnalyse.notValidate
+            };
+        }
 
         public static Analyses MapperToAnalyse(AnalyseToAddDto analyseToAddDto, Guid IdOrdreMedical)
         {
             return new Analyses
             {
                 Id = Guid.NewGuid(),
-                description = analyseToAddDto.Description,
+               
                 IdOrdreMedical = IdOrdreMedical,
-                IdMedicalAnalyse = null,
-                Instruction = analyseToAddDto.Instruction,
-                Status = StatusAnalyse.validate,
-                DateValidation = null,
+               
+               
+                
+             
                 FileAnalyse = analyseToAddDto.FileMedicalAnalyse
             };
         }
@@ -271,17 +301,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
             return new Radio
             {
                 Id = Guid.NewGuid(),
-                Description = radioDto.Description,
                 IdOrdreMedical = IdOrdreMedical,
-                IdRadiology=null,
-                Instruction=radioDto.Instruction,
-                Status=StatusRadio.notValidate,
-                DateValidation=null,
                 FileRadio= radioDto.FileMedicalRadio
-
-
-
-
             };
         }
         public static PrescriptionLines MapperToPrescriptionLine(Guid PrescriptionId , PrescriptionLineDto prescriptionDto)

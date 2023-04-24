@@ -1,5 +1,6 @@
 ﻿using DTO;
 using Server.Models.fileMedical;
+using Server.Models.LineRadioMedical;
 using Server.Models.RadioMedical;
 using static Server.Utility.Utility;
 namespace Server.Services.Foundation.RadioMedicalService
@@ -16,13 +17,23 @@ namespace Server.Services.Foundation.RadioMedicalService
                 RadioInformation= radioInformation
             };
         }
-        public static RadioInformation MapperToRadioInformation(Radio radio)
+        public static RadioInformation MapperToRadioInformation(Radio radio, List<LineRadioMedicalResultDto>  ListLinesRadioResult)
         {
             return new RadioInformation
             {
-                Description = radio.Description,
+               
                 Id = EncryptGuid(radio.Id),
-                Instruction = radio.Instruction
+                linesRadioMedicals=ListLinesRadioResult
+                
+            };
+        }
+        public static LineRadioMedicalResultDto MapperTolineRadioMedicalResultDto(LineRadioMedicals lineRadioMedicals)
+        {
+            return new LineRadioMedicalResultDto
+            {
+Description = lineRadioMedicals.Description,
+Instruction=lineRadioMedicals.Instruction,
+Id=EncryptGuid(lineRadioMedicals.Id)
             };
         }
         public static FileMedicalInformation MapperToFileInformationDto(fileMedicals fileMedicals ,List<string> chronicDeasses) 

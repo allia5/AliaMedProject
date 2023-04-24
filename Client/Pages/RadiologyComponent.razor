@@ -88,15 +88,20 @@
             
         </div>
     </div>
+        @foreach (var line in InformationRadioResultDto.RadioInformation.linesRadioMedicals)
+        {
+            
+       
         <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
         <div class="card-header">Information Radio</div>
         <div class="card-body text-secondary">
-            <p class="card-text">Description Radio : @InformationRadioResultDto.RadioInformation.Description</p>
-            <p class="card-text">Instruction Radio :@InformationRadioResultDto.RadioInformation.Instruction</p>
+                <p class="card-text">Description Radio : @line.Description</p>
+            <p class="card-text">Instruction Radio :@line.Instruction</p>
             <input class="form-control" type="file" placeholder="telecharger resultat ">
            <button class="btn btn-success">Validate Result</button>
         </div>
     </div>
+        }
     </div>
 
 }

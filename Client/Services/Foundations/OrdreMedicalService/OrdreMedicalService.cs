@@ -115,8 +115,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
                 RadioObject = new
                 {
                     fileMedicalRadio = FileRadiobase64String,
-                    description = orderMedicalToAddDro.RadioToAdd.Description,
-                    instruction = orderMedicalToAddDro.RadioToAdd.Instruction
+                    LineRadioMedicals=orderMedicalToAddDro.RadioToAdd.LineRadioMedicals
                 };
             }
             if (orderMedicalToAddDro.AnalyseToAdd != null)
@@ -125,8 +124,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
                 AnalyseObject = new
                 {
                     fileMedicalAnalyse = FileAnalysebase64String,
-                    description = orderMedicalToAddDro.AnalyseToAdd.Description,
-                    instruction = orderMedicalToAddDro.AnalyseToAdd.Instruction
+                    LineAnalyseMedicals=orderMedicalToAddDro.AnalyseToAdd.LineAnalyseMedicals
                 };
             }
 

@@ -9,6 +9,8 @@ using Server.Models.ChronicDiseases;
 using Server.Models.Doctor;
 using Server.Models.FileChronicDisease;
 using Server.Models.fileMedical;
+using Server.Models.LineAnalyseMedical;
+using Server.Models.LineRadioMedical;
 using Server.Models.MedicalAnalysis;
 using Server.Models.MedicalOrder;
 using Server.Models.MedicalPlannings;
@@ -394,6 +396,8 @@ namespace Server.Data
         public DbSet<WorkDoctors> WorkDoctors { get; set; }
         public DbSet<Role> roles { get; set; }
         public DbSet<UserRole> userRoles { get; set; }
+        public DbSet<LineRadioMedicals> LineRadioMedicals { get; set; }
+        public DbSet<LineAnalyseMedicals> LineAnalyseMedicals { get; set; }
 
     }
 }

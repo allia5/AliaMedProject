@@ -13,7 +13,7 @@ namespace Server.Services.Foundation.ResultRadioService
             {
                 Id=Guid.NewGuid(),
                 FileResult=resultToAddDto.FileUpload,
-                IdRadio=RadioId,
+                
                 fileType=TypeFileUpload
                  
             };

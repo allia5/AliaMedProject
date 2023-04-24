@@ -72,7 +72,7 @@
                 
               
                 <div class="form-control">
-                    <button class="btn btn-success" style="width:100%;" @onclick="OnAddLine" data-bs-toggle="modal">+ Add Prescription</button>
+                        <button class="btn btn-success" style="width:100%;" @onclick="OnAddLinePrescription" data-bs-toggle="modal">+ Add Prescription</button>
                 </div>
                 <div class="mb-3">
                     <label for="formFile" class="form-label">File Docx</label>
@@ -99,27 +99,35 @@
                 <h5 class="modal-title" id="exampleModalToggleLabel2">Radio</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <EditForm Model="RadioToAddDto">
+            <EditForm Model="LineRadioMedicalDto">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-            <div class="modal-body">
+                <div class="modal-body">
+                @foreach (var RadioItem in ListLineRadioDto)
+                {
 
+                    <div class="form-control d-flex">
+                        <input class="form-control w-50" @bind="RadioItem.Description" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="RadioItem.Instruction" type="text" placeholder="Description">  
+                    </div>
+
+
+                }
+
+
+                <div class="form-control d-flex">
+                        <input class="form-control w-50" @bind="LineRadioMedicalDto.Description" type="text" placeholder="Description">  <input class="form-control w-25" @bind="LineRadioMedicalDto.Instruction" type="text" placeholder="Description">
+                    </div>
                
-                    <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Radio Instruction:</label>
-                        <input type="text" @bind="RadioToAddDto.Instruction" class="form-control" id="recipient-name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Radio Description::</label>
-                        <textarea class="form-control" @bind="RadioToAddDto.Description" id="message-text"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label">Default file input example</label>
-                        <InputFile class="form-control" type="file" OnChange="HandleFileRadioSelected" />
-                    </div>
-              
 
-            </div>
+
+                <div class="form-control">
+                    <button class="btn btn-success" style="width:100%;" @onclick="OnAddLineRadio" data-bs-toggle="modal">+ Add Prescription</button>
+                </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">File Docx</label>
+                    <InputFile class="form-control" type="file" OnChange="HandleFileRadioSelected" />
+                </div>
+        </div>
             <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>
                 <button type="button" class="btn btn-danger" data-bs-target="#exampleModalToggle3" @onclick="OnSkipRadio" data-bs-toggle="modal" data-bs-dismiss="modal">Skip</button>
@@ -137,25 +145,35 @@
                 <h5 class="modal-title" id="exampleModalToggleLabel2">Analyse</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <EditForm Model="AnalyseToAddDto">
+            <EditForm Model="LineAnalyseMedicalDto">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-            <div class="modal-body">
-               
-                    <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Analyse Instruction:</label>
-                        <input @bind="AnalyseToAddDto.Instruction" type="text" class="form-control" id="recipient-name">
+                <div class="modal-body">
+                    @foreach (var AnalyseItem in ListLineAnalyseDto)
+                    {
+
+                        <div class="form-control d-flex">
+                            <input class="form-control w-50" @bind="AnalyseItem.Description" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="AnalyseItem.Instruction" type="text" placeholder="Description">   
+                        </div>
+
+
+                    }
+
+
+                    <div class="form-control d-flex">
+                        <input class="form-control w-50" @bind="LineAnalyseMedicalDto.Description" type="text" placeholder="Description">  <input class="form-control w-25" @bind="LineAnalyseMedicalDto.Instruction" type="text" placeholder="Description">
+                    </div>
+
+
+
+                    <div class="form-control">
+                        <button class="btn btn-success" style="width:100%;" @onclick="OnAddLineAnalyse" data-bs-toggle="modal">+ Add Prescription</button>
                     </div>
                     <div class="mb-3">
-                        <label for="message-text"  class="col-form-label">Analyse Description:</label>
-                        <textarea class="form-control" @bind="AnalyseToAddDto.Description" id="message-text"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label">Default file input example</label>
+                        <label for="formFile" class="form-label">File Docx</label>
                         <InputFile class="form-control" type="file" OnChange="HandleFileAnalyseSelected" />
                     </div>
-            
-            </div>
+                </div>
             <div class="modal-footer">
 
                     <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">previous</button>

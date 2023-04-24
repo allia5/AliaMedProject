@@ -21,6 +21,10 @@ namespace Client.Pages
         protected PrescriptionDto PrescriptionDto= new PrescriptionDto();
         protected PrescriptionLineDto PrescriptionLineDto= new PrescriptionLineDto();
         protected List<PrescriptionLineDto> ListPrescriptionLineDto = new List<PrescriptionLineDto>();
+        protected LineRadioMedicalDto LineRadioMedicalDto = new LineRadioMedicalDto();
+        protected List<LineRadioMedicalDto> ListLineRadioDto = new List<LineRadioMedicalDto>();
+        protected LineAnalyseMedicalDto LineAnalyseMedicalDto = new LineAnalyseMedicalDto();
+        protected List<LineAnalyseMedicalDto> ListLineAnalyseDto = new List<LineAnalyseMedicalDto>();
         protected int CountInput = 0;
         [Parameter]
         public string AppointmentId { get; set; }
@@ -53,7 +57,10 @@ namespace Client.Pages
         }
         public async Task OnAddRadio()
         {
+          
             this.OrderMedicalToAddDro.RadioToAdd = RadioToAddDto;
+
+            OrderMedicalToAddDro.RadioToAdd.LineRadioMedicals = ListLineRadioDto;
         }
         public async Task OnSkipRadio()
         {
@@ -62,17 +69,36 @@ namespace Client.Pages
         public async Task OnUpdateAnalyse()
         {
             this.OrderMedicalToAddDro.AnalyseToAdd = AnalyseToAddDto;
+            this.OrderMedicalToAddDro.AnalyseToAdd.LineAnalyseMedicals = ListLineAnalyseDto;
         }
         public async Task OnSkipAnalyse()
         {
             this.OrderMedicalToAddDro.AnalyseToAdd = null;
         }
-        public async Task OnAddLine()
+        public async Task OnAddLinePrescription()
         {
            
             this.ListPrescriptionLineDto.Add(PrescriptionLineDto);
             
             PrescriptionLineDto = new PrescriptionLineDto ();
+
+
+        }
+        public async Task OnAddLineRadio()
+        {
+
+            this.ListLineRadioDto.Add(LineRadioMedicalDto);
+
+            LineRadioMedicalDto = new LineRadioMedicalDto();
+
+
+        }
+        public async Task OnAddLineAnalyse()
+        {
+
+            this.ListLineAnalyseDto.Add(LineAnalyseMedicalDto);
+
+            LineAnalyseMedicalDto = new LineAnalyseMedicalDto();
 
 
         }

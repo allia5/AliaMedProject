@@ -17,6 +17,13 @@ namespace Server.Services.Foundation.OrdreMedicalService
     
     public partial class OrdreMedicalService
     {
+        public void ValidateRadioLineOnAdd(LineRadioMedicalDto lineRadioMedical)
+        {
+            if(lineRadioMedical.Instruction == null || lineRadioMedical.Description == null)
+            {
+                throw new ArgumentNullException(nameof(lineRadioMedical));
+            }
+        }
      public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
         {
             if(medicalOrdres == null)
@@ -89,7 +96,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
         }
         public void ValidateAnalyseOnAdd(AnalyseToAddDto analyseToAddDto)
         {
-            if(analyseToAddDto.Description == null || analyseToAddDto.FileMedicalAnalyse ==null)
+            if(analyseToAddDto.LineAnalyseMedicals.Count() == 0 || analyseToAddDto.FileMedicalAnalyse ==null)
             {
                 throw new ArgumentException(nameof(analyseToAddDto));
             }
@@ -97,7 +104,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
       
         public void ValidateRadioOnAdd(RadioToAddDto radioToAddDto )
         {
-            if(radioToAddDto.FileMedicalRadio == null || radioToAddDto.Description == null)
+            if(radioToAddDto.FileMedicalRadio == null || radioToAddDto.LineRadioMedicals.Count()==0)
             {
                 throw new ArgumentException(nameof(radioToAddDto));
             }
@@ -182,6 +189,14 @@ namespace Server.Services.Foundation.OrdreMedicalService
             {
                 throw new NullException(nameof(doctor));
 
+            }
+        }
+
+       public void ValidateAnalyseLineOnAdd(LineAnalyseMedicalDto lineAnalyseMedicalDto)
+        {
+            if(lineAnalyseMedicalDto.Instruction == null || lineAnalyseMedicalDto.Description == null)
+            {
+                throw new ArgumentNullException(nameof(lineAnalyseMedicalDto));
             }
         }
     }

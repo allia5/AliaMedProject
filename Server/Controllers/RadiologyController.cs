@@ -25,6 +25,7 @@ namespace Server.Controllers
         {
             try
             {
+                CodeQr = CodeQr.Replace("-", "/");
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 return await this.radioMedicalService.GetInformationRadioMedicalResult(Email, CodeQr);
             }

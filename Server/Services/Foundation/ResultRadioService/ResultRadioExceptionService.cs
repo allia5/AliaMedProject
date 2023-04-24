@@ -5,7 +5,7 @@
         public delegate Task OnAddResultRadio();
         public async Task TryCatch(OnAddResultRadio onAddResultRadio)
         {
-            try
+           /* try
             {
                 await onAddResultRadio();
             }
@@ -20,7 +20,7 @@
             catch (Exception ex)
             {
 
-            }
+            }*/
         }
     }
 }

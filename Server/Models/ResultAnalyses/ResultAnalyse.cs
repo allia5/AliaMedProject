@@ -1,4 +1,5 @@
 ﻿using Server.Models.Analyse;
+using Server.Models.LineAnalyseMedical;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,7 +16,7 @@ namespace Server.Models.ResultAnalyses
         [Required]
         public FileType FileType { get; set; }
         [ForeignKey("Analyses")]
-        public Guid IdAnalyse { get; set; }
-        public Analyses Analyses { get; set; }
+        public Guid IdLineAnalyse { get; set; }
+        public LineAnalyseMedicals LineAnalyseMedicals { get; set; }
     }
 }

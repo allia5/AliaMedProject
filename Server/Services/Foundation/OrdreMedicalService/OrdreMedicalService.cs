@@ -26,6 +26,8 @@ using Server.Models.Analyse;
 using Server.Managers.Storages.SecretaryManager;
 using Server.Services.Foundation.MailService;
 using Server.Models.Prescriptions;
+using Server.Managers.Storages.LineRadioMedicalManager;
+using Server.Managers.Storages.LineAnalyseMedicalManager;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -48,9 +50,13 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public readonly IAnalyseManager analyseManager;
         public readonly ISecretaryManager secretaryManager;
         public readonly IMailService mailService;
+        public readonly ILineRadioMedicalManager lineRadioMedicalManager;
+        public readonly ILineAnalyseMedicalManager lineAnalyseMedicalManager;
         
-        public OrdreMedicalService(IMailService mailService,ISecretaryManager secretaryManager, IPrescriptionManager prescriptionManager, IPrescriptionLineManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
+        public OrdreMedicalService(ILineRadioMedicalManager lineRadioMedicalManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager,IMailService mailService,ISecretaryManager secretaryManager, IPrescriptionManager prescriptionManager, IPrescriptionLineManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
         {
+            this.lineAnalyseMedicalManager= lineAnalyseMedicalManager;
+            this.lineRadioMedicalManager= lineRadioMedicalManager;
             this.mailService=mailService;
             this.secretaryManager = secretaryManager;
             this.fileMedicalManager = fileMedicalManager;
@@ -199,12 +205,23 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     ValidateRadioOnAdd(orderMedicalToAdd.RadioToAdd);
                    var Radio = MapperToRadio(orderMedicalToAdd.RadioToAdd, OddreMedicalInsertResult.Id);
                     Radio.QrCode = GenerateQRCodeStringFromGuid(Radio.Id);
+                    var RadioInser = await this.radioManager.InsertRadioAsync(Radio);
                     Radio.FileRadio = AddInfromationFileToToPdf(Radio.FileRadio, FileMedical);
-                    Radio.FileRadio = AddTextToPdfAnalyseRadio(Radio.FileRadio,Radio.Description ,Radio.Instruction);
+                    float k = 1;
+                    foreach (var item in orderMedicalToAdd.RadioToAdd.LineRadioMedicals)
+                    {
+                        ValidateRadioLineOnAdd(item);
+                        var RadioLineInsert = MapperToRadioLine(Radio.Id, item);
+                        await this.lineRadioMedicalManager.InsertLineRadioMedical(RadioLineInsert);
+                       var stringToAddFile = item.Description + "........." + item.Instruction + Environment.NewLine;
+                        Radio.FileRadio = AddTextToPdf(Radio.FileRadio, stringToAddFile, k);
+                        k = (float)(k + 0.5);
+                    }
+                   
                     Radio.FileRadio = AddInfromationDoctorToToPdf(Radio.FileRadio, UserAccountDoctor, (float)1.5);
                     Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio, FileMedical.MedicalIdentification, 100, 0);
-                    Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString( Radio.QrCode, "AJFNJjfjJZFJNdzj=="), 0, 0);
-                    var RadioInsert =  await this.radioManager.InsertRadioAsync(Radio);
+                    Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString(Radio.QrCode,"AJFNJjfjJZFJNdzj=="), 0, 0);
+                    var RadioInsert =  await this.radioManager.UpdateRadioAsync(Radio);
                     OrdreMedicalResult.ResultFileMedicalRadio = RadioInsert.FileRadio;
                 }
                 if(orderMedicalToAdd.AnalyseToAdd != null)
@@ -212,12 +229,24 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     ValidateAnalyseOnAdd(orderMedicalToAdd.AnalyseToAdd);
                     var Analyse =MapperToAnalyse(orderMedicalToAdd.AnalyseToAdd, OddreMedicalInsertResult.Id);
                     Analyse.QrCode = GenerateQRCodeStringFromGuid(Analyse.Id);
+                    var AnalyseInsert = await this.analyseManager.InsertAnalyseAsync(Analyse);
+                  
                     Analyse.FileAnalyse = AddInfromationFileToToPdf(Analyse.FileAnalyse, FileMedical);
-                    Analyse.FileAnalyse = AddTextToPdfAnalyseRadio(Analyse.FileAnalyse, Analyse.description, Analyse.Instruction);
+                    float k = 1;
+                    foreach (var item in orderMedicalToAdd.AnalyseToAdd.LineAnalyseMedicals)
+                    {
+                        ValidateAnalyseLineOnAdd(item);
+                        var AnalyseLine = MapperToAnalyseLine(Analyse.Id, item);
+                        await this.lineAnalyseMedicalManager.InsertLineAnalyseMedical(AnalyseLine);
+                        var stringToAddFile = item.Description + "........." + item.Instruction + Environment.NewLine;
+                        Analyse.FileAnalyse = AddTextToPdf(Analyse.FileAnalyse, stringToAddFile, k);
+                        k = (float)(k + 0.5);
+                    }
+                
                     Analyse.FileAnalyse = AddInfromationDoctorToToPdf(Analyse.FileAnalyse, UserAccountDoctor, (float)1.5);
                     Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse, FileMedical.MedicalIdentification, 100, 0);
                     Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( Analyse.QrCode, "AJFNJjfjJZFJNdzj=="), 0, 0);
-                    var AnalyseInsert = await this.analyseManager.InsertAnalyseAsync(Analyse);
+                    var NewAnalyseInsert = await this.analyseManager.UpdateAnalyseAsync(Analyse);
                     OrdreMedicalResult.ResultFileMedicalAnalyse = Analyse.FileAnalyse;
                 }
                 MapperMailRequestDeleteMedicalAppoiment(UserAccountPatient, UserAccountDoctor);
