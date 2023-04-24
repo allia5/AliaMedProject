@@ -124,12 +124,14 @@ namespace Client.Pages
 
                     SuccessMessage = "Operation Success";
                     this.isLoading = false;
+                this.ErrorMessage = null;
 
                 
             }
             catch (Exception e)
             {
                 this.ErrorMessage = e.Message;
+                this.isLoading = false;
             }
           
         }

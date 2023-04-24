@@ -14,6 +14,7 @@ namespace Client.Pages
         protected string SuccessMessage = null;
         protected string CodeQr = null;
         protected bool ButtonAddIsLoding = false;
+        protected string MessageHasBeenValidated = null;
         [Inject]
         protected IJSRuntime jSRuntime { get; set; }
         protected InformationRadioResultDto InformationRadioResultDto = null;
@@ -47,12 +48,17 @@ namespace Client.Pages
                 this.InformationRadioResultDto = await this.RadiologyService.GetInformationRadioResultAsync(CodeQr);
                 this.IsLoading = false;
                 ButtonAddIsLoding = false;
+                ErrorMessage = null;
+                SuccessMessage = null;
+                MessageHasBeenValidated = null;
 
 
             }
             catch (NoContentException Ex)
             {
-                this.jSRuntime.InvokeVoidAsync("Alert", "This Ordre Medical Has Been Validated");
+                this.MessageHasBeenValidated = "Not Validate";
+                this.IsLoading = false;
+                ButtonAddIsLoding = false;
             }
             catch (Exception ex)
             {

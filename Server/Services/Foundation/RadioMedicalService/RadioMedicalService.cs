@@ -60,7 +60,8 @@ namespace Server.Services.Foundation.RadioMedicalService
                 ValidateUserIsNull(UserAcccountRadiology);
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAcccountRadiology.Id);
                 ValidationDoctorIsNull(Doctor);
-                var Radio = await this.radioManager.SelectRadioByCodeAsync(DecryptString( CodeQr, "AJFNJjfjJZFJNdzj=="));
+                var codeQr = DecryptString(CodeQr, "AJFNJjfjJZFJNdzj==");
+                var Radio = await this.radioManager.SelectRadioByCodeAsync(codeQr);
                 ValidateRadioIsNull(Radio);
                 var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Radio.IdOrdreMedical);
                 ValidateOrdreMedicalIsNull(OrdreMedical);

@@ -44,25 +44,28 @@ namespace Server.Utility
 
         public static string DecryptString(string cipherText, string key)
         {
-            byte[] combinedBytes = Convert.FromBase64String(cipherText);
+           
+                byte[] combinedBytes = Convert.FromBase64String(cipherText);
 
-            byte[] iv = new byte[16];
-            byte[] cipherTextBytes = new byte[combinedBytes.Length - 16];
+                byte[] iv = new byte[16];
+                byte[] cipherTextBytes = new byte[combinedBytes.Length - 16];
 
-            Array.Copy(combinedBytes, 0, iv, 0, 16);
-            Array.Copy(combinedBytes, 16, cipherTextBytes, 0, cipherTextBytes.Length);
+                Array.Copy(combinedBytes, 0, iv, 0, 16);
+                Array.Copy(combinedBytes, 16, cipherTextBytes, 0, cipherTextBytes.Length);
 
-            byte[] keyBytes = new Rfc2898DeriveBytes(key, Salt).GetBytes(256 / 8);
+                byte[] keyBytes = new Rfc2898DeriveBytes(key, Salt).GetBytes(256 / 8);
 
-            using Aes aes = Aes.Create();
-            aes.Key = keyBytes;
-            aes.IV = iv;
+                using Aes aes = Aes.Create();
+                aes.Key = keyBytes;
+                aes.IV = iv;
 
-            using MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
-            using CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read);
-            using StreamReader streamReader = new StreamReader(cryptoStream);
-            string plainText = streamReader.ReadToEnd();
-            return plainText;
+                using MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
+                using CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read);
+                using StreamReader streamReader = new StreamReader(cryptoStream);
+                string plainText = streamReader.ReadToEnd();
+                return plainText;
+          
+           
         }
 
 

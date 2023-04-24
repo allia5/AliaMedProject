@@ -26,6 +26,10 @@ namespace Server.Services.Foundation.RadioMedicalService
             {
                 throw new  StorageValidationException(Ex);
             }
+            catch (FormatException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
         }
     }
 }
