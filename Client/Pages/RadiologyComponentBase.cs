@@ -1,7 +1,9 @@
-﻿using Client.Services.Foundations.RadiologyService;
+﻿using Client.Services.Exceptions;
+using Client.Services.Foundations.RadiologyService;
 using DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 
 namespace Client.Pages
 {
@@ -12,7 +14,9 @@ namespace Client.Pages
         protected string SuccessMessage = null;
         protected string CodeQr = null;
         protected bool ButtonAddIsLoding = false;
-        protected InformationRadioResultDto InformationRadioResultDto = new InformationRadioResultDto();
+        [Inject]
+        protected IJSRuntime jSRuntime { get; set; }
+        protected InformationRadioResultDto InformationRadioResultDto = null;
         [Inject]
         public IRadiologyService RadiologyService { get; set; }
         [Inject]
@@ -45,6 +49,10 @@ namespace Client.Pages
                 ButtonAddIsLoding = false;
 
 
+            }
+            catch (NoContentException Ex)
+            {
+                this.jSRuntime.InvokeVoidAsync("Alert", "This Ordre Medical Has Been Validated");
             }
             catch (Exception ex)
             {

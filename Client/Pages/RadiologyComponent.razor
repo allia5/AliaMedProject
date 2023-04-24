@@ -14,13 +14,13 @@
 }
 
 <div class="d-flex justify-content-center">
-    <div class="input-group">
+    <div class="input-group w-50">
         <div class="input-group-prepend">
             <span class="input-group-text" id="">CodeQr Radio</span>
         </div>
-        <input type="text" @bind="CodeQr" placeholder="CodeQr" style="border-radius:25px;" class="form-control w-50">
-        <button @onclick="()=>OnAddCodeQr(CodeQr)" class="btn btn-success">
-            Add
+        <input type="text" @bind="CodeQr" placeholder="CodeQr" style="border-radius:25px;" class="form-control">
+        <button @onclick="()=>OnAddCodeQr(CodeQr)" class="btn btn-success border-radius:25px;">
+            research
             @if (ButtonAddIsLoding == true)
             {
 
@@ -32,8 +32,14 @@
     </div>
 </div>
 
+@if(IsLoading == true)
+{
+    <WaitComponent></WaitComponent>
+}
+
 @if(this.InformationRadioResultDto != null){
-    <div class="card border-secondary mb-3" style="max-width: 50rem;">
+    <div class="justify-content-center">
+    <div class="card border-secondary mb-3" style="max-width: 50rem; border-radius:30px;">
         <div class="card-header">Information File Medical</div>
         <div class="card-body text-secondary">
             <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.FirstName</p>
@@ -43,7 +49,7 @@
         </div>
     </div>
 
-    <div class="card border-secondary mb-3" style="max-width: 50rem;">
+        <div class="card border-secondary mb-3" style="max-width: 50rem; border-radius:30px;">
         <div class="card-header">Infourmation Account File Medical</div>
         <div class="card-body text-secondary">
 
@@ -56,7 +62,7 @@
     </div>
 
 
-    <div class="card border-secondary mb-3" style="max-width: 50rem;">
+        <div class="card border-secondary mb-3" style="max-width: 50rem; border-radius:30px;">
         <div class="card-header">Information Doctor</div>
         <div class="card-body text-secondary">
             <p class="card-text">@InformationRadioResultDto.DoctorInformation.FirstName</p>
@@ -65,14 +71,15 @@
             
         </div>
     </div>
-    <div class="card border-secondary mb-3" style="max-width: 50rem;">
+        <div class="card border-secondary mb-3" style="max-width: 50rem; border-radius:30px;">
         <div class="card-header">Information Radio</div>
         <div class="card-body text-secondary">
-            <h5 class="card-title">Secondary card title</h5>
-            <p class="card-text">>@InformationRadioResultDto.RadioInformation.Description</p>
-            <p class="card-text">>@InformationRadioResultDto.RadioInformation.Instruction</p>
+            <p class="card-text">Description Radio : @InformationRadioResultDto.RadioInformation.Description</p>
+            <p class="card-text">Instruction Radio :@InformationRadioResultDto.RadioInformation.Instruction</p>
             <input class="form-control" type="file" placeholder="telecharger resultat ">
+           <button class="btn btn-success">Validate Result</button>
         </div>
+    </div>
     </div>
 
 }
