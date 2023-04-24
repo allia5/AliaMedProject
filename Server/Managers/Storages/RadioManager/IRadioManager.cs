@@ -8,5 +8,6 @@ namespace Server.Managers.Storages.RadioManager
         public Task<Radio> UpdateRadioAsync(Radio radio);
         public Task<Radio> SelectRadioByIdMedicalOrdre(Guid MedicalOrdre);
         public Task<Radio> SelectRadioByCodeAsync(string Code);
+        public Task<Radio> SelectRadioByIdAsync(Guid RadioId);
     }
 }

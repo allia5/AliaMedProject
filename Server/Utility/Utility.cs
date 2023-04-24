@@ -5,6 +5,8 @@ using System.Transactions;
 using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
+using FileMagic;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Server.Utility
 {
@@ -15,6 +17,33 @@ namespace Server.Utility
 
 
         private static readonly byte[] Salt = Encoding.ASCII.GetBytes("ASJCXLlJDTqJDHDRvcSEAHbc==");
+
+
+        public static string GetFileType(byte[] byteArray)
+        {
+            string fileExtension = Path.GetExtension(Path.GetRandomFileName());
+            string tempFilePath = Path.ChangeExtension(Path.GetTempFileName(), fileExtension);
+
+            using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+            {
+                fileStream.Write(byteArray, 0, byteArray.Length);
+            }
+
+            string fileType = "";
+
+            try
+            {
+                fileType = new FileExtensionContentTypeProvider().Mappings[fileExtension];
+            }
+            catch
+            {
+                fileType = "application/octet-stream";
+            }
+
+            File.Delete(tempFilePath);
+
+            return fileType;
+        }
 
         public static string EncryptString(string plainText, string key)
         {

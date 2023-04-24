@@ -38,5 +38,13 @@ namespace Server.Managers.Storages.FileMedicalManager
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task<fileMedicals> SelectFileMedicalByIdOrdreMedicalAsync(Guid OrdreMedicalId)
+        {
+            return await (from itemOrdreMedical in this.ServerDbContext.MedicalOrdres where itemOrdreMedical.Id == OrdreMedicalId
+                          join itemFile in this.ServerDbContext.fileMedicals 
+                          on itemOrdreMedical.IdFileMedical equals itemFile.Id 
+                          select itemFile).FirstOrDefaultAsync();
+        }
     }
 }

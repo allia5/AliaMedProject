@@ -14,7 +14,7 @@ namespace Server.Models.ResultsRadio
 
         public byte[]? FileResult { get; set; }
         [Required]
-        public FileType FileType { get; set; }
+        public string fileType { get; set; }
         [ForeignKey("Radio")]
         public Guid IdRadio { get; set; }
         public Radio Radio { get; set; }

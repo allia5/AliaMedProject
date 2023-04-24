@@ -17,7 +17,9 @@ using Server.Managers.Storages.OrdreMedicalManager;
 using Server.Managers.Storages.PlanningAppoimentManager;
 using Server.Managers.Storages.PrescriptionLineManager;
 using Server.Managers.Storages.PrescriptionManager;
+using Server.Managers.Storages.RadiologyManager;
 using Server.Managers.Storages.RadioManager;
+using Server.Managers.Storages.RadioResultManager;
 using Server.Managers.Storages.RolesManager;
 using Server.Managers.Storages.SecretaryManager;
 using Server.Managers.Storages.SpecialitiesManager;
@@ -34,6 +36,7 @@ using Server.Services.Foundation.MailService;
 using Server.Services.Foundation.OrdreMedicalService;
 using Server.Services.Foundation.PlanningAppoimentService;
 using Server.Services.Foundation.RadioMedicalService;
+using Server.Services.Foundation.ResultRadioService;
 using Server.Services.Foundation.SecretaryService;
 using Server.Services.Foundation.WorkDoctorService;
 using Server.Services.UserService;
@@ -119,7 +122,9 @@ builder.Services.AddScoped<IRadioManager, RadioManager>();
 builder.Services.AddScoped<IAnalyseManager, AnalyseManager>();
 builder.Services.AddScoped<IOrdreMedicalService, OrdreMedicalService>();
 builder.Services.AddScoped<IRadioMedicalService, RadioMedicalService>();
-
+builder.Services.AddScoped<IRadioResultManager, RadioResultManager>();
+builder.Services.AddScoped<IResultRadioService,ResultRadioService>();
+builder.Services.AddScoped<IRadiologyManager, RadiologyManager>();
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers();
