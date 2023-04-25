@@ -11,17 +11,21 @@ namespace Server.Services.Foundation.AnalyseMedicalService
             {
                 return await onGetInformationAnalyse();
             }
-            catch ()
+            catch (ArgumentNullException Ex)
             {
-
+                throw new ValidationException(Ex);
             }
-            catch ()
+            catch (NullException Ex)
             {
-
+                throw new ServiceException(Ex);
             }
-            catch ()
+            catch (NullDataStorageException Ex)
             {
-
+                throw new StorageValidationException(Ex);
+            }
+            catch (FormatException Ex)
+            {
+                throw new ValidationException(Ex);
             }
         }
     }
