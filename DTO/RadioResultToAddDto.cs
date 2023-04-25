@@ -9,7 +9,7 @@ namespace DTO
 {
     public class RadioResultToAddDto
     {
-        public string IdRadio { get; set; }
+        public string IdLineRadio { get; set; }
         [Required]
         public byte[] FileUpload { get; set; }
     }

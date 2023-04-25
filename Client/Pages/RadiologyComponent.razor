@@ -88,7 +88,7 @@
             
         </div>
     </div>
-        @foreach (var line in InformationRadioResultDto.RadioInformation.linesRadioMedicals)
+        @foreach (var line in InformationRadioResultDto.RadioInformation.linesRadioMedicals.ToList())
         {
             
        
@@ -97,8 +97,16 @@
         <div class="card-body text-secondary">
                 <p class="card-text">Description Radio : @line.Description</p>
             <p class="card-text">Instruction Radio :@line.Instruction</p>
-            <input class="form-control" type="file" placeholder="telecharger resultat ">
-           <button class="btn btn-success">Validate Result</button>
+                    <InputFile class="form-control" type="file" OnChange="HandleFileRadioResultSelected" />
+                    <button class="btn btn-success" @onclick="()=>OnAddRadioResult(line.Id)">Validate Result
+                        @if (ButtonLoaddingOnAddResult == line.Id)
+                        {
+
+
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                    </button>
         </div>
     </div>
         }

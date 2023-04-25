@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Services.Foundation.RadioMedicalService;
+using Server.Services.Foundation.ResultRadioService;
 using System.Security.Claims;
+using System.Transactions;
+using static Server.Utility.Utility;
 
 namespace Server.Controllers
 {
@@ -15,10 +18,45 @@ namespace Server.Controllers
     public class RadiologyController : ControllerBase
     {
         public readonly IRadioMedicalService radioMedicalService;
-        public RadiologyController(IRadioMedicalService radioMedicalService)
+        public readonly IResultRadioService resultRadioService;
+        public RadiologyController(IRadioMedicalService radioMedicalService, IResultRadioService resultRadioService)
         { 
             this.radioMedicalService = radioMedicalService;
+            this.resultRadioService = resultRadioService;
         }
+
+        [HttpPost("PostRadioResult")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "RADIOLOGUE")]
+        public async Task<ActionResult> PostNewRadioMedicalResult([FromBody] RadioResultToAddDto radioResultToAddDto)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.resultRadioService.AddRadioResultService(Email, radioResultToAddDto);
+                transaction.Complete();
+                return Ok();
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest();
+            }
+            catch (ServiceException ex)
+            {
+                return StatusCode(412);
+            }catch(StorageValidationException ex)
+            {
+                return NoContent();
+            }catch(Exception e)
+            {
+                return Problem();
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
+        }
+
         [HttpGet("GetRadioInformation/{CodeQr}")]
          [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "RADIOLOGUE")]
         public async Task<ActionResult<InformationRadioResultDto>> GetInformationRadio(string CodeQr)

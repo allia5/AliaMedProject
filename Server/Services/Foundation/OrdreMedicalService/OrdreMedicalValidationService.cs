@@ -39,10 +39,10 @@ namespace Server.Services.Foundation.OrdreMedicalService
             foreach (var prop in obj.GetType().GetProperties())
             {
                 if (prop.GetValue(obj) == null)
-                    return false;
+                    return true;
             }
 
-            return true;
+            return false;
         }
         public void ValidateEntryOnUpdateStatusSecritary(string Email, UpdateOrdreMedicalDto updateOrdreMedicalDto)
         {

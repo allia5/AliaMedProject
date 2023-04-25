@@ -1,4 +1,5 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.Models.Radiologys;
 
 namespace Server.Managers.Storages.RadiologyManager
@@ -13,7 +14,7 @@ namespace Server.Managers.Storages.RadiologyManager
 
         public async Task<Radiology> SelectRadiologyByIdDoctor(Guid DoctorId)
         {
-            throw new NullReferenceException();//  return await (from RadiologyItem in this.serverDbContext.radiologies where RadiologyItem.IdDoctor ==)
+            return await (from RadiologyItem in this.serverDbContext.radiologies where RadiologyItem.IdDoctor == DoctorId select RadiologyItem).FirstOrDefaultAsync();
         }
     }
 }

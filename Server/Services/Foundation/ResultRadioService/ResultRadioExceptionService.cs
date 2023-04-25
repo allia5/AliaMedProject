@@ -1,26 +1,30 @@
-﻿namespace Server.Services.Foundation.ResultRadioService
+﻿using Server.Models.Doctor.Exceptions;
+using Server.Models.Exceptions;
+
+namespace Server.Services.Foundation.ResultRadioService
 {
     public partial class ResultRadioService
     {
         public delegate Task OnAddResultRadio();
         public async Task TryCatch(OnAddResultRadio onAddResultRadio)
         {
-           /* try
+            try
             {
                 await onAddResultRadio();
             }
-            catch ()
+            catch (NullException Ex)
             {
-
+                throw new ServiceException(Ex);
             }
-            catch ()
+            catch (ArgumentNullException Ex)
             {
-
+                throw new ValidationException(Ex);
             }
-            catch (Exception ex)
+            catch (NullDataStorageException Ex)
             {
-
-            }*/
+                throw new StorageValidationException(Ex);
+            }
+           
         }
     }
 }

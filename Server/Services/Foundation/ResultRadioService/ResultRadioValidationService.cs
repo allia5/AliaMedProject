@@ -3,7 +3,9 @@ using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.fileMedical;
+using Server.Models.LineRadioMedical;
 using Server.Models.MedicalOrder;
+using Server.Models.Radiologys;
 using Server.Models.RadioMedical;
 using Server.Models.UserAccount;
 
@@ -26,7 +28,7 @@ namespace Server.Services.Foundation.ResultRadioService
         {
             if (PatientUser == null) throw new ArgumentNullException(nameof(PatientUser));
         }
-       /* public void ValidateResultRadioOnAdd(string Email,RadioResultToAddDto radioResultToAddDto)
+        public void ValidateResultRadioOnAdd(string Email,RadioResultToAddDto radioResultToAddDto)
         {
             if(Email == null)
             {
@@ -36,14 +38,21 @@ namespace Server.Services.Foundation.ResultRadioService
             {
                 if (ArePropertiesNull(radioResultToAddDto))
                 {
-                    throw new ArgumentNullException(radioResultToAddDto);
+                    throw new ArgumentNullException(nameof(radioResultToAddDto));
                 }
             }
             else
             {
                 throw new ArgumentNullException(nameof(radioResultToAddDto));
             }
-        }*/
+        }
+       public void ValidateLineRadioIsNull(LineRadioMedicals lineRadioMedicals)
+        {
+            if(lineRadioMedicals == null)
+            {
+                throw new NullDataStorageException(nameof(lineRadioMedicals));
+            }
+        }
         public static bool ArePropertiesNull(object obj)
         {
             if (obj == null)
@@ -52,10 +61,10 @@ namespace Server.Services.Foundation.ResultRadioService
             foreach (var prop in obj.GetType().GetProperties())
             {
                 if (prop.GetValue(obj) == null)
-                    return false;
+                    return true;
             }
 
-            return true;
+            return false;
         }
 
         public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
@@ -71,6 +80,13 @@ namespace Server.Services.Foundation.ResultRadioService
             {
                 throw new NullException(nameof(doctor));
 
+            }
+        }
+        public void ValidateRadiologyIsNull(Radiology radiology)
+        {
+            if(radiology == null)
+            {
+                throw new NullException(nameof(radiology));
             }
         }
         public void ValidateUserIsNull(User user)
