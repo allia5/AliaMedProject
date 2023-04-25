@@ -62,7 +62,7 @@ namespace Server.Services.Foundation.AnalyseMedicalService
                 ValidateUserIsNull(UserAccountSpecialisteAnalyse);
                 var SpecialistAnalyse = await this.specialisteAnalyseManager.SelectSpecialisteAnalyseByIdUser(UserAccountSpecialisteAnalyse.Id);
                 ValidateSpecialisteAnalyseIsNull(SpecialistAnalyse);
-                var Analyse = await this.AnalyseManager.SelectAnalyseByCodeAsync(EncryptString(codeQr, "AJFNJjfjJZFJNdzj=="));
+                var Analyse = await this.AnalyseManager.SelectAnalyseByCodeAsync(DecryptString(codeQr, "AJFNJjfjJZFJNdzj=="));
                 ValidateAnalyseIsNull(Analyse);
                 var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Analyse.IdOrdreMedical);
                 ValidateOrdreMedicalIsNull(OrdreMedical);

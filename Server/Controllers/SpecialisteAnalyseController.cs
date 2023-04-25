@@ -20,7 +20,7 @@ namespace Server.Controllers
             this.analyseMedicalService = analyseMedicalService;
         }
         [HttpGet("GetInformationAnalyse/{CodeQr}")]
-        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "ANALYSE")]
         public async Task<ActionResult<InformationAnalyseResultDto>> GetInformationAnalyse(string CodeQr)
         {
             try
