@@ -24,6 +24,7 @@ using Server.Managers.Storages.RadioManager;
 using Server.Managers.Storages.RadioResultManager;
 using Server.Managers.Storages.RolesManager;
 using Server.Managers.Storages.SecretaryManager;
+using Server.Managers.Storages.SpecialisteAnalyseManager;
 using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.Storages.UserRoleManager;
 using Server.Managers.Storages.WorkDoctorManager;
@@ -128,6 +129,7 @@ builder.Services.AddScoped<IRadioResultManager, RadioResultManager>();
 builder.Services.AddScoped<IResultRadioService,ResultRadioService>();
 builder.Services.AddScoped<IRadiologyManager, RadiologyManager>();
 builder.Services.AddScoped<ILineRadioMedicalManager, LineRadioMedicalManager>();
+builder.Services.AddScoped<ISpecialisteAnalyseManager, SpecialisteAnalyseManager>();
 
 builder.Services.AddScoped<ILineAnalyseMedicalManager, LineAnalyseMedicalManager>();
 builder.Services.AddSignalR();
