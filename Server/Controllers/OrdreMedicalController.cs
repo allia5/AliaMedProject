@@ -83,7 +83,7 @@ namespace Server.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
-        public async Task<ActionResult<OrdreMedicalDto>> PostNewOrdreMedical( OrderMedicalToAddDro orderMedicalToAddDro)
+        public async Task<ActionResult> PostNewOrdreMedical( OrderMedicalToAddDro orderMedicalToAddDro)
         {
             TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
@@ -93,7 +93,7 @@ namespace Server.Controllers
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 var ResultOrdreMedical = await this.ordreMedicalService.AddOrdreMedicalDto(Email, orderMedicalToAddDro);
                 transaction.Complete();
-                 return ResultOrdreMedical;
+                return Ok();
             
 
             }

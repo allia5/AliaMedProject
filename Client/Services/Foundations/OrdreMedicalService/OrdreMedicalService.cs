@@ -93,7 +93,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
 
 
 
-        public async Task<OrdreMedicalDto> PostOrdreMedicalPatient(OrderMedicalToAddDro orderMedicalToAddDro)
+        public async Task PostOrdreMedicalPatient(OrderMedicalToAddDro orderMedicalToAddDro)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "/api/OrdreMedical");
             var prescriptionObject = new object();
@@ -148,19 +148,9 @@ namespace Client.Services.Foundations.OrdreMedicalService
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtBearer.Token);
             var result = await HttpClient.SendAsync(request);
 
-            if (result.StatusCode == HttpStatusCode.OK)
-            {
-                if (result.Content.Headers.ContentLength != 0)
-                {
-                    return await result.Content.ReadFromJsonAsync<OrdreMedicalDto>();
-                }
-                else
-                {
-                    throw new NullException("Empty Data");
-                }
-            }
+            
 
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
+             if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 throw new BadRequestException("Bad Request Check Field");
             }
@@ -173,7 +163,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
                 throw new PreconditionFailedException("Condition User denied");
             }
 
-            else
+            else if(result.StatusCode == HttpStatusCode.InternalServerError)
             {
                 throw new ProblemException("Error Intern");
             }
