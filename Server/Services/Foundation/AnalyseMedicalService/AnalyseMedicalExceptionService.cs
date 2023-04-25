@@ -1,4 +1,6 @@
 ﻿using DTO;
+using Server.Models.Doctor.Exceptions;
+using Server.Models.Exceptions;
 
 namespace Server.Services.Foundation.AnalyseMedicalService
 {

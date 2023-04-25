@@ -44,7 +44,7 @@ namespace Server.Services.Foundation.AnalyseMedicalService
         {
             if (Analyse == null)
             {
-                throw new NullDataStorageException(nameof(radio));
+                throw new NullDataStorageException(nameof(Analyse));
             }
         }
        

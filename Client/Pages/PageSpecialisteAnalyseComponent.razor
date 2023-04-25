@@ -1,0 +1,111 @@
+﻿@page "/SpecialisteAnalyse"
+@inherits PageSpecialisteAnalyseComponentBase
+
+
+
+
+@if (ErrorMessage != null)
+{
+    <ErrorRoutingMessage Message=@ErrorMessage></ErrorRoutingMessage>
+}
+@if (SuccessMessage != null)
+{
+    <CorrectRoutingMessage></CorrectRoutingMessage>
+}
+
+<div class="d-flex justify-content-center">
+    <div class="input-group w-75">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="">CodeQr Radio</span>
+        </div>
+        <input type="text" @bind="CodeQr" placeholder="CodeQr" style="border-radius:25px;" class="form-control">
+        <button @onclick="()=>OnAddCodeQr(CodeQr)" class="btn btn-success " style="border-radius:25px;">
+            research
+            @if (ButtonAddIsLoding == true)
+            {
+
+
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="sr-only">Loading...</span>
+            }
+        </button>
+    </div>
+</div>
+
+@if (IsLoading == true)
+{
+    <WaitComponent></WaitComponent>
+}
+
+
+
+
+@if (MessageHasBeenValidated != null)
+{
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill" /></svg>
+        <div>
+            Ordre Medical Has Been Validated
+        </div>
+    </div>
+}
+
+
+
+
+
+@if (this.InformationAnalyseResultDto != null)
+{
+    <div class="d-block justify-content-center">
+        <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
+            <div class="card-header">Information File Medical</div>
+            <div class="card-body text-secondary">
+                <p class="card-text">@InformationAnalyseResultDto.FileMedicalInformation.FirstName</p>
+                <p class="card-text">@InformationAnalyseResultDto.FileMedicalInformation.LastName</p>
+                <p class="card-text">@InformationAnalyseResultDto.FileMedicalInformation.DateOfBirth</p>
+                <p class="card-text">@InformationAnalyseResultDto.FileMedicalInformation.Sexe</p>
+            </div>
+        </div>
+
+        <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
+            <div class="card-header">Infourmation Account File Medical</div>
+            <div class="card-body text-secondary">
+
+                <p class="card-text">@InformationAnalyseResultDto.PatientInformation.FirstName</p>
+                <p class="card-text">@InformationAnalyseResultDto.PatientInformation.LastName</p>
+                <p class="card-text">@InformationAnalyseResultDto.PatientInformation.NationalNumber</p>
+                <p class="card-text">@InformationAnalyseResultDto.PatientInformation.DateOfBirth</p>
+                <p class="card-text">@InformationAnalyseResultDto.PatientInformation.Sexe</p>
+            </div>
+        </div>
+
+
+        <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
+            <div class="card-header">Information Doctor</div>
+            <div class="card-body text-secondary">
+                <p class="card-text">@InformationAnalyseResultDto.DoctorInformation.FirstName</p>
+                <p class="card-text">@InformationAnalyseResultDto.DoctorInformation.LastName</p>
+                <p class="card-text">@InformationAnalyseResultDto.DoctorInformation.Email</p>
+
+            </div>
+        </div>
+        @foreach (var line in InformationAnalyseResultDto.informationAnalyseDto.LinesAnalyse.ToList())
+        {
+
+
+            <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
+                <div class="card-header">Information Radio</div>
+                <div class="card-body text-secondary">
+                    <p class="card-text">Description Radio : @line.Description</p>
+                    <p class="card-text">Instruction Radio :@line.Instruction</p>
+                    <InputFile class="form-control" type="file"  />
+                    <button class="btn btn-success" >
+                        Validate Result
+                      
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+
+}
