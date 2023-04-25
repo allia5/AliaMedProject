@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Server.Models.ResultAnalyses;
 using Newtonsoft.Json;
+using Server.Models.SpecialisteAnalyses;
 
 namespace Server.Models.LineAnalyseMedical
 {
@@ -18,9 +19,12 @@ namespace Server.Models.LineAnalyseMedical
         public StatusAnalyse Status { get; set; }
 
         public DateTime? DateValidation { get; set; }
-        [ForeignKey("MedicalAnalyse")]
-        public Guid? IdMedicalAnalyse { get; set; }
-        public MedicalAnalyse MedicalAnalyse { get; set; }
+        [ForeignKey("Analyses")]
+        public Guid IdAnalyse { get; set; }
+        public Analyses Analyses { get; set; }
+        [ForeignKey("SpecialisteAnalyse")]
+        public Guid? IdSpecialisteAnalyse { get; set; }
+        public SpecialisteAnalyse SpecialisteAnalyse { get; set; }
         [JsonIgnore]
         public IEnumerable<ResultAnalyse> ResultAnalyse { get; set; }
     }

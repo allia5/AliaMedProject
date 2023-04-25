@@ -274,9 +274,11 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 DateValidation = null,
                 description = lineAnalyse.Description,
                 Instruction = lineAnalyse.Instruction,
-                IdMedicalAnalyse = null,
+                IdSpecialisteAnalyse = null,
                 ResultAnalyse = null,
-                Status = StatusAnalyse.notValidate
+                Status = StatusAnalyse.notValidate,
+                IdAnalyse=AnalyseId
+               
             };
         }
 

@@ -20,7 +20,7 @@ namespace Server.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NameCabinet = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    image = table.Column<byte[]>(type: "varbinary(100)", maxLength: 100, nullable: true),
+                    image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     MapAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     numberPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     statusService = table.Column<int>(type: "int", nullable: false),
@@ -129,27 +129,6 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "medicalAnalyses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NameMedicalAnalyse = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AuthenticationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdUser = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_medicalAnalyses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_medicalAnalyses_users_IdUser",
-                        column: x => x.IdUser,
-                        principalTable: "users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Pharmacists",
                 columns: table => new
                 {
@@ -192,6 +171,27 @@ namespace Server.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Secretarys_users_IdUser",
+                        column: x => x.IdUser,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SpecialisteAnalyse",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NameMedicalAnalyse = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AuthenticationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdUser = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpecialisteAnalyse", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SpecialisteAnalyse_users_IdUser",
                         column: x => x.IdUser,
                         principalTable: "users",
                         principalColumn: "Id",
@@ -425,12 +425,13 @@ namespace Server.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Visibility = table.Column<int>(type: "int", nullable: false),
                     summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    DateValidation = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateValidation = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IdDoctor = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdFileMedical = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdSecritary = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdSecritary = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IdCabinetMedical = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -467,13 +468,10 @@ namespace Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileAnalyse = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     QrCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Instruction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    IdPharmacist = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdOrdreMedical = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MedicalAnalyseId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    SpecialisteAnalyseId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -485,15 +483,9 @@ namespace Server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Analyses_Pharmacists_IdPharmacist",
-                        column: x => x.IdPharmacist,
-                        principalTable: "Pharmacists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Analyses_medicalAnalyses_MedicalAnalyseId",
-                        column: x => x.MedicalAnalyseId,
-                        principalTable: "medicalAnalyses",
+                        name: "FK_Analyses_SpecialisteAnalyse_SpecialisteAnalyseId",
+                        column: x => x.SpecialisteAnalyseId,
+                        principalTable: "SpecialisteAnalyse",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -504,6 +496,7 @@ namespace Server.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     qrCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FilePrescription = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     instruction = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdMedicalOrdre = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -523,12 +516,10 @@ namespace Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FileRadio = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     QrCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Instruction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    DateValidation = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdRadiology = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdOrdreMedical = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IdOrdreMedical = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RadiologyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -540,29 +531,38 @@ namespace Server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Radio_radiologies_IdRadiology",
-                        column: x => x.IdRadiology,
+                        name: "FK_Radio_radiologies_RadiologyId",
+                        column: x => x.RadiologyId,
                         principalTable: "radiologies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "resultAnalyses",
+                name: "LineAnalyseMedicals",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReferenceFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileType = table.Column<int>(type: "int", nullable: false),
-                    IdAnalyse = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Instruction = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DateValidation = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IdAnalyse = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdSpecialisteAnalyse = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_resultAnalyses", x => x.Id);
+                    table.PrimaryKey("PK_LineAnalyseMedicals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_resultAnalyses_Analyses_IdAnalyse",
+                        name: "FK_LineAnalyseMedicals_Analyses_IdAnalyse",
                         column: x => x.IdAnalyse,
                         principalTable: "Analyses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LineAnalyseMedicals_SpecialisteAnalyse_IdSpecialisteAnalyse",
+                        column: x => x.IdSpecialisteAnalyse,
+                        principalTable: "SpecialisteAnalyse",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -576,9 +576,9 @@ namespace Server.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dosage = table.Column<int>(type: "int", nullable: false),
                     StatusPrescriptionLine = table.Column<int>(type: "int", nullable: false),
-                    DateValidation = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateValidation = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IdPrescription = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdPharmacist = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IdPharmacist = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -598,21 +598,71 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LineRadioMedicals",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Instruction = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DateValidation = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IdRadiology = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IdRadio = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LineRadioMedicals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LineRadioMedicals_Radio_IdRadio",
+                        column: x => x.IdRadio,
+                        principalTable: "Radio",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LineRadioMedicals_radiologies_IdRadiology",
+                        column: x => x.IdRadiology,
+                        principalTable: "radiologies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "resultAnalyses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AnalyseResult = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    FileType = table.Column<int>(type: "int", nullable: false),
+                    IdLineAnalyse = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LineAnalyseMedicalsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_resultAnalyses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_resultAnalyses_LineAnalyseMedicals_LineAnalyseMedicalsId",
+                        column: x => x.LineAnalyseMedicalsId,
+                        principalTable: "LineAnalyseMedicals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RadioResult",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReferenceFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileType = table.Column<int>(type: "int", nullable: false),
-                    IdRadio = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FileResult = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    fileType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdLineRadio = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RadioResult", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RadioResult_Radio_IdRadio",
-                        column: x => x.IdRadio,
-                        principalTable: "Radio",
+                        name: "FK_RadioResult_LineRadioMedicals_IdLineRadio",
+                        column: x => x.IdLineRadio,
+                        principalTable: "LineRadioMedicals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -643,13 +693,13 @@ namespace Server.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"), "f2ffc49d-468d-4138-914d-c207fb2a840c", "RADIOLOGUE", null },
-                    { new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"), "471b24fe-2258-44a6-90da-ddaca9024a69", "PHARMACIEN", null },
-                    { new Guid("0d518584-64a4-424b-b011-7283083394b8"), "3360e595-a431-453a-a057-1d951aadd1f8", "SECRITAIRE", null },
-                    { new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"), "9979c289-ce9d-4c54-befe-9527355b11f6", "MEDECIN", null },
-                    { new Guid("232d07c5-711e-4802-a048-f2f73804ea40"), "6cdcb83e-8520-4232-97ea-0920343ec437", "ANALYSE", null },
-                    { new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"), "1a9ad5bc-bcdb-42be-a9f5-c75b325b6066", "PATIENT", null },
-                    { new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"), "0d95d517-b6d2-4b71-831c-cd16497959a8", "ADMIN", null }
+                    { new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"), "9fd55dd8-7ddc-40c1-a551-161000828156", "RADIOLOGUE", null },
+                    { new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"), "76002e46-ed20-413a-911b-d2e611d4cabc", "PHARMACIEN", null },
+                    { new Guid("0d518584-64a4-424b-b011-7283083394b8"), "520f0f59-f810-4e5b-bdb7-5b2fbd51c9af", "SECRITAIRE", null },
+                    { new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"), "f17011e6-c838-4b2f-a052-4879f091047d", "MEDECIN", null },
+                    { new Guid("232d07c5-711e-4802-a048-f2f73804ea40"), "3fdafb63-fb68-4b21-9cd3-acb334061301", "ANALYSE", null },
+                    { new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"), "af78baa7-dd0f-4c18-a360-1fc121d9ddd9", "PATIENT", null },
+                    { new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"), "71128104-06b5-40ea-8310-10f56d6241f9", "ADMIN", null }
                 });
 
             migrationBuilder.InsertData(
@@ -699,14 +749,9 @@ namespace Server.Migrations
                 column: "IdOrdreMedical");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Analyses_IdPharmacist",
+                name: "IX_Analyses_SpecialisteAnalyseId",
                 table: "Analyses",
-                column: "IdPharmacist");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Analyses_MedicalAnalyseId",
-                table: "Analyses",
-                column: "MedicalAnalyseId");
+                column: "SpecialisteAnalyseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cabinetMedicals_NameCabinet",
@@ -744,14 +789,24 @@ namespace Server.Migrations
                 column: "IdUser");
 
             migrationBuilder.CreateIndex(
-                name: "IX_medicalAnalyses_IdUser",
-                table: "medicalAnalyses",
-                column: "IdUser");
+                name: "IX_LineAnalyseMedicals_IdAnalyse",
+                table: "LineAnalyseMedicals",
+                column: "IdAnalyse");
 
             migrationBuilder.CreateIndex(
-                name: "IX_medicalAnalyses_NameMedicalAnalyse",
-                table: "medicalAnalyses",
-                column: "NameMedicalAnalyse");
+                name: "IX_LineAnalyseMedicals_IdSpecialisteAnalyse",
+                table: "LineAnalyseMedicals",
+                column: "IdSpecialisteAnalyse");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LineRadioMedicals_IdRadio",
+                table: "LineRadioMedicals",
+                column: "IdRadio");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LineRadioMedicals_IdRadiology",
+                table: "LineRadioMedicals",
+                column: "IdRadiology");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalOrdres_IdCabinetMedical",
@@ -819,9 +874,9 @@ namespace Server.Migrations
                 column: "IdOrdreMedical");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Radio_IdRadiology",
+                name: "IX_Radio_RadiologyId",
                 table: "Radio",
-                column: "IdRadiology");
+                column: "RadiologyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_radiologies_IdDoctor",
@@ -829,14 +884,14 @@ namespace Server.Migrations
                 column: "IdDoctor");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RadioResult_IdRadio",
+                name: "IX_RadioResult_IdLineRadio",
                 table: "RadioResult",
-                column: "IdRadio");
+                column: "IdLineRadio");
 
             migrationBuilder.CreateIndex(
-                name: "IX_resultAnalyses_IdAnalyse",
+                name: "IX_resultAnalyses_LineAnalyseMedicalsId",
                 table: "resultAnalyses",
-                column: "IdAnalyse");
+                column: "LineAnalyseMedicalsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Secretarys_IdCabinetMedical",
@@ -847,6 +902,16 @@ namespace Server.Migrations
                 name: "IX_Secretarys_IdUser",
                 table: "Secretarys",
                 column: "IdUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SpecialisteAnalyse_IdUser",
+                table: "SpecialisteAnalyse",
+                column: "IdUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SpecialisteAnalyse_NameMedicalAnalyse",
+                table: "SpecialisteAnalyse",
+                column: "NameMedicalAnalyse");
 
             migrationBuilder.CreateIndex(
                 name: "IX_specialtiesDoctors_IdDoctor",
@@ -920,13 +985,16 @@ namespace Server.Migrations
                 name: "chronicDiseases");
 
             migrationBuilder.DropTable(
+                name: "Pharmacists");
+
+            migrationBuilder.DropTable(
                 name: "prescriptions");
 
             migrationBuilder.DropTable(
-                name: "Radio");
+                name: "LineRadioMedicals");
 
             migrationBuilder.DropTable(
-                name: "Analyses");
+                name: "LineAnalyseMedicals");
 
             migrationBuilder.DropTable(
                 name: "specialites");
@@ -935,16 +1003,19 @@ namespace Server.Migrations
                 name: "roles");
 
             migrationBuilder.DropTable(
+                name: "Radio");
+
+            migrationBuilder.DropTable(
+                name: "Analyses");
+
+            migrationBuilder.DropTable(
                 name: "radiologies");
 
             migrationBuilder.DropTable(
                 name: "MedicalOrdres");
 
             migrationBuilder.DropTable(
-                name: "Pharmacists");
-
-            migrationBuilder.DropTable(
-                name: "medicalAnalyses");
+                name: "SpecialisteAnalyse");
 
             migrationBuilder.DropTable(
                 name: "Secretarys");

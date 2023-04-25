@@ -3,9 +3,9 @@
 // FREE TO USE AS LONG AS SOFTWARE FUNDS ARE DONATED TO THE POOR
 // ---------------------------------------------------------------
 
-namespace Server.Models.MedicalAnalysis
+namespace Server.Models.SpecialisteAnalyses
 {
-    public enum StatusMedicalAnalyse
+    public enum StatusSpecialisteAnalyse
     {
         Activated,
         Deactivated

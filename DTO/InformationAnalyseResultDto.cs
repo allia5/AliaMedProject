@@ -14,14 +14,15 @@ namespace DTO
 
     }
     public class InformationAnalyseDto
-        {
-        public string IdAnalyse { get; set; }   
+    {
+        public string IdAnalyse { get; set; }
         public List<LinesAnalyseDto> LinesAnalyse { get; set; }
 
-        }
+    }
     public class LinesAnalyseDto
     {
-        public string IdLineAnalyse { get;  set; }
+        public string IdLineAnalyse { get; set; }
         public string Instruction { get; set; }
         public string Description { get; set; }
+    }
 }

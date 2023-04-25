@@ -8,5 +8,7 @@ namespace Server.Managers.Storages.AnalyseManager
         public Task<Analyses> InsertAnalyseAsync(Analyses analyses);
         public Task<Analyses> UpdateAnalyseAsync(Analyses analyses);
         public Task<Analyses> SelectAnalyseByOrdreMedicalId(Guid MedicalOrdreId);
+        public Task<Analyses> SelectAnalyseByCodeAsync(string CodeQr);
+
     }
 }

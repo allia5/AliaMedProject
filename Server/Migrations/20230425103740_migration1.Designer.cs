@@ -12,8 +12,8 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    [Migration("20230419162038_migration13")]
-    partial class migration13
+    [Migration("20230425103740_migration1")]
+    partial class migration1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,38 +52,24 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateValidation")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
                     b.Property<byte[]>("FileAnalyse")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<Guid?>("IdMedicalAnalyse")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("IdOrdreMedical")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Instruction")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QrCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("SpecialisteAnalyseId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdMedicalAnalyse");
-
                     b.HasIndex("IdOrdreMedical");
+
+                    b.HasIndex("SpecialisteAnalyseId");
 
                     b.ToTable("Analyses");
                 });
@@ -261,35 +247,73 @@ namespace Server.Migrations
                     b.ToTable("FileChronicDiseases");
                 });
 
-            modelBuilder.Entity("Server.Models.MedicalAnalysis.MedicalAnalyse", b =>
+            modelBuilder.Entity("Server.Models.LineAnalyseMedical.LineAnalyseMedicals", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Adress")
-                        .IsRequired()
+                    b.Property<DateTime?>("DateValidation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IdAnalyse")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IdSpecialisteAnalyse")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Instruction")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AuthenticationNumber")
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("NameMedicalAnalyse")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdUser");
+                    b.HasIndex("IdAnalyse");
 
-                    b.HasIndex("NameMedicalAnalyse");
+                    b.HasIndex("IdSpecialisteAnalyse");
 
-                    b.ToTable("medicalAnalyses");
+                    b.ToTable("LineAnalyseMedicals");
+                });
+
+            modelBuilder.Entity("Server.Models.LineRadioMedical.LineRadioMedicals", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DateValidation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("IdRadio")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IdRadiology")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Instruction")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdRadio");
+
+                    b.HasIndex("IdRadiology");
+
+                    b.ToTable("LineRadioMedicals");
                 });
 
             modelBuilder.Entity("Server.Models.MedicalOrder.MedicalOrdres", b =>
@@ -484,38 +508,24 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateValidation")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte[]>("FileRadio")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<Guid>("IdOrdreMedical")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("IdRadiology")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Instruction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("QrCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("RadiologyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdOrdreMedical");
 
-                    b.HasIndex("IdRadiology");
+                    b.HasIndex("RadiologyId");
 
                     b.ToTable("Radio");
                 });
@@ -557,12 +567,15 @@ namespace Server.Migrations
                     b.Property<int>("FileType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("IdAnalyse")
+                    b.Property<Guid>("IdLineAnalyse")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LineAnalyseMedicalsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdAnalyse");
+                    b.HasIndex("LineAnalyseMedicalsId");
 
                     b.ToTable("resultAnalyses");
                 });
@@ -577,17 +590,49 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("FileType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("IdRadio")
+                    b.Property<Guid>("IdLineRadio")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("fileType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdRadio");
+                    b.HasIndex("IdLineRadio");
 
                     b.ToTable("RadioResult");
+                });
+
+            modelBuilder.Entity("Server.Models.SpecialisteAnalyses.SpecialisteAnalyse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthenticationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NameMedicalAnalyse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdUser");
+
+                    b.HasIndex("NameMedicalAnalyse");
+
+                    b.ToTable("SpecialisteAnalyse");
                 });
 
             modelBuilder.Entity("Server.Models.Specialites.Specialite", b =>
@@ -775,43 +820,43 @@ namespace Server.Migrations
                         new
                         {
                             Id = new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"),
-                            ConcurrencyStamp = "824df4b2-7209-4ed5-8312-b2e32bec24cf",
+                            ConcurrencyStamp = "71128104-06b5-40ea-8310-10f56d6241f9",
                             Name = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"),
-                            ConcurrencyStamp = "8653d574-5dca-4308-b9dc-6a143380415a",
+                            ConcurrencyStamp = "af78baa7-dd0f-4c18-a360-1fc121d9ddd9",
                             Name = "PATIENT"
                         },
                         new
                         {
                             Id = new Guid("0d518584-64a4-424b-b011-7283083394b8"),
-                            ConcurrencyStamp = "8cdf1674-818d-4f58-b29a-be0808f7f591",
+                            ConcurrencyStamp = "520f0f59-f810-4e5b-bdb7-5b2fbd51c9af",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
                             Id = new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"),
-                            ConcurrencyStamp = "65a7d45f-3c83-4970-86fa-473d7489665b",
+                            ConcurrencyStamp = "f17011e6-c838-4b2f-a052-4879f091047d",
                             Name = "MEDECIN"
                         },
                         new
                         {
                             Id = new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"),
-                            ConcurrencyStamp = "013d8a38-e6de-475c-b415-98e5d3267cd7",
+                            ConcurrencyStamp = "9fd55dd8-7ddc-40c1-a551-161000828156",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
                             Id = new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"),
-                            ConcurrencyStamp = "e5c1d3be-bd94-4192-b520-80ca484044cb",
+                            ConcurrencyStamp = "76002e46-ed20-413a-911b-d2e611d4cabc",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
                             Id = new Guid("232d07c5-711e-4802-a048-f2f73804ea40"),
-                            ConcurrencyStamp = "31122a97-184d-4dd6-8505-d3a3b9237555",
+                            ConcurrencyStamp = "3fdafb63-fb68-4b21-9cd3-acb334061301",
                             Name = "ANALYSE"
                         });
                 });
@@ -1062,18 +1107,16 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.Analyse.Analyses", b =>
                 {
-                    b.HasOne("Server.Models.MedicalAnalysis.MedicalAnalyse", "MedicalAnalyse")
-                        .WithMany("Analyses")
-                        .HasForeignKey("IdMedicalAnalyse")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Server.Models.MedicalOrder.MedicalOrdres", "MedicalOrdres")
                         .WithMany("Analyses")
                         .HasForeignKey("IdOrdreMedical")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("MedicalAnalyse");
+                    b.HasOne("Server.Models.SpecialisteAnalyses.SpecialisteAnalyse", null)
+                        .WithMany("Analyses")
+                        .HasForeignKey("SpecialisteAnalyseId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("MedicalOrdres");
                 });
@@ -1108,15 +1151,40 @@ namespace Server.Migrations
                     b.Navigation("fileMedicals");
                 });
 
-            modelBuilder.Entity("Server.Models.MedicalAnalysis.MedicalAnalyse", b =>
+            modelBuilder.Entity("Server.Models.LineAnalyseMedical.LineAnalyseMedicals", b =>
                 {
-                    b.HasOne("Server.Models.UserAccount.User", "User")
-                        .WithMany("MedicalAnalyse")
-                        .HasForeignKey("IdUser")
+                    b.HasOne("Server.Models.Analyse.Analyses", "Analyses")
+                        .WithMany("LineAnalyseMedicals")
+                        .HasForeignKey("IdAnalyse")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("Server.Models.SpecialisteAnalyses.SpecialisteAnalyse", "SpecialisteAnalyse")
+                        .WithMany()
+                        .HasForeignKey("IdSpecialisteAnalyse")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Analyses");
+
+                    b.Navigation("SpecialisteAnalyse");
+                });
+
+            modelBuilder.Entity("Server.Models.LineRadioMedical.LineRadioMedicals", b =>
+                {
+                    b.HasOne("Server.Models.RadioMedical.Radio", "Radio")
+                        .WithMany("LineRadioMedicals")
+                        .HasForeignKey("IdRadio")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Server.Models.Radiologys.Radiology", "Radiology")
+                        .WithMany()
+                        .HasForeignKey("IdRadiology")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Radio");
+
+                    b.Navigation("Radiology");
                 });
 
             modelBuilder.Entity("Server.Models.MedicalOrder.MedicalOrdres", b =>
@@ -1228,14 +1296,12 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Models.Radiologys.Radiology", "Radiology")
+                    b.HasOne("Server.Models.Radiologys.Radiology", null)
                         .WithMany("Radios")
-                        .HasForeignKey("IdRadiology")
+                        .HasForeignKey("RadiologyId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("MedicalOrdres");
-
-                    b.Navigation("Radiology");
                 });
 
             modelBuilder.Entity("Server.Models.Radiologys.Radiology", b =>
@@ -1251,24 +1317,35 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.ResultAnalyses.ResultAnalyse", b =>
                 {
-                    b.HasOne("Server.Models.Analyse.Analyses", "Analyses")
+                    b.HasOne("Server.Models.LineAnalyseMedical.LineAnalyseMedicals", "LineAnalyseMedicals")
                         .WithMany("ResultAnalyse")
-                        .HasForeignKey("IdAnalyse")
+                        .HasForeignKey("LineAnalyseMedicalsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Analyses");
+                    b.Navigation("LineAnalyseMedicals");
                 });
 
             modelBuilder.Entity("Server.Models.ResultsRadio.ResultRadio", b =>
                 {
-                    b.HasOne("Server.Models.RadioMedical.Radio", "Radio")
+                    b.HasOne("Server.Models.LineRadioMedical.LineRadioMedicals", "LineRadioMedicals")
                         .WithMany("resultRadios")
-                        .HasForeignKey("IdRadio")
+                        .HasForeignKey("IdLineRadio")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Radio");
+                    b.Navigation("LineRadioMedicals");
+                });
+
+            modelBuilder.Entity("Server.Models.SpecialisteAnalyses.SpecialisteAnalyse", b =>
+                {
+                    b.HasOne("Server.Models.UserAccount.User", "User")
+                        .WithMany("MedicalAnalyse")
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Server.Models.SpecialtieDoctor.SpecialtiesDoctor", b =>
@@ -1367,7 +1444,7 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.Analyse.Analyses", b =>
                 {
-                    b.Navigation("ResultAnalyse");
+                    b.Navigation("LineAnalyseMedicals");
                 });
 
             modelBuilder.Entity("Server.Models.CabinetMedicals.CabinetMedical", b =>
@@ -1400,9 +1477,14 @@ namespace Server.Migrations
                     b.Navigation("fileMedical");
                 });
 
-            modelBuilder.Entity("Server.Models.MedicalAnalysis.MedicalAnalyse", b =>
+            modelBuilder.Entity("Server.Models.LineAnalyseMedical.LineAnalyseMedicals", b =>
                 {
-                    b.Navigation("Analyses");
+                    b.Navigation("ResultAnalyse");
+                });
+
+            modelBuilder.Entity("Server.Models.LineRadioMedical.LineRadioMedicals", b =>
+                {
+                    b.Navigation("resultRadios");
                 });
 
             modelBuilder.Entity("Server.Models.MedicalOrder.MedicalOrdres", b =>
@@ -1426,12 +1508,17 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.RadioMedical.Radio", b =>
                 {
-                    b.Navigation("resultRadios");
+                    b.Navigation("LineRadioMedicals");
                 });
 
             modelBuilder.Entity("Server.Models.Radiologys.Radiology", b =>
                 {
                     b.Navigation("Radios");
+                });
+
+            modelBuilder.Entity("Server.Models.SpecialisteAnalyses.SpecialisteAnalyse", b =>
+                {
+                    b.Navigation("Analyses");
                 });
 
             modelBuilder.Entity("Server.Models.Specialites.Specialite", b =>

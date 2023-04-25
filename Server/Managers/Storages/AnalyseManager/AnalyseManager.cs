@@ -37,5 +37,12 @@ namespace Server.Managers.Storages.AnalyseManager
         {
             return await (from ItemAnalyse in this.ServerDbContext.Analyses where ItemAnalyse.IdOrdreMedical == MedicalOrdreId select ItemAnalyse ).FirstOrDefaultAsync();
         }
+
+        public async Task<Analyses> SelectAnalyseByCodeAsync(string CodeQr)
+        {
+            return await (from analyseItem in this.ServerDbContext.Analyses 
+                          where analyseItem.QrCode == CodeQr 
+                          select analyseItem).FirstOrDefaultAsync();
+        }
     }
 }

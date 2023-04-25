@@ -22,6 +22,7 @@ using Server.Models.RadioMedical;
 using Server.Models.ResultAnalyses;
 using Server.Models.ResultsRadio;
 using Server.Models.secretary;
+using Server.Models.SpecialisteAnalyses;
 using Server.Models.Specialites;
 using Server.Models.SpecialtieDoctor;
 using Server.Models.UserAccount;
@@ -379,7 +380,7 @@ namespace Server.Data
         public DbSet<Doctors> Doctors { get; set; }
         public DbSet<FileChronicDiseases> FileChronicDiseases { get; set; }
         public DbSet<fileMedicals> fileMedicals { get; set; }
-        public DbSet<MedicalAnalyse> medicalAnalyses { get; set; }
+        public DbSet<SpecialisteAnalyse> SpecialisteAnalyse { get; set; }
         public DbSet<MedicalOrdres> MedicalOrdres { get; set; }
         public DbSet<MedicalPlanning> medicalPlannings { get; set; }
         public DbSet<Pharmacists> Pharmacists { get; set; }
@@ -398,6 +399,6 @@ namespace Server.Data
         public DbSet<UserRole> userRoles { get; set; }
         public DbSet<LineRadioMedicals> LineRadioMedicals { get; set; }
         public DbSet<LineAnalyseMedicals> LineAnalyseMedicals { get; set; }
-
+        
     }
 }

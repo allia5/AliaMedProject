@@ -5,10 +5,10 @@ using Server.Models.UserAccount;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Server.Models.MedicalAnalysis
+namespace Server.Models.SpecialisteAnalyses
 {
     [Index(nameof(NameMedicalAnalyse))]
-    public class MedicalAnalyse
+    public class SpecialisteAnalyse
     {
         [Key]
         public Guid Id { get; set; }
@@ -20,7 +20,7 @@ namespace Server.Models.MedicalAnalysis
         public string Adress { get; set; }
         [Required]
 
-        public StatusMedicalAnalyse Status;
+        public StatusSpecialisteAnalyse Status;
         [ForeignKey("User")]
         public string IdUser { get; set; }
         public User User { get; set; }
