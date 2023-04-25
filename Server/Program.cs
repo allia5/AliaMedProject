@@ -30,6 +30,7 @@ using Server.Managers.Storages.UserRoleManager;
 using Server.Managers.Storages.WorkDoctorManager;
 using Server.Managers.UserManager;
 using Server.Models.UserAccount;
+using Server.Services.Foundation.AnalyseMedicalService;
 using Server.Services.Foundation.CabinetMedicalService;
 using Server.Services.Foundation.ChronicDiseasesService;
 using Server.Services.Foundation.DoctorService;
@@ -39,6 +40,7 @@ using Server.Services.Foundation.MailService;
 using Server.Services.Foundation.OrdreMedicalService;
 using Server.Services.Foundation.PlanningAppoimentService;
 using Server.Services.Foundation.RadioMedicalService;
+using Server.Services.Foundation.ResultAnalyseService;
 using Server.Services.Foundation.ResultRadioService;
 using Server.Services.Foundation.SecretaryService;
 using Server.Services.Foundation.WorkDoctorService;
@@ -130,7 +132,8 @@ builder.Services.AddScoped<IResultRadioService,ResultRadioService>();
 builder.Services.AddScoped<IRadiologyManager, RadiologyManager>();
 builder.Services.AddScoped<ILineRadioMedicalManager, LineRadioMedicalManager>();
 builder.Services.AddScoped<ISpecialisteAnalyseManager, SpecialisteAnalyseManager>();
-
+builder.Services.AddScoped<IResultAnalyseService, ResultAnalyseService>();
+builder.Services.AddScoped<IAnalyseMedicalService, AnalyseMedicalService>();
 builder.Services.AddScoped<ILineAnalyseMedicalManager, LineAnalyseMedicalManager>();
 builder.Services.AddSignalR();
 

@@ -23,7 +23,7 @@ namespace Server.Managers.Storages.LineAnalyseMedicalManager
 
         public async Task<List<LineAnalyseMedicals>> SelectLinesMedicalByIdAnalyseAsync(Guid AnalyseId)
         {
-            return await (from Line in this.serverDbContext.LineAnalyseMedicals /*where Line.AnalyseId == AnalyseId*/ select Line).ToListAsync();
+            return await (from Line in this.serverDbContext.LineAnalyseMedicals where Line.IdAnalyse == AnalyseId select Line).ToListAsync();
         }
     }
     

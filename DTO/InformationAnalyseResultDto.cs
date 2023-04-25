@@ -11,6 +11,7 @@ namespace DTO
         public PatientInformationDto PatientInformation { get; set; }
         public DoctorInformationDto DoctorInformation { get; set; }
         public FileMedicalInformation FileMedicalInformation { get; set; }
+        public InformationAnalyseDto informationAnalyseDto { get; set; }
 
     }
     public class InformationAnalyseDto
