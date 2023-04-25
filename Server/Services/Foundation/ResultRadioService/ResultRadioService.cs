@@ -26,9 +26,6 @@ namespace Server.Services.Foundation.ResultRadioService
         public readonly UserManager<User> _UserManager;
         public readonly IOrdreMedicalManager ordreMedicalManager;
         public readonly IRadioManager radioManager;
-        public readonly IFileChronicDiseasesManager fileChronicDiseasesManager;
-        public readonly IChronicDiseasesManager chronicDiseasesManager;
-        public readonly ISpecialitiesManager specialitiesManager;
         public readonly ILineRadioMedicalManager lineRadioMedicalManager;
         public readonly IRadioResultManager radioResultManager;
         public readonly IRadiologyManager radiologyManager;
@@ -49,7 +46,7 @@ namespace Server.Services.Foundation.ResultRadioService
         public async Task AddRadioResultService(string Email, RadioResultToAddDto RadioResultToAddDto) =>
             await TryCatch(async () =>
             {
-                ValidateResultRadioOnAdd(Email, RadioResultToAddDto);
+               ValidateResultRadioOnAdd(Email, RadioResultToAddDto);
                 var UserAccountRadiology = await this._UserManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(UserAccountRadiology);
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAccountRadiology.Id);
@@ -66,15 +63,11 @@ namespace Server.Services.Foundation.ResultRadioService
                 validationPatientIsNull(UserAccountPatient);
                 var TypeFileUpload =GetFileType(RadioResultToAddDto.FileUpload);
                 var RadioResultMapper = MapperToResultRadio(LineRadio.Id, TypeFileUpload, RadioResultToAddDto);
-                await this.radioResultManager.InserRadioResult(RadioResultMapper);
+               var Radioinserted= await this.radioResultManager.InserRadioResult(RadioResultMapper);
                 var NewLineRadio = MapperToLineRadioMedical(LineRadio, Radiology);
                 await this.lineRadioMedicalManager.UpdateLineRadioMedical(NewLineRadio);
                 var MailRequest = MapperToMailRequestAddRadioResult(UserAccountPatient, UserAccountRadiology, LineRadio);
-                await this.mailService.SendEmailNotification(MailRequest);
-
-
-
-
+               await this.mailService.SendEmailNotification(MailRequest);
             });
     }
 }

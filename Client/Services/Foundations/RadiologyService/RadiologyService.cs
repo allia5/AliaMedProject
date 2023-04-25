@@ -88,7 +88,7 @@ namespace Client.Services.Foundations.RadiologyService
             {
                 throw new NoContentException("Data Has Been Canfirmed By Auther Radiology");
             }
-            else
+            else if(result.StatusCode == HttpStatusCode.InternalServerError)
             {
                 throw new ProblemException("Error Intern");
             }

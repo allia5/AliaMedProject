@@ -111,7 +111,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
         }
         public void validateeFileMedicalIsNull(fileMedicals fileMedicals)
         {
-            if (ArePropertiesNull(fileMedicals))
+            if (fileMedicals==null)
             {
                 throw new NullException(nameof(fileMedicals));
             }

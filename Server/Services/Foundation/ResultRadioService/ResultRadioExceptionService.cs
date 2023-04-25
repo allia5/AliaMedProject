@@ -23,6 +23,9 @@ namespace Server.Services.Foundation.ResultRadioService
             catch (NullDataStorageException Ex)
             {
                 throw new StorageValidationException(Ex);
+            }catch(Exception e)
+            {
+                throw new Exception(e.Message);
             }
            
         }

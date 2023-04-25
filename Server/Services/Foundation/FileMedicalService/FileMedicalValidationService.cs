@@ -49,14 +49,14 @@ namespace Server.Services.Foundation.FileMedicalService
         }
         public void validateeFileMedicalIsNull(fileMedicals fileMedicals)
         {
-            if (ArePropertiesNull(fileMedicals))
+            if (fileMedicals==null)
             {
                 throw new NullException(nameof(fileMedicals));
             }
         }
         public void ValidateEntryOnUpdateFileMedical(string Email,UpdateFileMedicalDto updateFileMedicalDto)
         {
-            if(ArePropertiesNull(updateFileMedicalDto) == false)
+            if(ArePropertiesNull(updateFileMedicalDto))
             {
                 throw new ArgumentNullException(nameof(updateFileMedicalDto));
             }else if(Email == null)
@@ -119,7 +119,7 @@ namespace Server.Services.Foundation.FileMedicalService
             if(Email == null) throw new ArgumentNullException("email");
             if (fileMedicalPatient != null)
             {
-                if (ArePropertiesNull(fileMedicalPatient) == false)
+                if (ArePropertiesNull(fileMedicalPatient))
                 {
                     throw new ArgumentException(nameof(fileMedicalPatient));
                 }
@@ -138,10 +138,10 @@ namespace Server.Services.Foundation.FileMedicalService
             foreach (var prop in obj.GetType().GetProperties())
             {
                 if (prop.GetValue(obj) == null)
-                    return false;
+                    return true;
             }
 
-            return true;
+            return false;
         }
 
     }

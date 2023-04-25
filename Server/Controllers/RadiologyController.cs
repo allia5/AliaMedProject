@@ -27,7 +27,7 @@ namespace Server.Controllers
 
         [HttpPost("PostRadioResult")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "RADIOLOGUE")]
-        public async Task<ActionResult> PostNewRadioMedicalResult([FromBody] RadioResultToAddDto radioResultToAddDto)
+        public async Task<ActionResult> PostNewRadioMedicalResult( RadioResultToAddDto radioResultToAddDto)
         {
             TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
@@ -53,7 +53,9 @@ namespace Server.Controllers
             }
             finally
             {
+                   
                 transaction.Dispose();
+               
             }
         }
 
