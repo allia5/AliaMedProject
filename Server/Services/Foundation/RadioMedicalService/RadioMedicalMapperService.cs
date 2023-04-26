@@ -1,6 +1,7 @@
 ﻿using DTO;
 using Server.Models.fileMedical;
 using Server.Models.LineRadioMedical;
+using Server.Models.MedicalOrder;
 using Server.Models.RadioMedical;
 using static Server.Utility.Utility;
 namespace Server.Services.Foundation.RadioMedicalService
@@ -17,13 +18,14 @@ namespace Server.Services.Foundation.RadioMedicalService
                 RadioInformation= radioInformation
             };
         }
-        public static RadioInformation MapperToRadioInformation(Radio radio, List<LineRadioMedicalResultDto>  ListLinesRadioResult)
+        public static RadioInformation MapperToRadioInformation(Radio radio, List<LineRadioMedicalResultDto>  ListLinesRadioResult, MedicalOrdres medicalOrdres)
         {
             return new RadioInformation
             {
-               
+
                 Id = EncryptGuid(radio.Id),
-                linesRadioMedicals=ListLinesRadioResult
+                linesRadioMedicals = ListLinesRadioResult,
+                DateRelease=medicalOrdres.ReleaseDate
                 
             };
         }

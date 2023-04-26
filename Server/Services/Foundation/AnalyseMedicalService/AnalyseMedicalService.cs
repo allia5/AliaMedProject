@@ -88,7 +88,7 @@ namespace Server.Services.Foundation.AnalyseMedicalService
                 var FileInformation = MapperToFileInformationDto(FileMedical, ListChronicDeasses);
                 var DoctorInformation = MapperToDoctorInformationDto(specialitiesDoctor, UserAccountDoctor);
                 var PatientInformation = MppperToPatientInformationDto(UserAccountPatient);
-                var InformationAnalyse = MapperToAnalyseInformation(Analyse, LinesAnalyse);
+                var InformationAnalyse = MapperToAnalyseInformation(Analyse, LinesAnalyse,OrdreMedical);
                 var resultInformationAnalyse = MapperToInformationAnalyseResult(InformationAnalyse, FileInformation, PatientInformation, DoctorInformation);
                 return resultInformationAnalyse;
 

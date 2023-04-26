@@ -30,6 +30,7 @@ namespace DTO
     {
         public string Id { get; set; }
         public List<LineRadioMedicalResultDto> linesRadioMedicals { get; set; }
+        public DateTime DateRelease { get; set; }
       
     }
     public class LineRadioMedicalResultDto

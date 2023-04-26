@@ -18,6 +18,7 @@ namespace DTO
     {
         public string IdAnalyse { get; set; }
         public List<LinesAnalyseDto> LinesAnalyse { get; set; }
+        public DateTime DateRelease { get; set; }
 
     }
     public class LinesAnalyseDto

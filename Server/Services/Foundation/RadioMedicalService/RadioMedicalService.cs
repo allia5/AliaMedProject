@@ -96,7 +96,7 @@ namespace Server.Services.Foundation.RadioMedicalService
                 var informationDoctor = MapperToDoctorInformationDto(specialities,UserAccountDoctor);
                 var FileInformation = MapperToFileInformationDto(FileMedical, ListChronicDeasses);
                 
-                var radioInformation = MapperToRadioInformation(Radio, LinesResultRadio);
+                var radioInformation = MapperToRadioInformation(Radio, LinesResultRadio,OrdreMedical);
                 var Result = MapperToInformationRadioResult(radioInformation, FileInformation,InformationPatient, informationDoctor);
                 return Result;
           

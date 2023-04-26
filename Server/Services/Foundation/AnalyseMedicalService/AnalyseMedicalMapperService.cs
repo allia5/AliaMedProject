@@ -2,6 +2,7 @@
 using Server.Models.Analyse;
 using Server.Models.fileMedical;
 using Server.Models.LineRadioMedical;
+using Server.Models.MedicalOrder;
 using Server.Models.RadioMedical;
 using static Server.Utility.Utility;
 
@@ -21,13 +22,14 @@ namespace Server.Services.Foundation.AnalyseMedicalService
             };
         }
        
-        public static InformationAnalyseDto MapperToAnalyseInformation(Analyses analyse, List<LinesAnalyseDto> ListLinesAnalyseResult)
+        public static InformationAnalyseDto MapperToAnalyseInformation(Analyses analyse, List<LinesAnalyseDto> ListLinesAnalyseResult, MedicalOrdres medicalOrdres )
         {
             return new InformationAnalyseDto
             {
 
                 IdAnalyse = EncryptGuid(analyse.Id),
-                LinesAnalyse = ListLinesAnalyseResult
+                LinesAnalyse = ListLinesAnalyseResult,
+                DateRelease=medicalOrdres.ReleaseDate
 
             };
         }
