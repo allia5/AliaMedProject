@@ -1,0 +1,88 @@
+﻿@page "/PharmacistPage"
+@inherits PagePharmacistComponentBase
+@if (ErrorMessage != null)
+{
+    <ErrorRoutingMessage Message=@ErrorMessage></ErrorRoutingMessage>
+}
+@if (SuccessMessage != null)
+{
+    <CorrectRoutingMessage></CorrectRoutingMessage>
+}
+
+<div class="d-flex justify-content-center">
+    <div class="input-group w-75">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="">CodeQr Radio</span>
+        </div>
+        <input type="text" @bind="CodeQr" placeholder="CodeQr" style="border-radius:25px;" class="form-control">
+        <button @onclick="()=>OnAddCodeQr(CodeQr)" class="btn btn-success " style="border-radius:25px;">
+            research
+            @if (ButtonAddIsLoding == true)
+            {
+
+
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="sr-only">Loading...</span>
+            }
+        </button>
+    </div>
+</div>
+
+
+@if (this.prescriptionResultDto != null)
+{
+    <div class="d-block justify-content-center">
+        <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
+            <div class="card-header">Information File Medical</div>
+            <div class="card-body text-secondary">
+                <p class="card-text">@prescriptionResultDto.FileMedicalInformation.FirstName</p>
+                <p class="card-text">@prescriptionResultDto.FileMedicalInformation.LastName</p>
+                <p class="card-text">@prescriptionResultDto.FileMedicalInformation.DateOfBirth</p>
+                <p class="card-text">@prescriptionResultDto.FileMedicalInformation.Sexe</p>
+            </div>
+        </div>
+
+        <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
+            <div class="card-header">Infourmation Account File Medical</div>
+            <div class="card-body text-secondary">
+
+                <p class="card-text">@prescriptionResultDto.PatientInformation.FirstName</p>
+                <p class="card-text">@prescriptionResultDto.PatientInformation.LastName</p>
+                <p class="card-text">@prescriptionResultDto.PatientInformation.NationalNumber</p>
+                <p class="card-text">@prescriptionResultDto.PatientInformation.DateOfBirth</p>
+                <p class="card-text">@prescriptionResultDto.PatientInformation.Sexe</p>
+            </div>
+        </div>
+
+
+        <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
+            <div class="card-header">Information Doctor</div>
+            <div class="card-body text-secondary">
+                <p class="card-text">@prescriptionResultDto.DoctorInformation.FirstName</p>
+                <p class="card-text">@prescriptionResultDto.DoctorInformation.LastName</p>
+                <p class="card-text">@prescriptionResultDto.DoctorInformation.Email</p>
+                <p class="card-text">@prescriptionResultDto.prescriptionInfromationDto.DateRelease</p>
+
+            </div>
+        </div>
+    </div>
+<table>
+    <tr>
+        <td>Medicament Name</td>
+         <td>Quentity</td>
+            <td>Description</td>
+            <td>Validate</td>
+    </tr>
+    <tbody>
+            @foreach (var ItemLinePrescription in prescriptionResultDto.prescriptionInfromationDto.linePrescriptionDtos)
+            {
+                <tr>
+                    <td>@ItemLinePrescription.MedicamentName</td>
+                    <td>@ItemLinePrescription.Quantity</td>
+                    <td>@ItemLinePrescription.Description</td>
+                    <td><button class="btn btn-success">Validate</button></td>
+                </tr>
+            }
+        </tbody>
+</table>
+}

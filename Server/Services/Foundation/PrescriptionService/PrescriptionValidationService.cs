@@ -58,7 +58,7 @@ namespace Server.Services.Foundation.PrescriptionService
         {
             if (prescription == null)
             {
-                throw new NullDataStorageException(nameof(radio));
+                throw new NullDataStorageException(nameof(prescription));
             }
         }
         public void ValidatePharmacist(Pharmacists pharmacists)
