@@ -98,8 +98,8 @@
                 <div class="card-body text-secondary">
                     <p class="card-text">Description Radio : @line.Description</p>
                     <p class="card-text">Instruction Radio :@line.Instruction</p>
-                    <InputFile class="form-control" type="file"  />
-                    <button class="btn btn-success" >
+                    <InputFile class="form-control" type="file" OnChange="HandleFileAnalyseResultSelected" />
+                    <button class="btn btn-success" @onclick="()=>OnAddAnalyseResult(line.IdLineAnalyse)">
                         Validate Result
                       
                     </button>

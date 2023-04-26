@@ -4,6 +4,7 @@ using Client.Services.Foundations.SpecialisteAnalyseService;
 using DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 
 namespace Client.Pages
@@ -17,6 +18,7 @@ namespace Client.Pages
         protected bool ButtonAddIsLoding = false;
         protected string ButtonLoaddingOnAddResult = null;
         protected string MessageHasBeenValidated = null;
+        protected AnalyseResultToAdd analyseResultToAdd = new AnalyseResultToAdd();
        
         [Inject]
         protected IJSRuntime jSRuntime { get; set; }
@@ -38,6 +40,42 @@ namespace Client.Pages
             else
             {
                 this.NavigationManager.NavigateTo("Login/RadiologistOperations");
+            }
+        }
+        protected async Task OnAddAnalyseResult(string LineAnalyseId)
+        {
+            try
+            {
+                this.ButtonLoaddingOnAddResult = LineAnalyseId;
+                this.IsLoading = true;
+                this.analyseResultToAdd.IdLineAnalyse = LineAnalyseId;
+                await this.SpecialisteAnalyseService.PostAnalyseResult(analyseResultToAdd);
+                var itemLine = this.InformationAnalyseResultDto.informationAnalyseDto.LinesAnalyse.Where(e => e.IdLineAnalyse == LineAnalyseId).FirstOrDefault();
+                this.InformationAnalyseResultDto.informationAnalyseDto.LinesAnalyse.Remove(itemLine);
+                this.IsLoading = false;
+                this.SuccessMessage = "Operation Valide";
+                this.ErrorMessage = null;
+                this.ButtonLoaddingOnAddResult = null;
+                analyseResultToAdd = new AnalyseResultToAdd();
+            }
+            catch (Exception ex)
+            {
+                this.ErrorMessage = ex.Message;
+                this.IsLoading = false;
+                this.ButtonLoaddingOnAddResult = null;
+                this.SuccessMessage = null;
+            }
+
+
+        }
+        protected async Task HandleFileAnalyseResultSelected(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            using (var stream = file.OpenReadStream())
+            {
+                var buffer = new byte[file.Size];
+                await stream.ReadAsync(buffer, 0, (int)file.Size);
+                this.analyseResultToAdd.FileUpload = buffer;
             }
         }
         protected async Task OnAddCodeQr(string CodeQr)

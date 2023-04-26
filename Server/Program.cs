@@ -8,6 +8,7 @@ using Microsoft.Net.Http.Headers;
 using Server.Data;
 using Server.Hubs.PlanningAppoimentHub;
 using Server.Managers.Storages.AnalyseManager;
+using Server.Managers.Storages.AnalyseResultManager;
 using Server.Managers.Storages.CabinetMedicalManager;
 using Server.Managers.Storages.ChronicDiseasesManager;
 using Server.Managers.Storages.DoctorManager;
@@ -135,6 +136,7 @@ builder.Services.AddScoped<ISpecialisteAnalyseManager, SpecialisteAnalyseManager
 builder.Services.AddScoped<IResultAnalyseService, ResultAnalyseService>();
 builder.Services.AddScoped<IAnalyseMedicalService, AnalyseMedicalService>();
 builder.Services.AddScoped<ILineAnalyseMedicalManager, LineAnalyseMedicalManager>();
+builder.Services.AddScoped<IAnalyseResultManager, AnalyseResultManager>();
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers();

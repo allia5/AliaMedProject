@@ -44,5 +44,10 @@ namespace Server.Managers.Storages.AnalyseManager
                           where analyseItem.QrCode == CodeQr 
                           select analyseItem).FirstOrDefaultAsync();
         }
+
+        public async Task<Analyses> SelectAnalyseByIdAsync(Guid AnalyseId)
+        {
+            return await (from ItemAnalyse in this.ServerDbContext.Analyses where ItemAnalyse.Id == AnalyseId select ItemAnalyse).FirstOrDefaultAsync();
+        }
     }
 }

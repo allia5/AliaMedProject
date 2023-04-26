@@ -14,8 +14,8 @@ namespace Server.Models.ResultAnalyses
 
         public byte[]? AnalyseResult { get; set; }
         [Required]
-        public FileType FileType { get; set; }
-        [ForeignKey("Analyses")]
+        public string fileType { get; set; }
+        [ForeignKey("LineAnalyseMedicals")]
         public Guid IdLineAnalyse { get; set; }
         public LineAnalyseMedicals LineAnalyseMedicals { get; set; }
     }

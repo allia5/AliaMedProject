@@ -1,28 +1,33 @@
 ﻿using DTO;
+using Server.Models.Doctor.Exceptions;
+using Server.Models.Exceptions;
 
 namespace Server.Services.Foundation.ResultAnalyseService
 {
     public partial class ResultAnalyseService
     {
         public delegate Task OnPostResultAnalyse();
-       /* public async Task TryCatch( )
+        public async Task TryCatch(OnPostResultAnalyse onPostResultAnalyse )
         {
             try
             {
-                return await onGetInformationAnalyse();
+                 await onPostResultAnalyse();
             }
-            catch ()
+            catch (NullException Ex)
             {
-
+                throw new ServiceException(Ex);
             }
-            catch ()
+            catch (ArgumentNullException Ex)
             {
-
+                throw new ValidationException(Ex);
             }
-            catch ()
+            catch (NullDataStorageException Ex)
             {
-
+                throw new ValidationException(Ex);
+            }catch(StatusValidationException Ex)
+            {
+                throw new StorageValidationException(Ex);
             }
-        }*/
+        }
     }
 }

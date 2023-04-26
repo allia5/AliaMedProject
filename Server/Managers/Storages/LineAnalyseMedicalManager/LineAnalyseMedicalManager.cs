@@ -25,6 +25,18 @@ namespace Server.Managers.Storages.LineAnalyseMedicalManager
         {
             return await (from Line in this.serverDbContext.LineAnalyseMedicals where Line.IdAnalyse == AnalyseId select Line).ToListAsync();
         }
+
+        public async Task<LineAnalyseMedicals> SelectLineAnalyseById(Guid LineAnalyseId)
+        {
+            return await (from Line in this.serverDbContext.LineAnalyseMedicals where Line.Id == LineAnalyseId select Line).FirstOrDefaultAsync();
+        }
+
+        public async Task<LineAnalyseMedicals> UpdateLineAnalyseAsync(LineAnalyseMedicals lineAnalyseMedicals)
+        {
+            var Result = this.serverDbContext.LineAnalyseMedicals.Update(lineAnalyseMedicals);
+            await this.serverDbContext.SaveChangesAsync();
+            return Result.Entity;
+        }
     }
     
 }

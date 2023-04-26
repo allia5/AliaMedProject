@@ -1,6 +1,7 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Identity;
 using Server.Managers.Storages.AnalyseManager;
+using Server.Managers.Storages.AnalyseResultManager;
 using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.FileMedicalManager;
 using Server.Managers.Storages.LineAnalyseMedicalManager;
@@ -13,6 +14,8 @@ using Server.Managers.Storages.SpecialisteAnalyseManager;
 using Server.Managers.UserManager;
 using Server.Models.UserAccount;
 using Server.Services.Foundation.MailService;
+using static Server.Services.Foundation.ResultAnalyseService.ResultAnalyseMapperService;
+using static Server.Utility.Utility;
 
 namespace Server.Services.Foundation.ResultAnalyseService
 {
@@ -27,8 +30,10 @@ namespace Server.Services.Foundation.ResultAnalyseService
         public readonly ILineAnalyseMedicalManager lineAnalyseMedicalManager;
         public readonly ISpecialisteAnalyseManager SpecialisteAnalyseManager;
         public readonly IMailService mailService;
-        public ResultAnalyseService(IMailService mailService,ISpecialisteAnalyseManager SpecialisteAnalyseManager, ILineAnalyseMedicalManager lineAnalyseMedicalManager,IAnalyseManager AnalyseManager,IOrdreMedicalManager ordreMedicalManager,IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _UserManager)
+        public readonly IAnalyseResultManager analyseResultManager;
+        public ResultAnalyseService(IAnalyseResultManager analyseResultManager,IMailService mailService,ISpecialisteAnalyseManager SpecialisteAnalyseManager, ILineAnalyseMedicalManager lineAnalyseMedicalManager,IAnalyseManager AnalyseManager,IOrdreMedicalManager ordreMedicalManager,IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _UserManager)
         { 
+            this.analyseResultManager = analyseResultManager;
             this.mailService = mailService;
             this.doctorManager = doctorManager;
             this.userManager = userManager;
@@ -39,7 +44,40 @@ namespace Server.Services.Foundation.ResultAnalyseService
             this.ordreMedicalManager = ordreMedicalManager;
             this.AnalyseManager= AnalyseManager;
         }
-       
-       
+
+        public async Task PostNewAnalyseResult(string Email, AnalyseResultToAdd analyseResultToAdd) =>
+            await TryCatch(async () =>
+            {
+                ValidateEntryOnAddAnalyseResult(Email, analyseResultToAdd);
+                var UserAccountSpecialisteAnalyse = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccountSpecialisteAnalyse);
+                var SpecialistAnalyse = await this.SpecialisteAnalyseManager.SelectSpecialisteAnalyseByIdUser(UserAccountSpecialisteAnalyse.Id);
+                ValidateSpecialisteAnalyse(SpecialistAnalyse);
+                var LignAnalyse = await this.lineAnalyseMedicalManager.SelectLineAnalyseById(DecryptGuid(analyseResultToAdd.IdLineAnalyse));
+                ValidateLineAnalyseIsNull(LignAnalyse);
+                var Analyse = await this.AnalyseManager.SelectAnalyseByIdAsync(LignAnalyse.IdAnalyse);
+                ValidateAnalyseIsNull(Analyse);
+                var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Analyse.IdOrdreMedical);
+                ValidateOrdreMedicalIsNull(OrdreMedical);
+                var fileMedical = await this.FileMedicalManager.SelectFileMedicalByIdOrdreMedicalAsync(OrdreMedical.Id);
+                ValidateFileMedicalIsNull(fileMedical);
+                var PatientInformationAccount = await this._UserManager.FindByIdAsync(fileMedical.IdUser);
+                validationPatientIsNull(PatientInformationAccount);
+                var DoctorInformationAccount = await this.userManager.SelectUserByIdDoctor(OrdreMedical.IdDoctor);
+                validationPatientIsNull(DoctorInformationAccount);
+                var TypeFilUpload = GetFileType(analyseResultToAdd.FileUpload);
+                var AnalyseResult = MapperToResultAnalyse(LignAnalyse.Id, TypeFilUpload, analyseResultToAdd.FileUpload);
+                await this.analyseResultManager.InsertAnalyseResultAsync(AnalyseResult);
+                var newLineAnalyseMedical = MapperToLineAnalyseMedicals(LignAnalyse, SpecialistAnalyse.Id);
+                await this.lineAnalyseMedicalManager.UpdateLineAnalyseAsync(newLineAnalyseMedical);
+                var mailRequest = MapperToMailRequestAddAnalyseResult(PatientInformationAccount, UserAccountSpecialisteAnalyse, newLineAnalyseMedical);
+                await this.mailService.SendEmailNotification(mailRequest);
+            });
+        
+           
+
+
+
+        
     }
 }
