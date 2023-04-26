@@ -55,7 +55,7 @@ namespace Server.Services.Foundation.RadioMedicalService
         }
         public void ValidateUserIsNull(User user)
         {
-            if (user == null)
+            if (user == null || user.Status == UserStatus.Deactivated)
             {
                 throw new NullException(nameof(user));
             }

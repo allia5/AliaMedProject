@@ -16,5 +16,12 @@ namespace Server.Managers.Storages.LinePrescriptionMedicalManager
         {
             return await (from Line in this.serverDbContext.PrescriptionLines where Line.Id == lineId select Line).FirstOrDefaultAsync();
         }
+
+        public async Task<List<PrescriptionLines>> SelectLinePrescriptionByIdPrescription(Guid PrescriptionId)
+        {
+            return await(from Line in this.serverDbContext.PrescriptionLines 
+                         where Line.IdPrescription == PrescriptionId 
+                         select Line).ToListAsync();
+        }
     }
 }

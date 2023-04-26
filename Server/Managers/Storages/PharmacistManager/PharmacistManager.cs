@@ -17,5 +17,12 @@ namespace Server.Managers.Storages.PharmacistManager
                           where Pharmacist.Id == PharmacistId 
                           select Pharmacist).FirstOrDefaultAsync();
         }
+
+        public async Task<Pharmacists> SelectPharmacistByIdUser(string UserId)
+        {
+            return await(from Pharmacist in this.serverDbContext.Pharmacists
+                         where Pharmacist.idUser == UserId
+                         select Pharmacist).FirstOrDefaultAsync();
+        }
     }
 }

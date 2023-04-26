@@ -9,7 +9,7 @@ namespace Server.Services.Foundation.DoctorService
     {
         public void ValidateUserIsNull(User user)
         {
-            if (user == null)
+            if (user == null || user.Status == UserStatus.Deactivated)
             {
                 throw new NullException(nameof(user));
             }

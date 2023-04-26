@@ -42,6 +42,7 @@ using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
 using Server.Services.Foundation.OrdreMedicalService;
 using Server.Services.Foundation.PlanningAppoimentService;
+using Server.Services.Foundation.PrescriptionService;
 using Server.Services.Foundation.RadioMedicalService;
 using Server.Services.Foundation.ResultAnalyseService;
 using Server.Services.Foundation.ResultRadioService;
@@ -141,6 +142,7 @@ builder.Services.AddScoped<ILineAnalyseMedicalManager, LineAnalyseMedicalManager
 builder.Services.AddScoped<IAnalyseResultManager, AnalyseResultManager>();
 builder.Services.AddScoped<IPharmacistManager, PharmacistManager>();
 builder.Services.AddScoped<ILinePrescriptionMedicalManager, LinePrescriptionMedicalManager>();
+builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers();
