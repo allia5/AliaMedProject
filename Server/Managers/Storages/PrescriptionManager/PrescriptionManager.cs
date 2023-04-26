@@ -31,5 +31,12 @@ namespace Server.Managers.Storages.PrescriptionManager
         {
             return await (from ItemPrescription in this.ServerDbContext.prescriptions where ItemPrescription.IdMedicalOrdre == MedicalOrdre select ItemPrescription).FirstOrDefaultAsync();
         }
+
+        public async Task<Prescription> SelectPrescriptionByCode(string Code)
+        {
+            return await (from PrescriptionItem in this.ServerDbContext.prescriptions 
+                          where PrescriptionItem.qrCode == Code 
+                          select PrescriptionItem).FirstOrDefaultAsync();
+        }
     }
 }
