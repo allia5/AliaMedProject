@@ -80,6 +80,7 @@ namespace Client.Pages
                     this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
                     this.informationOrderMedicalSecritaries = await this.OrdreMedicalService.GetAllOrdreMedicalSecritary(new KeysAppoimentInformationSecretary { CabinetId = CabinetId, IdDoctor = DoctorId, DateAppoiment = DateAppoiment });
                     this.informationOrderMedicalSecritariesNotValidate = this.informationOrderMedicalSecritaries.Where(e=>e.informationOrdreMedical.statusOrdreMedical== StatusOrdreMedicalDto.NotValidate).ToList();
+                    this.informationOrderMedicalSecritariesNotValidate = this.informationOrderMedicalSecritariesNotValidate.OrderByDescending(e => e.informationOrdreMedical.DateCreate).ToList();
                     this.informationOrderMedicalSecritariesValidate = this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.statusOrdreMedical == StatusOrdreMedicalDto.validate).ToList();
                     this.IsLoading = false;
 
