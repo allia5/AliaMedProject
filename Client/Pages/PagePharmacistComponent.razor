@@ -12,7 +12,7 @@
 <div class="d-flex justify-content-center">
     <div class="input-group w-75">
         <div class="input-group-prepend">
-            <span class="input-group-text" id="">CodeQr Radio</span>
+            <span class="input-group-text" id="">CodeQr Prescription</span>
         </div>
         <input type="text" @bind="CodeQr" placeholder="CodeQr" style="border-radius:25px;" class="form-control">
         <button @onclick="()=>OnAddCodeQr(CodeQr)" class="btn btn-success " style="border-radius:25px;">
@@ -66,13 +66,15 @@
             </div>
         </div>
     </div>
-<table>
+<table class="table caption-top">
+    <caption>Instruction Prescription : @prescriptionResultDto.prescriptionInfromationDto.Instruction</caption>
+     <thead>
     <tr>
         <td>Medicament Name</td>
          <td>Quentity</td>
             <td>Description</td>
             <td>Validate</td>
-    </tr>
+    </tr></thead>
     <tbody>
             @foreach (var ItemLinePrescription in prescriptionResultDto.prescriptionInfromationDto.linePrescriptionDtos)
             {
