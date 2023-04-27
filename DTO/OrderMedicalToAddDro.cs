@@ -40,8 +40,8 @@ namespace DTO
     {
         [Required]
         public string MedicamentName { get; set; }
-        [Required]
-        public string Description { get; set; }
+        
+        public string? Description { get; set; }
         [Required]
         public int Quantity { get; set; }
 
@@ -59,8 +59,8 @@ namespace DTO
     {
         [Required]
         public string Description { get; set; }
-        [Required]
-        public string Instruction { get; set; }
+        
+        public string? Instruction { get; set; }
     }
 
     public class AnalyseToAddDto
@@ -75,8 +75,8 @@ namespace DTO
     {
         [Required]
         public string Description { get; set; }
-        [Required]
-        public string Instruction { get; set; }
+       
+        public string? Instruction { get; set; }
     }
 }
 

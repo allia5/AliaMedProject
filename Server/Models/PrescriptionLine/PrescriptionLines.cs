@@ -12,7 +12,7 @@ namespace Server.Models.PrescriptionLine
         [Required]
         public string MedicamentName { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [Required]
         public int Dosage { get; set; }
         [Required]

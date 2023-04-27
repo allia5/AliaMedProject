@@ -15,9 +15,9 @@ namespace Server.Models.Prescriptions
         
         public string? qrCode { get; set; }
         [DataType(DataType.Upload)]
-
+       
         public byte[]? FilePrescription { get; set; }
-        public string instruction { get; set; }
+        public string? instruction { get; set; }
         [ForeignKey("MedicalOrdres")]
         public Guid IdMedicalOrdre { get; set; }
         public MedicalOrdres MedicalOrdres { get; set; }

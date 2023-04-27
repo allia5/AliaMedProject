@@ -11,7 +11,7 @@ namespace Server.Models.LineRadioMedical
         [Key]
         public Guid Id { get; set; }
         public string Description { get; set; }
-        [Required]
+      
         public string? Instruction { get; set; }
         [Required]
         public StatusRadio Status { get; set; }

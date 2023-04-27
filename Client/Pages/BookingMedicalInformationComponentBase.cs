@@ -32,6 +32,7 @@ namespace Client.Pages
                 {
                     var KeysReservation = await this.localStorageServices.GetItemAsync<KeysReservationMedicalDto>("KeysReservationMedical");
                     this.ListappointmentInformation = await this.medicalPlanningService.PostAppointmentInformationDto(KeysReservation);
+                    this.ListappointmentInformation.OrderBy(e => e.DateAppoiment).ToList();
                     IsLoading = false;
                 }
                 else

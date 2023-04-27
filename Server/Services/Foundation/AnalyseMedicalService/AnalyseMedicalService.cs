@@ -81,7 +81,8 @@ namespace Server.Services.Foundation.AnalyseMedicalService
                     ListChronicDeasses.Add(chronicDeasses.NameChronicDiseases);
                 }
                 var LineAnalyse = await this.lineAnalyseMedicalManager.SelectLinesMedicalByIdAnalyseAsync(Analyse.Id);
-               foreach(var ItemAnalyse in LineAnalyse)
+                LineAnalyse = LineAnalyse.Where(e => e.Status == Models.Analyse.StatusAnalyse.notValidate).ToList();
+               foreach (var ItemAnalyse in LineAnalyse)
                 {
                     LinesAnalyse.Add(new LinesAnalyseDto { Description = ItemAnalyse.description, Instruction = ItemAnalyse.Instruction, IdLineAnalyse =EncryptGuid (ItemAnalyse.Id) });
                 }

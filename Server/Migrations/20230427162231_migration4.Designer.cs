@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -11,9 +12,11 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    partial class ServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230427162231_migration4")]
+    partial class migration4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,6 +301,7 @@ namespace Server.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Instruction")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -343,6 +347,7 @@ namespace Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("summary")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -482,6 +487,7 @@ namespace Server.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("instruction")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("qrCode")
@@ -811,43 +817,43 @@ namespace Server.Migrations
                         new
                         {
                             Id = new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"),
-                            ConcurrencyStamp = "ec74acb2-daec-4609-aa8d-e5a4ab4b96e9",
+                            ConcurrencyStamp = "7055ece3-17db-4ff0-a088-3df3cf0792ad",
                             Name = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"),
-                            ConcurrencyStamp = "9baf08d8-aaeb-436d-84f5-4e0f3d048204",
+                            ConcurrencyStamp = "1d060156-eedd-4d44-8ab5-965535e3b20e",
                             Name = "PATIENT"
                         },
                         new
                         {
                             Id = new Guid("0d518584-64a4-424b-b011-7283083394b8"),
-                            ConcurrencyStamp = "ec11b725-28b2-440b-a545-a40dcfdf8725",
+                            ConcurrencyStamp = "dba57dca-11a2-4a0b-a608-bf9336fd0ec6",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
                             Id = new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"),
-                            ConcurrencyStamp = "b460d4ff-4bcc-4dfa-a6c5-1cfa8f0779c8",
+                            ConcurrencyStamp = "fcd6f614-19c4-46a8-8896-ef6b7d27877a",
                             Name = "MEDECIN"
                         },
                         new
                         {
                             Id = new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"),
-                            ConcurrencyStamp = "59a723c6-22fb-4b79-987a-8be616c1f6a6",
+                            ConcurrencyStamp = "bce6788d-164d-4227-a481-04796e1a4fb6",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
                             Id = new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"),
-                            ConcurrencyStamp = "fd7e64ba-3825-40ef-9f1b-f7bf05d4598e",
+                            ConcurrencyStamp = "bcff09c3-124e-44aa-a8f5-9d90452168fd",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
                             Id = new Guid("232d07c5-711e-4802-a048-f2f73804ea40"),
-                            ConcurrencyStamp = "66e5e993-f74c-4d51-b80c-6872f5cdc945",
+                            ConcurrencyStamp = "f5ff5321-aa71-4a60-8aae-530a138f7477",
                             Name = "ANALYSE"
                         });
                 });

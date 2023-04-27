@@ -19,7 +19,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
     {
         public void ValidateRadioLineOnAdd(LineRadioMedicalDto lineRadioMedical)
         {
-            if(lineRadioMedical.Instruction == null || lineRadioMedical.Description == null)
+            if( lineRadioMedical.Description == null)
             {
                 throw new ArgumentNullException(nameof(lineRadioMedical));
             }
@@ -194,7 +194,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
        public void ValidateAnalyseLineOnAdd(LineAnalyseMedicalDto lineAnalyseMedicalDto)
         {
-            if(lineAnalyseMedicalDto.Instruction == null || lineAnalyseMedicalDto.Description == null)
+            if( lineAnalyseMedicalDto.Description == null)
             {
                 throw new ArgumentNullException(nameof(lineAnalyseMedicalDto));
             }
