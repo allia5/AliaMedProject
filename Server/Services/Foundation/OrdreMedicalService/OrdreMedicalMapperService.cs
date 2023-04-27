@@ -174,8 +174,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, "By Doctor :", pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (2 + k+1), 0);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (2+k+1.5)), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, "By Doctor :", pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (0.5 - k)), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (float)(0.5 - k-0.02)), 0);
 
                     pdfContentByte.EndText();
                     pdfStamper.Close();
@@ -197,7 +197,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height /(2+k), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (0.5-k)) /*/(2+k)*/, 0);
 
                     pdfContentByte.EndText();
                     pdfStamper.Close();
