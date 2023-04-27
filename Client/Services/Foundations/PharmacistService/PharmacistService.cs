@@ -3,6 +3,8 @@ using Client.Services.Foundations.LocalStorageService;
 using DTO;
 using System.Net.Http.Json;
 using System.Net;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Client.Services.Foundations.PharmacistService
 {
@@ -51,6 +53,36 @@ namespace Client.Services.Foundations.PharmacistService
                 throw new NoContentException("Data Has Been Canfirmed By Auther Radiology");
             }
             else
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+
+        public async Task UpdateStatusPrescriptionLine(string PrescriptionLineId)
+        {
+            var HttpRequest = new HttpRequestMessage(HttpMethod.Patch, "/api/Pharmacist/PatchStatusPrescription");
+            var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            HttpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
+            var json = JsonConvert.SerializeObject(PrescriptionLineId);
+            HttpRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            var result = await this.httpClient.SendAsync(HttpRequest);
+            if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new PreconditionFailedException("Denied User Account");
+            }
+            else if (result.StatusCode == HttpStatusCode.NoContent)
+            {
+                throw new NoContentException("Data Has Been Canfirmed By Auther Radiology");
+            }
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
             {
                 throw new ProblemException("Error Intern");
             }

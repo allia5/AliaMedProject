@@ -17,7 +17,6 @@ using static Server.Utility.Utility;
 using static Server.Services.Foundation.DoctorService.DoctorServiceMapper;
 using static Server.Services.Foundation.PlanningAppoimentService.PlanningAppoimentMapperService;
 using static Server.Services.Foundation.OrdreMedicalService.OrdreMedicalMapperService;
-using Server.Managers.Storages.PrescriptionLineManager;
 using Server.Managers.Storages.RadioManager;
 using Server.Managers.Storages.AnalyseManager;
 using Server.Managers.Storages.PrescriptionManager;
@@ -28,6 +27,7 @@ using Server.Services.Foundation.MailService;
 using Server.Models.Prescriptions;
 using Server.Managers.Storages.LineRadioMedicalManager;
 using Server.Managers.Storages.LineAnalyseMedicalManager;
+using Server.Managers.Storages.LinePrescriptionMedicalManager;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -44,7 +44,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public readonly IOrdreMedicalManager ordreMedicalManager;
         public readonly ISpecialitiesManager specialitiesManager;
         public readonly ICabinetMedicalManager cabinetMedicalManager;
-        public readonly IPrescriptionLineManager PrescriptionLineManager;
+        public readonly ILinePrescriptionMedicalManager PrescriptionLineManager;
         public readonly IPrescriptionManager prescriptionManager;
         public readonly IRadioManager radioManager;
         public readonly IAnalyseManager analyseManager;
@@ -53,7 +53,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public readonly ILineRadioMedicalManager lineRadioMedicalManager;
         public readonly ILineAnalyseMedicalManager lineAnalyseMedicalManager;
         
-        public OrdreMedicalService(ILineRadioMedicalManager lineRadioMedicalManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager,IMailService mailService,ISecretaryManager secretaryManager, IPrescriptionManager prescriptionManager, IPrescriptionLineManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
+        public OrdreMedicalService(ILineRadioMedicalManager lineRadioMedicalManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager,IMailService mailService,ISecretaryManager secretaryManager, IPrescriptionManager prescriptionManager, ILinePrescriptionMedicalManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
         {
             this.lineAnalyseMedicalManager= lineAnalyseMedicalManager;
             this.lineRadioMedicalManager= lineRadioMedicalManager;

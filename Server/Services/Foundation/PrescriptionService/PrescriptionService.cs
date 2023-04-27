@@ -80,6 +80,7 @@ namespace Server.Services.Foundation.PrescriptionService
                 ListChronicDeasses.Add(ChronicDeasses.NameChronicDiseases);
             }
             var LinePrescriptionLine = await this.linePrescriptionMedicalManager.SelectLinePrescriptionByIdPrescription(Prescription.Id);
+            LinePrescriptionLine = LinePrescriptionLine.Where(e=>e.StatusPrescriptionLine == Models.PrescriptionLine.StatusPrescriptionLine.NotValidate).ToList();
             foreach (var LinePresription in LinePrescriptionLine)
             {
                 LinesPrescriptionDto.Add(new LinePrescriptionDto { Description = LinePresription.Description, IdLine = EncryptGuid(LinePresription.Id), MedicamentName = LinePresription.MedicamentName, Quantity = LinePresription.Dosage });

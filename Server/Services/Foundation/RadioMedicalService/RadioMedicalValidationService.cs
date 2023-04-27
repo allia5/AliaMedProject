@@ -14,7 +14,7 @@ namespace Server.Services.Foundation.RadioMedicalService
     {
         public void validationPatientIsNull(User PatientUser)
         {
-            if(PatientUser == null) throw new ArgumentNullException(nameof(PatientUser));
+            if(PatientUser == null || PatientUser.Status == UserStatus.Deactivated) throw new ArgumentNullException(nameof(PatientUser));
         }
         public void ValidateFileMedicalIsNull(fileMedicals fileMedicals)
         {

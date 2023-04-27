@@ -185,7 +185,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
         }
         public void ValidationDoctorIsNull(Doctors doctor)
         {
-            if (doctor == null)
+            if (doctor == null || doctor.StatusDoctor == StatusDoctor.Deactivated)
             {
                 throw new NullException(nameof(doctor));
 

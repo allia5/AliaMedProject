@@ -8,5 +8,6 @@ namespace Server.Managers.Storages.PrescriptionManager
         public Task<Prescription> UpdatePrescriptionAsync(Prescription prescription);
         public Task<Prescription> SelectPrescriptionByIdMedicalOrdreAsync(Guid MedicalOrdre);
         public Task<Prescription> SelectPrescriptionByCode(string Code);
+        public Task<Prescription> SelectPrescriptioById(Guid Id);
     }
 }

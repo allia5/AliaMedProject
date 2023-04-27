@@ -8,7 +8,6 @@ using Server.Managers.Storages.FileChronicDiseasesManager;
 using Server.Managers.Storages.FileMedicalManager;
 using Server.Managers.Storages.OrdreMedicalManager;
 using Server.Managers.Storages.PlanningAppoimentManager;
-using Server.Managers.Storages.PrescriptionLineManager;
 using Server.Managers.Storages.PrescriptionManager;
 using Server.Managers.Storages.RadioManager;
 using Server.Managers.Storages.SecretaryManager;

@@ -14,7 +14,7 @@ namespace Client.Pages
         protected string SuccessMessage = null;
         protected string CodeQr = null;
         protected bool ButtonAddIsLoding = false;
-        protected string ButtonLoaddingOnAddResult = null;
+        protected string ButtonLoaddingOnUpdateResult = null;
         protected string MessageHasBeenValidated = null;
         protected InformationPrescriptionResultDto prescriptionResultDto = null;
         [Inject]
@@ -59,5 +59,34 @@ namespace Client.Pages
             }
 
         }
+        public async Task OnUpdateStatusPrecriptionLine(string IdPrecriptionLine)
+        {
+            try
+            {
+                ButtonLoaddingOnUpdateResult = IdPrecriptionLine;
+                await this.pharmacistService.UpdateStatusPrescriptionLine(IdPrecriptionLine);
+               var LineToRemove = prescriptionResultDto.prescriptionInfromationDto.linePrescriptionDtos.Where(x => x.IdLine==IdPrecriptionLine).FirstOrDefault();
+                if (LineToRemove!=null)
+                {
+                    prescriptionResultDto.prescriptionInfromationDto.linePrescriptionDtos.Remove(LineToRemove);
+                    ButtonLoaddingOnUpdateResult = null;
+                }
+                else
+                {
+                    throw new Exception("Line Prescreption Not Found");
+                }
+              
+                
+
+            }
+            catch(Exception ex)
+            {
+                ErrorMessage = ex.Message;
+                ButtonLoaddingOnUpdateResult = null;
+            }
+           
+
+        }
+
     }
 }

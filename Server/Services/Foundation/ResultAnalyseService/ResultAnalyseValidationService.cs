@@ -54,7 +54,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
         }
         public void validationPatientIsNull(User PatientUser)
         {
-            if (PatientUser == null) throw new ArgumentNullException(nameof(PatientUser));
+            if (PatientUser == null || PatientUser.Status == UserStatus.Deactivated) throw new ArgumentNullException(nameof(PatientUser));
         }
        
         public void ValidateAnalyseIsNull(Analyses Analyse)

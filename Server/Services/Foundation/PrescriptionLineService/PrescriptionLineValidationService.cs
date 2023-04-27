@@ -4,24 +4,34 @@ using Server.Models.Exceptions;
 using Server.Models.fileMedical;
 using Server.Models.MedicalOrder;
 using Server.Models.Pharmacist;
+using Server.Models.PrescriptionLine;
 using Server.Models.Prescriptions;
-using Server.Models.RadioMedical;
-using Server.Models.SpecialisteAnalyses;
 using Server.Models.UserAccount;
 
-namespace Server.Services.Foundation.PrescriptionService
+namespace Server.Services.Foundation.PrescriptionLineService
 {
-    public partial class PrescriptionService
+    public partial class PrescriptionLineService
     {
-        public void ValidateEntryOnGetPrescriptionInformation(string Email, string CodeQr)
+        public void ValidatePrescriptionLine(PrescriptionLines prescriptionLines)
+        {
+            if (prescriptionLines == null )
+            {
+                throw new ArgumentNullException(nameof(prescriptionLines));
+            }
+            if(prescriptionLines.StatusPrescriptionLine == StatusPrescriptionLine.Validate)
+            {
+                throw new StatusValidationException(nameof(prescriptionLines));
+            }
+        }
+        public void ValidateEntryOnUpdatePrescriptionLine(string Email, string LinePrescriptionId)
         {
             if (string.IsNullOrEmpty(Email))
             {
                 throw new ArgumentNullException("email");
             }
-            if (string.IsNullOrEmpty(CodeQr))
+            if (string.IsNullOrEmpty(LinePrescriptionId))
             {
-                throw new ArgumentNullException("codeQr");
+                throw new ArgumentNullException("LinePrescriptionId");
             }
         }
         public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
@@ -33,7 +43,7 @@ namespace Server.Services.Foundation.PrescriptionService
         }
         public void ValidationDoctorIsNull(Doctors doctor)
         {
-            if (doctor == null)
+            if (doctor == null || doctor.StatusDoctor == StatusDoctor.Deactivated)
             {
                 throw new NullException(nameof(doctor));
 

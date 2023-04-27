@@ -23,5 +23,19 @@ namespace Server.Managers.Storages.LinePrescriptionMedicalManager
                          where Line.IdPrescription == PrescriptionId 
                          select Line).ToListAsync();
         }
+        public async Task<PrescriptionLines> InsertPrescriptionLineAsync(PrescriptionLines prescriptionLines)
+        {
+            var result = this.serverDbContext.PrescriptionLines.Add(prescriptionLines);
+            await this.serverDbContext.SaveChangesAsync();
+            return result.Entity;
+
+        }
+
+        public async Task<PrescriptionLines> UpdatePrescriptionLine(PrescriptionLines prescriptionLines)
+        {
+            var Result = this.serverDbContext.PrescriptionLines.Update(prescriptionLines);
+            await this.serverDbContext.SaveChangesAsync();
+            return Result.Entity;
+        }
     }
 }

@@ -71,7 +71,7 @@
      <thead>
     <tr>
         <td>Medicament Name</td>
-         <td>Quentity</td>
+         <td>Quantity</td>
             <td>Description</td>
             <td>Validate</td>
     </tr></thead>
@@ -82,7 +82,15 @@
                     <td>@ItemLinePrescription.MedicamentName</td>
                     <td>@ItemLinePrescription.Quantity</td>
                     <td>@ItemLinePrescription.Description</td>
-                    <td><button class="btn btn-success">Validate</button></td>
+                    <td>
+                        <button class="btn btn-success" @onclick="()=>OnUpdateStatusPrecriptionLine(ItemLinePrescription.IdLine)">
+                            Validate
+                            @if(ButtonLoaddingOnUpdateResult == ItemLinePrescription.IdLine)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>
+                            }
+                        </button></td>
                 </tr>
             }
         </tbody>

@@ -26,7 +26,7 @@ namespace Server.Services.Foundation.ResultRadioService
         }
         public void validationPatientIsNull(User PatientUser)
         {
-            if (PatientUser == null) throw new ArgumentNullException(nameof(PatientUser));
+            if (PatientUser == null || PatientUser.Status == UserStatus.Deactivated) throw new ArgumentNullException(nameof(PatientUser));
         }
         public void ValidateResultRadioOnAdd(string Email,RadioResultToAddDto radioResultToAddDto)
         {

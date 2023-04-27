@@ -38,5 +38,11 @@ namespace Server.Managers.Storages.PrescriptionManager
                           where PrescriptionItem.qrCode == Code 
                           select PrescriptionItem).FirstOrDefaultAsync();
         }
+
+        public async Task<Prescription> SelectPrescriptioById(Guid Id)
+        {
+           return await (from PrescriptionItem in this.ServerDbContext.prescriptions 
+                         where PrescriptionItem.Id == Id select PrescriptionItem ).FirstOrDefaultAsync();
+        }
     }
 }
