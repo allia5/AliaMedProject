@@ -39,6 +39,7 @@ namespace Server.Services.Foundation.PrescriptionService
 
         public PrescriptionService(IPharmacistManager pharmacistManager,IFileMedicalManager fileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _userManager, IOrdreMedicalManager ordreMedicalManager, IPrescriptionManager prescriptionManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, ISpecialitiesManager specialitiesManager, ILinePrescriptionMedicalManager linePrescriptionMedicalManager)
         {
+            this.pharmacistManager = pharmacistManager;
             FileMedicalManager = fileMedicalManager;
             _UserManager = _userManager;
             this.doctorManager = doctorManager;

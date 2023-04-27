@@ -7,7 +7,7 @@ namespace Server.Models.MedicalAnalysis
 {
     public enum Statuspharmacist
     {
-        Activated,
-        Deactivated
+        Activated=1,
+        Deactivated=0
     }
 }

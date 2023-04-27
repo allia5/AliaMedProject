@@ -16,7 +16,7 @@ namespace Client.Pages
         protected bool ButtonAddIsLoding = false;
         protected string ButtonLoaddingOnAddResult = null;
         protected string MessageHasBeenValidated = null;
-        protected InformationPrescriptionResultDto prescriptionResultDto = new InformationPrescriptionResultDto();
+        protected InformationPrescriptionResultDto prescriptionResultDto = null;
         [Inject]
         protected IPharmacistService pharmacistService { get; set; }
         [Inject]
