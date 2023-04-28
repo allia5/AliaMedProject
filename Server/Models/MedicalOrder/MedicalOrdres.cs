@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Server.Models.AdviceMedicals;
 using Server.Models.Analyse;
 using Server.Models.CabinetMedicals;
 using Server.Models.Doctor;
@@ -42,5 +43,7 @@ namespace Server.Models.MedicalOrder
         public IEnumerable<Analyses> Analyses { get; set; }
         [JsonIgnore]
         public IEnumerable<Radio> Radios { get; set; }
+        [JsonIgnore]
+        public IEnumerable<AdviceMedical> AdviceMedical { get; set; }
     }
 }

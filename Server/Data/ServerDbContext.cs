@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Server.Models.Admin;
+using Server.Models.AdviceMedicals;
 using Server.Models.Analyse;
 using Server.Models.CabinetMedicals;
 using Server.Models.ChronicDiseases;
@@ -43,7 +44,9 @@ namespace Server.Data
         {
 
             base.OnModelCreating(modelBuilder);
-            
+
+           
+
             modelBuilder.Entity<CabinetMedical>().HasData(new CabinetMedical
             {
                 Id = Guid.Parse("CF35304B-7896-4B81-8F57-D0DCCDCCB836"),
@@ -399,6 +402,7 @@ namespace Server.Data
         public DbSet<UserRole> userRoles { get; set; }
         public DbSet<LineRadioMedicals> LineRadioMedicals { get; set; }
         public DbSet<LineAnalyseMedicals> LineAnalyseMedicals { get; set; }
+        public DbSet<AdviceMedical> adviceMedicals { get; set; }
         
     }
 }

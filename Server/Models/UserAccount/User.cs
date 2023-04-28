@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Server.Models.AdviceMedicals;
 using Server.Models.Doctor;
 using Server.Models.fileMedical;
 using Server.Models.MedicalAnalysis;
@@ -10,7 +11,7 @@ using Server.Models.secretary;
 using Server.Models.SpecialisteAnalyses;
 using Server.Models.UserRoles;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models.UserAccount
 {
@@ -50,7 +51,11 @@ namespace Server.Models.UserAccount
         public IEnumerable<fileMedicals> fileMedical { get; set; }
         [JsonIgnore]
         public IEnumerable<UserRole> usersRoles { get; set; }
-
+        [JsonIgnore]
+        public IEnumerable<AdviceMedical> AdviceMedicalSender { get; set; }
+        [JsonIgnore]
+        [InverseProperty("ReceiverUser")]
+        public IEnumerable<AdviceMedical> AdviceMedicalReceiver { get; set; }
 
 
     }
