@@ -26,6 +26,9 @@ namespace Client.Pages
         protected LineAnalyseMedicalDto LineAnalyseMedicalDto = new LineAnalyseMedicalDto();
         protected List<LineAnalyseMedicalDto> ListLineAnalyseDto = new List<LineAnalyseMedicalDto>();
         protected MedicalFileArchiveDto MedicalFileArchive = new MedicalFileArchiveDto();
+        protected List<MedicalOrdresDto> ListmedicalOrdre = new List<MedicalOrdresDto>();
+        protected MedicalOrdreDetails medicalOrdreDetails = new MedicalOrdreDetails();
+        protected PrescriptionLineInformationDto prescriptionLineInformation = new PrescriptionLineInformationDto();
         protected int CountInput = 0;
         [Parameter]
         public string AppointmentId { get; set; }
@@ -56,6 +59,7 @@ namespace Client.Pages
                 {
                     isLoading = true;
                     this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchive(FileId, AppointmentId);
+                    this.ListmedicalOrdre = this.MedicalFileArchive.medicalOrdres.OrderByDescending(e=>e.medicalOrdreDetails.DateValidation).ToList();
                     isLoading = false;
                 }
                 catch(Exception Ex)
@@ -71,6 +75,13 @@ namespace Client.Pages
             }
 
         }
+
+        public async Task OnSelectOrdreMedical(string IdOrdreMedical)
+        {
+            var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
+            this.medicalOrdreDetails = OrdreMedical?.medicalOrdreDetails ?? new MedicalOrdreDetails();
+        }
+       
         public async Task OnAddPrescription()
         {
             this.OrderMedicalToAddDro.Prescription = PrescriptionDto;
