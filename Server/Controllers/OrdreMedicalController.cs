@@ -21,6 +21,32 @@ namespace Server.Controllers
             this.ordreMedicalService = ordreMedicalService;
         }
 
+
+        [HttpGet("GetAllOrdreArchiveFileMedcial/{AppointmentId}/{FileId}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult<MedicalFileArchiveDto>> GetMedicalArchive(string AppointmentId,string FileId)
+        {
+            try
+            {
+                FileId = FileId.Replace("-", "/");
+                AppointmentId = AppointmentId.Replace("-", "/");
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+               return await this.ordreMedicalService.GetListOrdreFileMedical(Email,AppointmentId,FileId);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.Message);
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
         [HttpPatch("PatchMedicalOrdre")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE")]
         public async Task<ActionResult> UpdateStatusMedicalOrdre(UpdateOrdreMedicalDto updateFileMedicalDto)

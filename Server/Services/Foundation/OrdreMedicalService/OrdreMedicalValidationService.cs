@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using Server.Models.CabinetMedicals;
 using Server.Models.Doctor;
@@ -14,19 +15,19 @@ using Server.Models.WorkDoctor;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
-    
+
     public partial class OrdreMedicalService
     {
         public void ValidateRadioLineOnAdd(LineRadioMedicalDto lineRadioMedical)
         {
-            if( lineRadioMedical.Description == null)
+            if (lineRadioMedical.Description == null)
             {
                 throw new ArgumentNullException(nameof(lineRadioMedical));
             }
         }
-     public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
+        public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
         {
-            if(medicalOrdres == null)
+            if (medicalOrdres == null)
             {
                 throw new NullException(nameof(medicalOrdres));
             }
@@ -50,9 +51,9 @@ namespace Server.Services.Foundation.OrdreMedicalService
             {
                 throw new ArgumentNullException(nameof(Email));
             }
-           if(updateOrdreMedicalDto != null) 
-            { 
-                if(updateOrdreMedicalDto.OrdreMedicalId == null || updateOrdreMedicalDto.DoctorId ==null || updateOrdreMedicalDto.CabinetId == null)
+            if (updateOrdreMedicalDto != null)
+            {
+                if (updateOrdreMedicalDto.OrdreMedicalId == null || updateOrdreMedicalDto.DoctorId == null || updateOrdreMedicalDto.CabinetId == null)
                 {
                     throw new ArgumentNullException(nameof(updateOrdreMedicalDto));
                 }
@@ -60,9 +61,9 @@ namespace Server.Services.Foundation.OrdreMedicalService
         }
         public void ValidateSecritary(Secretarys secretarys)
         {
-            if(secretarys != null)
+            if (secretarys != null)
             {
-                if(secretarys.Status != StatusSecretary.Active)
+                if (secretarys.Status != StatusSecretary.Active)
                 {
                     throw new StatusValidationException(nameof(secretarys));
                 }
@@ -96,43 +97,43 @@ namespace Server.Services.Foundation.OrdreMedicalService
         }
         public void ValidateAnalyseOnAdd(AnalyseToAddDto analyseToAddDto)
         {
-            if(analyseToAddDto.LineAnalyseMedicals.Count() == 0 || analyseToAddDto.FileMedicalAnalyse ==null)
+            if (analyseToAddDto.LineAnalyseMedicals.Count() == 0 || analyseToAddDto.FileMedicalAnalyse == null)
             {
                 throw new ArgumentException(nameof(analyseToAddDto));
             }
         }
-      
-        public void ValidateRadioOnAdd(RadioToAddDto radioToAddDto )
+
+        public void ValidateRadioOnAdd(RadioToAddDto radioToAddDto)
         {
-            if(radioToAddDto.FileMedicalRadio == null || radioToAddDto.LineRadioMedicals.Count()==0)
+            if (radioToAddDto.FileMedicalRadio == null || radioToAddDto.LineRadioMedicals.Count() == 0)
             {
                 throw new ArgumentException(nameof(radioToAddDto));
             }
         }
         public void validateeFileMedicalIsNull(fileMedicals fileMedicals)
         {
-            if (fileMedicals==null)
+            if (fileMedicals == null)
             {
                 throw new NullException(nameof(fileMedicals));
             }
         }
         public void ValidatePrecriptionLineOnAdd(PrescriptionLineDto prescriptionLine)
         {
-            if(prescriptionLine.Quantity ==null || prescriptionLine.MedicamentName == null)
+            if (prescriptionLine.Quantity == null || prescriptionLine.MedicamentName == null)
             {
                 throw new ArgumentException(nameof(prescriptionLine));
             }
         }
-       public void  ValidatePrescriptionOnAdd(PrescriptionDto prescriptionDto)
+        public void ValidatePrescriptionOnAdd(PrescriptionDto prescriptionDto)
         {
-            if (prescriptionDto.prescriptionLines.Count() == 0 && prescriptionDto.PrescriptionFile !=null  )
+            if (prescriptionDto.prescriptionLines.Count() == 0 && prescriptionDto.PrescriptionFile != null)
             {
-                throw new InvalidException(nameof(prescriptionDto),prescriptionDto,"Prescripion");
+                throw new InvalidException(nameof(prescriptionDto), prescriptionDto, "Prescripion");
             }
         }
         public void ValidateCabinetMedicalIsNull(CabinetMedical cabinetMedical)
         {
-            if(cabinetMedical == null)
+            if (cabinetMedical == null)
             {
                 throw new NullException(nameof(cabinetMedical));
             }
@@ -144,15 +145,15 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 throw new NullException(nameof(workDoctors));
             }
         }
-        
+
         public void ValidateOrdreMedicalOnAdd(OrderMedicalToAddDro orderMedicalToAddDro)
-        { 
-            if(orderMedicalToAddDro == null)
+        {
+            if (orderMedicalToAddDro == null)
             {
                 throw new ArgumentNullException(nameof(ordreMedicalManager));
 
             }
-            if(orderMedicalToAddDro.AnalyseToAdd == null && orderMedicalToAddDro.RadioToAdd == null && orderMedicalToAddDro.Prescription == null ) 
+            if (orderMedicalToAddDro.AnalyseToAdd == null && orderMedicalToAddDro.RadioToAdd == null && orderMedicalToAddDro.Prescription == null)
             {
                 throw new ArgumentNullException(nameof(ordreMedicalManager));
             }
@@ -192,11 +193,26 @@ namespace Server.Services.Foundation.OrdreMedicalService
             }
         }
 
-       public void ValidateAnalyseLineOnAdd(LineAnalyseMedicalDto lineAnalyseMedicalDto)
+        public void ValidateAnalyseLineOnAdd(LineAnalyseMedicalDto lineAnalyseMedicalDto)
         {
-            if( lineAnalyseMedicalDto.Description == null)
+            if (lineAnalyseMedicalDto.Description == null)
             {
                 throw new ArgumentNullException(nameof(lineAnalyseMedicalDto));
+            }
+        }
+        public void ValidateEntryOnGetArchiveOrdreFileMedical(string Email, string FileId, string AppointmentId)
+        {
+            if (Email.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(Email));
+            }
+            if (FileId.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(FileId));
+            }
+            if (AppointmentId.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(AppointmentId));
             }
         }
     }

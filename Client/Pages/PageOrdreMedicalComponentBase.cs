@@ -25,6 +25,7 @@ namespace Client.Pages
         protected List<LineRadioMedicalDto> ListLineRadioDto = new List<LineRadioMedicalDto>();
         protected LineAnalyseMedicalDto LineAnalyseMedicalDto = new LineAnalyseMedicalDto();
         protected List<LineAnalyseMedicalDto> ListLineAnalyseDto = new List<LineAnalyseMedicalDto>();
+        protected MedicalFileArchiveDto MedicalFileArchive = new MedicalFileArchiveDto();
         protected int CountInput = 0;
         [Parameter]
         public string AppointmentId { get; set; }
@@ -44,7 +45,32 @@ namespace Client.Pages
         protected IfileMedicalService fileMedicalService { get; set; }  
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-          
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            var AuthUser = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if(AuthUser.User.Identity?.IsAuthenticated?? false)
+            {
+                try
+                {
+                    isLoading = true;
+                    this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchive(FileId, AppointmentId);
+                    isLoading = false;
+                }
+                catch(Exception Ex)
+                {
+                    this.ErrorMessage= Ex.Message;
+                    isLoading = false;
+                }
+                
+            }
+            else
+            {
+                this.NavigationManager.NavigateTo("/Login/Home",forceLoad:true);
+            }
+
+        }
         public async Task OnAddPrescription()
         {
             this.OrderMedicalToAddDro.Prescription = PrescriptionDto;

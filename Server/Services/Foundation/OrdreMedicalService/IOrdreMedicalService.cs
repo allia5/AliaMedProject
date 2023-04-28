@@ -8,5 +8,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public Task<OrdreMedicalDto> AddOrdreMedicalDto(string Email, OrderMedicalToAddDro orderMedicalToAdd);
         public Task<List<InformationOrderMedicalSecritary>> SelectAllMedicalOrdreSecritary(string Email,KeysAppoimentInformationSecretary keysAppoimentInformationSecritary);
         public Task UpdateStatusOrdreMedicalService(string Email, UpdateOrdreMedicalDto updateOrdreMedicalDto);
+        public Task<MedicalFileArchiveDto> GetListOrdreFileMedical(string Email, string AppointmentId, string FileId);
+
+
     }
 }

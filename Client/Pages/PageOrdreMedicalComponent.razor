@@ -17,27 +17,32 @@
 }
 
 
-
-<div class="shadow-lg p-3 mb-5 bg-light rounded">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 mx-auto">
-                <img src="/OrdreFile.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+@if(MedicalFileArchive != null)
+{
+    <div class="shadow-lg p-3 mb-5 bg-light rounded">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mx-auto">
+                    <img src="/OrdreFile.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+                </div>
             </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-6 mx-auto">
-                <ul class="list-group list-group-flush ">
-                    <li class="list-group-item border-bottom">First Name : </li>
-                    <li class="list-group-item border-bottom">Last Name:</li>
-                    <li class="list-group-item border-bottom">Sexe : </li>
-                    <li class="list-group-item border-bottom">National Number : </li>
-                    <li class="list-group-item border-bottom">Phone Number : </li>
-                </ul>
+            <div class="row mt-3">
+                <div class="col-md-6 mx-auto">
+                    <ul class="list-group list-group-flush ">
+                        <li class="list-group-item border-bottom">FirstName: @MedicalFileArchive.informationFileMedical.FirstName </li>
+                        <li class="list-group-item border-bottom">Last Name:@MedicalFileArchive.informationFileMedical.LastName </li>
+                        <li class="list-group-item border-bottom">Sexe : @MedicalFileArchive.informationFileMedical.sexe  </li>
+                        <li class="list-group-item border-bottom">Date of Birth : @MedicalFileArchive.informationFileMedical.DateBirth  </li>
+                        
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+
+}
+
 
 
 

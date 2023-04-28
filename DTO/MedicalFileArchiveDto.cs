@@ -14,7 +14,7 @@ namespace DTO
     }
     public class MedicalOrdresDto
     {
-        DoctorInformationDto doctorInformation { get; set; }    
+        public DoctorInformationDto doctorInformation { get; set; }    
         public MedicalOrdreDetails medicalOrdreDetails { get; set; }
 
 
@@ -23,11 +23,11 @@ namespace DTO
     public class MedicalOrdreDetails
     {
         public string Id { get; set; }
-        public string Summary { get; set; }
-        public DateTime DateValidation { get; set; }
-        public List<PrescriptionLineInformationDto> prescriptionLinesInformation { get; set; }
-        public List<RadioLineInformationDto>  radioLinesInformation { get; set; }
-        public List<AnalyseLineInformationDto> analyseLinesInformation { get; set; }
+        public string? Summary { get; set; }
+        public DateTime? DateValidation { get; set; }
+        public List<PrescriptionLineInformationDto>? prescriptionLinesInformation { get; set; }
+        public List<RadioLineInformationDto>?  radioLinesInformation { get; set; }
+        public List<AnalyseLineInformationDto>? analyseLinesInformation { get; set; }
     }
     public class PrescriptionLineInformationDto
     {
@@ -35,7 +35,7 @@ namespace DTO
         public string MedicamentName { get; set; }
         public int Quantity { get; set; }
         public StatusPrescriptionLineDto statusPrescriptionLineDto { get; set; }
-        public DateTime DateValidation { get; set; }
+        public DateTime? DateValidation { get; set; }
     }
     public class RadioLineInformationDto
     {

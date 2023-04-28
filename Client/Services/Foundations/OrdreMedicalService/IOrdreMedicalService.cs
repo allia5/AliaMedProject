@@ -7,6 +7,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
         public Task PostOrdreMedicalPatient(OrderMedicalToAddDro orderMedicalToAddDro);
         public Task<List<InformationOrderMedicalSecritary>> GetAllOrdreMedicalSecritary(KeysAppoimentInformationSecretary keysAppoimentInformationSecretary);
         public Task UpdateStatusOrdreMedicalBySecritary(UpdateOrdreMedicalDto updateOrdreMedicalDto);
+        public Task<MedicalFileArchiveDto> GetMedicalFileArchive(string FileId, string AppointmentId);
        
 
 

@@ -24,6 +24,62 @@ namespace Server.Services.Foundation.OrdreMedicalService
 {
     public static class OrdreMedicalMapperService
     {
+
+
+        public static PrescriptionLineInformationDto MapperToPrescriptionLineInformationDto(PrescriptionLines prescriptionLines)
+        {
+            return new PrescriptionLineInformationDto
+            {
+                DateValidation = prescriptionLines?.DateValidation?? null ,
+                IdLinePrescription = EncryptGuid(prescriptionLines.Id),
+                MedicamentName = prescriptionLines.MedicamentName,
+                Quantity = prescriptionLines.Dosage,
+                statusPrescriptionLineDto = (StatusPrescriptionLineDto)prescriptionLines.StatusPrescriptionLine
+
+            };
+        }
+        public static RadioLineInformationDto MapperToRadioLineInformationDto(LineRadioMedicals lineRadioMedicals)
+        {
+            return new RadioLineInformationDto
+            {
+                IdLineRadio = EncryptGuid(lineRadioMedicals.Id),
+                Description = lineRadioMedicals.Description,
+                statusRadio = (StatusRadioDto)lineRadioMedicals.Status,
+                
+            };
+        }
+        public static AnalyseLineInformationDto MapperToAnalyseLineInformationDto(LineAnalyseMedicals lineAnalyseMedicals)
+        {
+            return new AnalyseLineInformationDto
+            {
+                IdLineAnalyse = EncryptGuid(lineAnalyseMedicals.Id),
+                Description = lineAnalyseMedicals.description,
+                statusAnalyse = (StatusAnalyseDto)lineAnalyseMedicals.Status
+            };
+        }
+
+        public static MedicalOrdreDetails MapperToMedicalOrdreDetails(MedicalOrdres medicalOrdres,List<AnalyseLineInformationDto> ListanalyseLineInformationDtos , List<RadioLineInformationDto> LineradioLineInformationDtos,List<PrescriptionLineInformationDto> ListPrescriptionLineInformationDtos)
+        {
+            return new MedicalOrdreDetails
+            {
+                Id = EncryptGuid(medicalOrdres.Id),
+                analyseLinesInformation = ListanalyseLineInformationDtos,
+                DateValidation = medicalOrdres?.DateValidation ?? null,
+                prescriptionLinesInformation = ListPrescriptionLineInformationDtos,
+                radioLinesInformation = LineradioLineInformationDtos,
+                Summary = medicalOrdres.summary
+
+            };
+        }
+        public static MedicalOrdresDto MapperToMedicalOrdresDto(MedicalOrdreDetails medicalOrdreDetails , DoctorInformationDto doctorInformationDto)
+        {
+            return new MedicalOrdresDto
+            {
+                medicalOrdreDetails = medicalOrdreDetails,
+                doctorInformation = doctorInformationDto
+
+            };
+        }
         public static MailRequest MapperToMailRequestUpdateStatusOrdreMedical(User UserAccountPatient,User UserAccountDoctor)
         {
             return new MailRequest
