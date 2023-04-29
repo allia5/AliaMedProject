@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Server.Models.Analyse;
+using Server.Models.LineAnalyseMedical;
 using Server.Models.UserAccount;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,6 +26,6 @@ namespace Server.Models.SpecialisteAnalyses
         public string IdUser { get; set; }
         public User User { get; set; }
         [JsonIgnore]
-        public IEnumerable<Analyses> Analyses { get; set; }
+        public IEnumerable<LineAnalyseMedicals> LinesAnalyses { get; set; }
     }
 }

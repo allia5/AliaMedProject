@@ -1,4 +1,6 @@
 ﻿using Server.Models.Doctor;
+using Server.Models.LineAnalyseMedical;
+using Server.Models.LineRadioMedical;
 using Server.Models.RadioMedical;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,6 +18,6 @@ namespace Server.Models.Radiologys
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }
         public Doctors Doctors { get; set; }
-        public IEnumerable<Radio> Radios { get; set; }
+        public IEnumerable<LineRadioMedicals> RadioLines { get; set; }
     }
 }

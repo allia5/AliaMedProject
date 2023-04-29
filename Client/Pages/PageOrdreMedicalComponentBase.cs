@@ -94,7 +94,7 @@ namespace Client.Pages
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                this.ErrorMessage = e.Message;
             }
 
 
@@ -127,7 +127,7 @@ namespace Client.Pages
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                this.ErrorMessage = e.Message;
             }
 
 

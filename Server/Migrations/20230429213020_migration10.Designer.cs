@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -11,9 +12,11 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    partial class ServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230429213020_migration10")]
+    partial class migration10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,9 +97,14 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("SpecialisteAnalyseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdOrdreMedical");
+
+                    b.HasIndex("SpecialisteAnalyseId");
 
                     b.ToTable("Analyses");
                 });
@@ -836,43 +844,43 @@ namespace Server.Migrations
                         new
                         {
                             Id = new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"),
-                            ConcurrencyStamp = "bd212bf8-848d-4b0d-a7e5-0d491b47016a",
+                            ConcurrencyStamp = "528368c9-ae11-4838-9880-b54fe240c9f8",
                             Name = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"),
-                            ConcurrencyStamp = "d2f2f35b-cd39-4131-8ade-5ff4bd1c4d34",
+                            ConcurrencyStamp = "8265a4ab-12cc-4f90-9889-943b77de8903",
                             Name = "PATIENT"
                         },
                         new
                         {
                             Id = new Guid("0d518584-64a4-424b-b011-7283083394b8"),
-                            ConcurrencyStamp = "13734020-8169-4367-b2bc-a83d859d89f7",
+                            ConcurrencyStamp = "109f36fb-04ca-4e8d-97af-d73593111b8b",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
                             Id = new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"),
-                            ConcurrencyStamp = "75b883ee-35f5-4346-abfd-b6cc157a773b",
+                            ConcurrencyStamp = "43fc11f8-72ba-421f-8ad3-3e2eaac76809",
                             Name = "MEDECIN"
                         },
                         new
                         {
                             Id = new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"),
-                            ConcurrencyStamp = "56fa5951-8120-472c-81e4-5f1d7df6ef36",
+                            ConcurrencyStamp = "98622b6b-5276-435a-8660-00078f72745b",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
                             Id = new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"),
-                            ConcurrencyStamp = "ccbd0986-c1e2-452f-a937-37ba402681a0",
+                            ConcurrencyStamp = "bd9bced3-6c16-4442-975d-ef4d8928cef2",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
                             Id = new Guid("232d07c5-711e-4802-a048-f2f73804ea40"),
-                            ConcurrencyStamp = "ed8f57ef-d42c-4783-968d-5e054975880a",
+                            ConcurrencyStamp = "67a1576f-548c-4feb-8f6d-77592472e833",
                             Name = "ANALYSE"
                         });
                 });
@@ -1156,6 +1164,11 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Server.Models.SpecialisteAnalyses.SpecialisteAnalyse", null)
+                        .WithMany("Analyses")
+                        .HasForeignKey("SpecialisteAnalyseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("MedicalOrdres");
                 });
 
@@ -1198,7 +1211,7 @@ namespace Server.Migrations
                         .IsRequired();
 
                     b.HasOne("Server.Models.SpecialisteAnalyses.SpecialisteAnalyse", "SpecialisteAnalyse")
-                        .WithMany("LinesAnalyses")
+                        .WithMany()
                         .HasForeignKey("IdSpecialisteAnalyse")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -1553,7 +1566,7 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.SpecialisteAnalyses.SpecialisteAnalyse", b =>
                 {
-                    b.Navigation("LinesAnalyses");
+                    b.Navigation("Analyses");
                 });
 
             modelBuilder.Entity("Server.Models.Specialites.Specialite", b =>
