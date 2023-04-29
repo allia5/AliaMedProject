@@ -30,7 +30,11 @@ namespace Server.Services.Foundation.ResultAnalyseService
 
         public void ValidateLineAnlayse(LineAnalyseMedicals lineAnalyseMedicals)
         {
-            if (lineAnalyseMedicals == null || lineAnalyseMedicals.Status != StatusAnalyse.validate)
+            if( lineAnalyseMedicals.Status != StatusAnalyse.validate)
+            {
+                throw new StatusValidationException(nameof(lineAnalyseMedicals));
+            }
+            if (lineAnalyseMedicals == null )
             {
                 throw new NullException(nameof(lineAnalyseMedicals));
             }
@@ -88,7 +92,11 @@ namespace Server.Services.Foundation.ResultAnalyseService
 
         public void ValidateOrdreMedical(MedicalOrdres medicalOrdres)
         {
-            if (medicalOrdres == null || medicalOrdres.Visibility == Models.MedicalOrder.StatusVisibility.Privet || medicalOrdres.Status==StatuseOrdreMedical.NotValidate)
+            if(medicalOrdres == null)
+            {
+                throw new NotFoundException(nameof(medicalOrdres));
+            }
+            if (  medicalOrdres.Visibility == Models.MedicalOrder.StatusVisibility.Privet || medicalOrdres.Status==StatuseOrdreMedical.NotValidate)
             {
                 throw new NullException(nameof(medicalOrdres));
             }
@@ -146,7 +154,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
         {
             if(resultAnalyse == null)
             {
-                throw new NullException(nameof(resultAnalyse));
+                throw new NotFoundException(nameof(resultAnalyse));
             }
         }
     }

@@ -6,6 +6,10 @@ using Client.Services.Foundations.OrdreMedicalService;
 using DTO;
 using Microsoft.AspNetCore.Components.Forms;
 using Client.Services.Foundations.FileMedicalService;
+using Microsoft.JSInterop;
+using Client.Services.Foundations.LineAnalyseResultService;
+using Client.Services.Foundations.LineRadioResultService;
+using System.Collections;
 
 namespace Client.Pages
 {
@@ -44,11 +48,58 @@ namespace Client.Pages
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
         protected IOrdreMedicalService OrdreMedicalService { get; set; }
+
+        [Inject]
+          protected ILineAnalyseResultService LineAnalyseResultService { get; set; }
+        [Inject]
+        protected ILineRadioResultService lineRadioResultService { get; set; }
         [Inject]
         protected IfileMedicalService fileMedicalService { get; set; }  
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await JSRuntime.InvokeVoidAsync("import", "/Js/ScripteFileMedical.js");
+            }
+        }
+
+        protected async Task DownloadFileRadio(string LineRadioId)
+        {
+            try
+            {
+
+
+                // Save the file
+                var FileResult = await this.lineRadioResultService.GetFileResultRadio(AppointmentId,LineRadioId);
+                if(FileResult.DataFile != null)
+                {
+                    MemoryStream stream = new MemoryStream(FileResult.DataFile);
+                    using var streamRef = new DotNetStreamReference(stream: stream);
+                    var fileName = "File.pdf";
+                    await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+                }
+                else
+                {
+                    throw new Exception("File Is Empty");
+                }
+              
+
+
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+
+
+        }
 
         protected override async Task OnInitializedAsync()
         {

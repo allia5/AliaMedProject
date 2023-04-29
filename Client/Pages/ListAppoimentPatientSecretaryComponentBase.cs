@@ -194,13 +194,7 @@ namespace Client.Pages
                 await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
                 
                
-               
-                //Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
-                /* var content = StreamToBytes(stream);
-                  var contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-                  var fileName = "file.docx"; // replace this with the appropriate filename for your file
-                  var newstream = new MemoryStream(content);
-                  await jSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, newstream, contentType);*/
+              
             }
             catch(Exception e)
             {

@@ -22,22 +22,31 @@ namespace Server.Services.Foundation.ResultRadioService
         {
             if (resultRadio == null)
             {
-                throw new NullException(nameof(resultRadio));
+                throw new NotFoundException(nameof(resultRadio));
             }
         }
         public void ValidateOrdreMedical(MedicalOrdres medicalOrdres)
-        {
-            if (medicalOrdres == null || medicalOrdres.Visibility == Models.MedicalOrder.StatusVisibility.Privet || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
+
+        { 
+           if(medicalOrdres == null)
+            {
+                throw new NotFoundException(nameof(medicalOrdres));
+            }
+                if ( medicalOrdres.Visibility == Models.MedicalOrder.StatusVisibility.Privet || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
             {
                 throw new NullException(nameof(medicalOrdres));
             }
         }
         public void ValidateLineRadio(LineRadioMedicals lineRadioMedicals)
         {
-            if(lineRadioMedicals.Status == StatusRadio.notValidate || lineRadioMedicals == null)
+            if(lineRadioMedicals.Status == StatusRadio.notValidate )
             {
                 
-                throw new NullException(nameof(LineRadioMedicals));
+                throw new StatusValidationException(nameof(LineRadioMedicals));
+            }
+            if(lineRadioMedicals == null)
+            {
+                throw new NotFoundException(nameof(LineRadioMedicals));
             }
             
             

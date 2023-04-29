@@ -15,17 +15,29 @@ namespace Server.Services.Foundation.ResultRadioService
             {
                 return await onGetFileResultRadio();
             }
-            catch ()
+            catch (StatusValidationException Ex)
             {
-
+                throw new ValidationException(Ex);
             }
-            catch ()
+            catch (CompatibilityError Ex)
             {
-
+                throw new ValidationException(Ex);
             }
-            catch ()
+            catch (NullException Ex)
             {
-
+                throw new ServiceException(Ex);
+            }
+            catch (NotFoundException Ex)
+            {
+                throw new StorageValidationException(Ex);
+            }
+            catch (NullDataStorageException Ex)
+            {
+                throw new StorageValidationException(Ex);
+            }
+            catch (ArgumentNullException Ex)
+            {
+                throw new ValidationException(Ex);
             }
         }
         public async Task TryCatch(OnAddResultRadio onAddResultRadio)
