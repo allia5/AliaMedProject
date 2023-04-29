@@ -52,12 +52,13 @@ namespace Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            isLoading = true;
             var AuthUser = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
             if(AuthUser.User.Identity?.IsAuthenticated?? false)
             {
                 try
                 {
-                    isLoading = true;
+                    
                     this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchive(FileId, AppointmentId);
                     this.ListmedicalOrdre = this.MedicalFileArchive.medicalOrdres.OrderByDescending(e=>e.medicalOrdreDetails.DateValidation).ToList();
                     isLoading = false;
