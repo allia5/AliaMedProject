@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Microsoft.IdentityModel.Tokens;
 using Server.Models.Analyse;
 using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
@@ -7,15 +8,34 @@ using Server.Models.fileMedical;
 using Server.Models.LineAnalyseMedical;
 using Server.Models.LineRadioMedical;
 using Server.Models.MedicalOrder;
+using Server.Models.MedicalPlannings;
 using Server.Models.Radiologys;
 using Server.Models.RadioMedical;
+using Server.Models.ResultAnalyses;
 using Server.Models.SpecialisteAnalyses;
 using Server.Models.UserAccount;
+using Server.Models.WorkDoctor;
 
 namespace Server.Services.Foundation.ResultAnalyseService
 {
     public partial class ResultAnalyseService
     {
+        public void ValidateEntryOnGetFileResult(string Email,string AppointmentId , string LineId)
+        {
+            if(Email.IsNullOrEmpty() || AppointmentId.IsNullOrEmpty() || LineId.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException();
+            }
+        }
+
+        public void ValidateLineAnlayse(LineAnalyseMedicals lineAnalyseMedicals)
+        {
+            if (lineAnalyseMedicals == null || lineAnalyseMedicals.Status != StatusAnalyse.validate)
+            {
+                throw new NullException(nameof(lineAnalyseMedicals));
+            }
+            
+        }
         public void ValidateLineAnalyseIsNull(LineAnalyseMedicals lineAnalyseMedicals)
         {
             if(lineAnalyseMedicals == null)
@@ -56,12 +76,21 @@ namespace Server.Services.Foundation.ResultAnalyseService
         {
             if (PatientUser == null || PatientUser.Status == UserStatus.Deactivated) throw new ArgumentNullException(nameof(PatientUser));
         }
-       
+
+        
         public void ValidateAnalyseIsNull(Analyses Analyse)
         {
             if (Analyse == null)
             {
                 throw new NullDataStorageException(nameof(Analyse));
+            }
+        }
+
+        public void ValidateOrdreMedical(MedicalOrdres medicalOrdres)
+        {
+            if (medicalOrdres == null || medicalOrdres.Visibility == Models.MedicalOrder.StatusVisibility.Privet || medicalOrdres.Status==StatuseOrdreMedical.NotValidate)
+            {
+                throw new NullException(nameof(medicalOrdres));
             }
         }
 
@@ -74,7 +103,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
         }
         public void ValidationDoctorIsNull(Doctors doctor)
         {
-            if (doctor == null)
+            if (doctor == null ||doctor.StatusDoctor == StatusDoctor.Deactivated)
             {
                 throw new NullException(nameof(doctor));
 
@@ -85,6 +114,39 @@ namespace Server.Services.Foundation.ResultAnalyseService
             if (user == null || user.Status == UserStatus.Deactivated)
             {
                 throw new NullException(nameof(user));
+            }
+        }
+        public void ValidateAppointmentWithDoctor(MedicalPlanning medicalPlanning, Doctors doctors)
+        {
+            if (medicalPlanning.IdDoctor != doctors.Id || medicalPlanning.AppointmentDate.Date != DateTime.Now.Date)
+            {
+                throw new CompatibilityError(nameof(medicalPlanning), nameof(doctors));
+            }
+            if (medicalPlanning.Status == StatusPlaning.passed)
+            {
+                throw new StatusValidationException(nameof(medicalPlanning));
+            }
+
+        }
+        public void ValidatePlanningIsNull(MedicalPlanning medicalPlanning)
+        {
+            if (medicalPlanning == null)
+            {
+                throw new NullException(nameof(medicalPlanning));
+            }
+        }
+        public void ValidateWorkDoctorIsNull(WorkDoctors workDoctors)
+        {
+            if (workDoctors == null)
+            {
+                throw new NullException(nameof(workDoctors));
+            }
+        }
+        public void ValidateResultLineMedical(ResultAnalyse resultAnalyse)
+        {
+            if(resultAnalyse == null)
+            {
+                throw new NullException(nameof(resultAnalyse));
             }
         }
     }

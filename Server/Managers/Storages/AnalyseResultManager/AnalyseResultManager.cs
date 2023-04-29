@@ -1,4 +1,5 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.Models.ResultAnalyses;
 
 namespace Server.Managers.Storages.AnalyseResultManager
@@ -23,6 +24,13 @@ namespace Server.Managers.Storages.AnalyseResultManager
                 throw new Exception(ex.Message);
             }
            
+        }
+
+        public async Task<ResultAnalyse> SelectResultAnalyseByIdLineMedcialAnalyse(Guid IdLine)
+        {
+            return await (from ItemResultAnalyse in this.serverDbContext.resultAnalyses
+                          where ItemResultAnalyse.IdLineAnalyse == IdLine 
+                          select ItemResultAnalyse).FirstOrDefaultAsync();
         }
     }
 }

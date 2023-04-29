@@ -3,6 +3,7 @@ using Server.Managers.Storages.RadioResultManager;
 using Server.Models.LineRadioMedical;
 using Server.Models.Radiologys;
 using Server.Models.RadioMedical;
+using Server.Models.ResultAnalyses;
 using Server.Models.ResultsRadio;
 using Server.Models.UserAccount;
 
@@ -10,6 +11,14 @@ namespace Server.Services.Foundation.ResultRadioService
 {
     public static class ResultRadioMapperService
     {
+        public static FileResultDto MapperToFileResultDto(ResultRadio resultRadio)
+        {
+            return new FileResultDto
+            {
+                DataFile = resultRadio?.FileResult,
+                FileType = resultRadio?.fileType
+            };
+        }
         public static ResultRadio MapperToResultRadio(Guid LineRadioId,string TypeFileUpload,RadioResultToAddDto resultToAddDto)
         {
             return new ResultRadio

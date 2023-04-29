@@ -8,6 +8,14 @@ namespace Server.Services.Foundation.ResultAnalyseService
 {
     public static class ResultAnalyseMapperService
     {
+        public static FileResultDto MapperToFileResultDto(ResultAnalyse resultAnalyse)
+        {
+            return new FileResultDto
+            {
+                DataFile = resultAnalyse?.AnalyseResult,
+                FileType = resultAnalyse?.fileType
+            };
+        }
         public static ResultAnalyse MapperToResultAnalyse(Guid IdLineAnalyse,string FileType, byte[] fileUpload)
         {
             return new ResultAnalyse

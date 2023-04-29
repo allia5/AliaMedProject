@@ -15,6 +15,8 @@ using Server.Managers.Storages.LineRadioMedicalManager;
 using Server.Managers.Storages.RadioResultManager;
 using Server.Managers.Storages.RadiologyManager;
 using Server.Services.Foundation.MailService;
+using Server.Managers.Storages.PlanningAppoimentManager;
+using Server.Managers.Storages.WorkDoctorManager;
 
 namespace Server.Services.Foundation.ResultRadioService
 {
@@ -30,8 +32,12 @@ namespace Server.Services.Foundation.ResultRadioService
         public readonly IRadioResultManager radioResultManager;
         public readonly IRadiologyManager radiologyManager;
         public readonly IMailService mailService;
-        public ResultRadioService(IFileMedicalManager FileMedicalManager,IMailService mailService,IRadiologyManager radiologyManager,IRadioResultManager radioResultManager,ILineRadioMedicalManager lineRadioMedicalManager,IDoctorManager doctorManager,IUserManager userManager, UserManager<User> _UserManager, IOrdreMedicalManager ordreMedicalManager, IRadioManager radioManager)
+        public readonly IPlanningAppoimentManager planningAppoimentManager;
+        public readonly IWorkDoctorManager workDoctorManager;
+        public ResultRadioService(IWorkDoctorManager workDoctorManager,IPlanningAppoimentManager planningAppoimentManager,IFileMedicalManager FileMedicalManager,IMailService mailService,IRadiologyManager radiologyManager,IRadioResultManager radioResultManager,ILineRadioMedicalManager lineRadioMedicalManager,IDoctorManager doctorManager,IUserManager userManager, UserManager<User> _UserManager, IOrdreMedicalManager ordreMedicalManager, IRadioManager radioManager)
         {
+            this.workDoctorManager = workDoctorManager;
+            this.planningAppoimentManager = planningAppoimentManager;
             this.mailService = mailService;
             this.radiologyManager = radiologyManager;
             this.lineRadioMedicalManager = lineRadioMedicalManager;
@@ -69,5 +75,31 @@ namespace Server.Services.Foundation.ResultRadioService
                 var MailRequest = MapperToMailRequestAddRadioResult(UserAccountPatient, UserAccountRadiology, LineRadio);
                await this.mailService.SendEmailNotification(MailRequest);
             });
+
+        public async Task<FileResultDto> GetFileResultRadio(string Email, string AppointmentId, string LineRadioId) =>
+            await TryCatch_(async () =>
+            {
+                ValidateEntryOnGetFileResult(Email, AppointmentId, LineRadioId);
+                var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccountDoctor);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccountDoctor.Id);
+                ValidationDoctorIsNull(Doctor);
+                var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(AppointmentId));
+                ValidatePlanningIsNull(Appointment);
+                ValidateAppointmentWithDoctor(Appointment, Doctor);
+                var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Doctor.Id, Appointment.IdCabinet);
+                ValidateWorkDoctorIsNull(WorkDoctor);
+                /****/
+                var LineRadio = await this.lineRadioMedicalManager.SelectLineRadioById(DecryptGuid(LineRadioId));
+                ValidateLineRadio(LineRadio);
+                var Radio = await this.radioManager.SelectRadioByIdAsync(LineRadio.IdRadio);
+                ValidateRadioIsNull(Radio);
+                var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Radio.IdOrdreMedical);
+                ValidateOrdreMedical(OrdreMedical);
+                var ResultLineRadio = await this.radioResultManager.SelectRadioResultByIdLineRadio(LineRadio.Id);
+                ValidateResultLineMedical(ResultLineRadio);
+                return MapperToFileResultDto(ResultLineRadio);
+            });
+       
     }
 }

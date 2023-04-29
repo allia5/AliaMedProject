@@ -7,6 +7,27 @@ namespace Server.Services.Foundation.ResultAnalyseService
     public partial class ResultAnalyseService
     {
         public delegate Task OnPostResultAnalyse();
+        public delegate Task<FileResultDto> OnGetFileResultAnalyse();
+
+        public async Task<FileResultDto> TryCatch_(OnGetFileResultAnalyse onGetFileResultAnalyse)
+        {
+            try
+            {
+                return await onGetFileResultAnalyse();
+            }
+            catch ()
+            {
+
+            }
+            catch ()
+            {
+
+            }
+            catch ()
+            {
+
+            }
+        }
         public async Task TryCatch(OnPostResultAnalyse onPostResultAnalyse )
         {
             try

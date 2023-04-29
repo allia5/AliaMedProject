@@ -1,4 +1,5 @@
-﻿using Server.Models.Doctor.Exceptions;
+﻿using DTO;
+using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 
 namespace Server.Services.Foundation.ResultRadioService
@@ -6,6 +7,27 @@ namespace Server.Services.Foundation.ResultRadioService
     public partial class ResultRadioService
     {
         public delegate Task OnAddResultRadio();
+        public delegate Task<FileResultDto> OnGetFileResultRadio();
+
+        public async Task<FileResultDto> TryCatch_(OnGetFileResultRadio onGetFileResultRadio)
+        {
+            try
+            {
+                return await onGetFileResultRadio();
+            }
+            catch ()
+            {
+
+            }
+            catch ()
+            {
+
+            }
+            catch ()
+            {
+
+            }
+        }
         public async Task TryCatch(OnAddResultRadio onAddResultRadio)
         {
             try
