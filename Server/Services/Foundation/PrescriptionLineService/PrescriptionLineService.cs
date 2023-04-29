@@ -58,7 +58,9 @@ namespace Server.Services.Foundation.PrescriptionLineService
                 ValidatePrescriptionLine(PrescriptionLine);
                 var Prescription = await this.prescriptionManager.SelectPrescriptioById(PrescriptionLine.IdPrescription);
                 ValidatePrescriptionIsNull(Prescription);
-                var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdOrdreMedicalAsync(Prescription.IdMedicalOrdre);
+                var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Prescription.IdMedicalOrdre);
+                ValidateOrdreMedicalIsNull(OrdreMedical);
+                var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdOrdreMedicalAsync(OrdreMedical.Id);
                 ValidateFileMedicalIsNull(FileMedical);
                 var UserAccountPatient = await this._UserManager.FindByIdAsync(FileMedical.IdUser);
                 validationPatientIsNull(UserAccountPatient);

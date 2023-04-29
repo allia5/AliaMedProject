@@ -93,7 +93,7 @@ namespace Server.Services.Foundation.ResultRadioService
         }
        public void ValidateLineRadioIsNull(LineRadioMedicals lineRadioMedicals)
         {
-            if(lineRadioMedicals == null)
+            if(lineRadioMedicals == null && lineRadioMedicals.Status == StatusRadio.validate)
             {
                 throw new NullDataStorageException(nameof(lineRadioMedicals));
             }
@@ -114,7 +114,7 @@ namespace Server.Services.Foundation.ResultRadioService
 
         public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
         {
-            if (medicalOrdres == null)
+            if (medicalOrdres == null || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
             {
                 throw new ArgumentNullException(nameof(medicalOrdres));
             }

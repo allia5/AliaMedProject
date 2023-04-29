@@ -20,13 +20,13 @@ namespace Server.Managers.Storages.LineRadioMedicalManager
 
         public async Task<List<LineRadioMedicals>> SelectAllLineMedicalByIdRadio(Guid RadioId)
         {
-            return await (from itemLineRadio in this.serverDbContext.LineRadioMedicals where itemLineRadio.IdRadio == RadioId && itemLineRadio.Status == Models.RadioMedical.StatusRadio.notValidate select itemLineRadio).ToListAsync();
+            return await (from itemLineRadio in this.serverDbContext.LineRadioMedicals where itemLineRadio.IdRadio == RadioId /*&& itemLineRadio.Status == Models.RadioMedical.StatusRadio.notValidate*/ select itemLineRadio).ToListAsync();
         }
 
         public async Task<LineRadioMedicals> SelectLineRadioById(Guid LineRadioId)
         {
             return await (from LineRadio in this.serverDbContext.LineRadioMedicals 
-                          where LineRadio.Id == LineRadioId && LineRadio.Status == Models.RadioMedical.StatusRadio.notValidate
+                          where LineRadio.Id == LineRadioId /*&& LineRadio.Status == Models.RadioMedical.StatusRadio.notValidate*/
                           select LineRadio ).FirstOrDefaultAsync();
         }
 

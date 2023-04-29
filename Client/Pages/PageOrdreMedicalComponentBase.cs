@@ -76,11 +76,11 @@ namespace Client.Pages
 
                 // Save the file
                 var FileResult = await this.lineRadioResultService.GetFileResultRadio(AppointmentId,LineRadioId);
-                if(FileResult.DataFile != null)
+                if(FileResult.DataFile != null && FileResult.FileType != null)
                 {
                     MemoryStream stream = new MemoryStream(FileResult.DataFile);
                     using var streamRef = new DotNetStreamReference(stream: stream);
-                    var fileName = "File.pdf";
+                    var fileName = "File"+FileResult.FileType;
                     await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
                 }
                 else
@@ -88,6 +88,39 @@ namespace Client.Pages
                     throw new Exception("File Is Empty");
                 }
               
+
+
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+
+
+        }
+
+        protected async Task DownloadFileAnalyse(string LineAnalyseId)
+        {
+            try
+            {
+
+
+                // Save the file
+                var FileResult = await this.LineAnalyseResultService.GetFileResultAnalyse(AppointmentId, LineAnalyseId);
+                if (FileResult.DataFile != null && FileResult.FileType != null)
+                {
+                    MemoryStream stream = new MemoryStream(FileResult.DataFile);
+                    using var streamRef = new DotNetStreamReference(stream: stream);
+                    var fileName = "FileAnalyse" + FileResult.FileType;
+                    await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+                }
+                else
+                {
+                    throw new Exception("File Is Empty");
+                }
+
 
 
 

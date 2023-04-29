@@ -18,6 +18,8 @@ namespace Client.Services.Foundations.LineRadioResultService
 
         public async Task<FileResultDto> GetFileResultRadio(string IdAppointment, string IdLineRadio)
         {
+            IdAppointment = IdAppointment.Replace("/", "-");
+            IdLineRadio =IdLineRadio.Replace("/", "-");
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/ResultLineRadio/GetResultFileRadio/{IdAppointment}/{IdLineRadio}");
             var JwtBearer = await this.LocalStorageService.GetItemAsync<JwtDto>("JwtLocalStorage");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);

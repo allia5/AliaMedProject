@@ -18,6 +18,8 @@ namespace Client.Services.Foundations.LineAnalyseResultService
         }
         public async Task<FileResultDto> GetFileResultAnalyse(string IdAppointment, string IdLineAnalyse)
         {
+            IdAppointment = IdAppointment.Replace("/", "-");
+            IdLineAnalyse = IdLineAnalyse.Replace("/", "-");
             var request = new HttpRequestMessage(HttpMethod.Get, $"/api/ResultLineAnalyse/GetResultFileAnalyse/{IdAppointment}/{IdLineAnalyse}");
             var JwtBearer = await this.LocalStorageService.GetItemAsync<JwtDto>("JwtLocalStorage");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);

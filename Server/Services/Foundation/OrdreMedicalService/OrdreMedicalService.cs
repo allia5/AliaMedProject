@@ -344,6 +344,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                         if(RadioMedical != null)
                         {
                             var ListLineRadioMedical = await this.lineRadioMedicalManager.SelectAllLineMedicalByIdRadio(RadioMedical.Id);
+                         
                             foreach (var LineRadio in ListLineRadioMedical)
                             {
                                 var RadioLineInformation = MapperToRadioLineInformationDto(LineRadio);

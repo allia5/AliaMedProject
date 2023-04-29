@@ -92,7 +92,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
 
         public void ValidateOrdreMedical(MedicalOrdres medicalOrdres)
         {
-            if(medicalOrdres == null)
+            if(medicalOrdres == null || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
             {
                 throw new NotFoundException(nameof(medicalOrdres));
             }
@@ -104,7 +104,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
 
         public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
         {
-            if (medicalOrdres == null)
+            if (medicalOrdres == null || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
             {
                 throw new ArgumentNullException(nameof(medicalOrdres));
             }

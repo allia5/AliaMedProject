@@ -32,6 +32,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
         {
             lineAnalyseMedicals.IdSpecialisteAnalyse=IdSpecialisteAnalyse;
             lineAnalyseMedicals.DateValidation = DateTime.Now;
+            lineAnalyseMedicals.Status = Models.Analyse.StatusAnalyse.validate;
             return lineAnalyseMedicals;
         }
         public static MailRequest MapperToMailRequestAddAnalyseResult(User UserAccountPatient, User UserAccountSpecialisteAnalyse, LineAnalyseMedicals lineAnalyseMedicals)

@@ -21,28 +21,32 @@ namespace Server.Utility
 
         public static string GetFileType(byte[] byteArray)
         {
-            string fileExtension = Path.GetExtension(Path.GetRandomFileName());
-            string tempFilePath = Path.ChangeExtension(Path.GetTempFileName(), fileExtension);
+            // Define the file signatures for each supported file type
+            Dictionary<string, string> fileSignatures = new Dictionary<string, string>
+    {
+         { ".jpg", "FFD8FF" },
+    { ".pdf", "25504446" },
+    { ".docx", "504B0304" },
+    { ".pptx", "504B0304" },
+    { ".png", "89504E47" },
+    { ".txt", "None" },
+    { ".html", "3C68746D6C" }
+    };
 
-            using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write))
+            // Get the file signature from the byte array
+            string fileSignature = BitConverter.ToString(byteArray.Take(4).ToArray()).Replace("-", "");
+
+            // Determine the file type based on the file signature
+            foreach (KeyValuePair<string, string> entry in fileSignatures)
             {
-                fileStream.Write(byteArray, 0, byteArray.Length);
+                if (fileSignature.StartsWith(entry.Value))
+                {
+                    return entry.Key;
+                }
             }
 
-            string fileType = "";
-
-            try
-            {
-                fileType = new FileExtensionContentTypeProvider().Mappings[fileExtension];
-            }
-            catch
-            {
-                fileType = "application/octet-stream";
-            }
-
-            File.Delete(tempFilePath);
-
-            return fileType;
+            // If no matching file type was found, return "unknown"
+            return "unknown";
         }
 
         public static string EncryptString(string plainText, string key)

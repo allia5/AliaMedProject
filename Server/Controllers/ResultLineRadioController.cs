@@ -26,6 +26,8 @@ namespace Server.Controllers
         {
             try
             {
+                AppointmentId = AppointmentId.Replace("-", "/");
+                LineRadioId = LineRadioId.Replace("-", "/");
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 return await this.resultRadioService.GetFileResultRadio(Email, AppointmentId, LineRadioId);
             }

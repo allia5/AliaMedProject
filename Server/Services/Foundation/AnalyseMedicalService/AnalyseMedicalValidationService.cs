@@ -50,7 +50,7 @@ namespace Server.Services.Foundation.AnalyseMedicalService
        
         public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
         {
-            if (medicalOrdres == null)
+            if (medicalOrdres == null || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
             {
                 throw new ArgumentNullException(nameof(medicalOrdres));
             }

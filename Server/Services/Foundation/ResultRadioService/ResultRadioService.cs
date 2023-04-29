@@ -63,7 +63,9 @@ namespace Server.Services.Foundation.ResultRadioService
                 ValidateLineRadioIsNull(LineRadio);
                 var Radio = await this.radioManager.SelectRadioByIdAsync(LineRadio.IdRadio);
                 ValidateRadioIsNull(Radio);
-                var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdOrdreMedicalAsync(Radio.IdOrdreMedical);
+                var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Radio.IdOrdreMedical);
+                ValidateOrdreMedicalIsNull(OrdreMedical);
+                var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdOrdreMedicalAsync(OrdreMedical.Id);
                 ValidateFileMedicalIsNull(FileMedical);
                 var UserAccountPatient = await this._UserManager.FindByIdAsync(FileMedical.IdUser);
                 validationPatientIsNull(UserAccountPatient);

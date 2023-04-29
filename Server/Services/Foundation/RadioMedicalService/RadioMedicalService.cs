@@ -70,7 +70,7 @@ namespace Server.Services.Foundation.RadioMedicalService
                 var Radio = await this.radioManager.SelectRadioByCodeAsync(codeQr);
                 ValidateRadioIsNull(Radio);
                 var LinesRadio = await this.lineRadioMedicalManager.SelectAllLineMedicalByIdRadio(Radio.Id);
-                
+                LinesRadio = LinesRadio.Where(e => e.Status == Models.RadioMedical.StatusRadio.notValidate).ToList();
                 var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Radio.IdOrdreMedical);
                 ValidateOrdreMedicalIsNull(OrdreMedical);
                 var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdAsync(OrdreMedical.IdFileMedical);

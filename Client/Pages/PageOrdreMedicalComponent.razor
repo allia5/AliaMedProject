@@ -57,7 +57,7 @@
                 <p class="card-text"> @OrdreMedicalItem?.medicalOrdreDetails?.Summary</p>
                 @if(OrdreMedicalItem != null)
                 {
-                    <button @onclick="()=>OnSelectOrdreMedical(OrdreMedicalItem.medicalOrdreDetails.Id)" class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Detail</button>
+                    <button @onclick="()=>OnSelectOrdreMedical(OrdreMedicalItem.medicalOrdreDetails.Id)" class="btn btn-primary" data-bs-target="#exampleModalToggleChoix" data-bs-toggle="modal" data-bs-dismiss="modal">Detail</button>
                 }
                
             </div>
@@ -79,7 +79,7 @@
 
 
 <!-- Modal Choix -->
-<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+<div class="modal fade" id="exampleModalToggleChoix" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -169,7 +169,7 @@
                                     <td>@RadioItem.statusRadio.ToString()</td>
                                    @if( RadioItem.statusRadio == DTO.StatusRadioDto.validate)
                                     {
-                                    <td><button class="btn btn-secondary">Download</button></td>
+                                        <td><button @onclick="()=>DownloadFileRadio(RadioItem.IdLineRadio)" class="btn btn-secondary">Download</button></td>
                                     }
                                   
                                     
@@ -210,7 +210,7 @@
                                     <td>@AnalyseItem.statusAnalyse.ToString()</td>
                                     @if(AnalyseItem.statusAnalyse== DTO.StatusAnalyseDto.validate)
                                     {
-                                        <td><button class="btn btn-secondary">Download</button></td>
+                                        <td><button @onclick="()=>DownloadFileAnalyse(AnalyseItem.IdLineAnalyse)" class="btn btn-secondary">Download</button></td>
                                     }
                                   
 

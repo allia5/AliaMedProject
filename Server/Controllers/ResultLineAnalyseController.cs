@@ -26,6 +26,8 @@ namespace Server.Controllers
         {
             try
             {
+                AppointmentId = AppointmentId.Replace("-", "/");
+                LineAnalyseId = LineAnalyseId.Replace("-", "/");
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 return await this.resultAnalyseService.GetFileResultAnalyse(Email,AppointmentId,LineAnalyseId);
             }
