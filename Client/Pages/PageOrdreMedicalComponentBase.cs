@@ -39,10 +39,6 @@ namespace Client.Pages
         [Parameter]
         public string FileId { get; set; }
 
-       
-           
-
-
 
         [Inject]
         protected NavigationManager NavigationManager { get; set; }

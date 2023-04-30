@@ -1,0 +1,26 @@
+﻿@page "/FilesMedicalPatient"
+@inherits PatientFilesMedicalComponentBase
+
+
+
+
+@if (IsLoading == true)
+{
+    <WaitComponent />
+}
+
+
+@foreach (var File in this.FileMedicalPatients)
+{
+    <div class="card">
+        <h5 class="card-header">Featured</h5>
+        <div class="card-body">
+            <h5 class="card-title">Full Name :@File.FirstName, @File.LastName</h5>
+            <p class="card-text">Date Of Birth : @File.DateOfBirth</p>
+             <p class="card-text">Sexe : @File.Sexe</p>
+            <p class="card-text">Number Of Ordre Medical :@File.CountOrderMedical</p>
+            <p class="card-text">Date Create :@File.DateOfCreate</p>
+            <a class="btn btn-primary" href="/MedicalFileArchivePatient/@File.Id.Replace("/","-")">View Archive File Medical</a>
+        </div>
+    </div>
+}

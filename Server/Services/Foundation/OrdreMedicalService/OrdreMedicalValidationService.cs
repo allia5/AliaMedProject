@@ -215,5 +215,16 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 throw new ArgumentNullException(nameof(AppointmentId));
             }
         }
+        public void ValidateEntryOnGetArchiveOrdreFileMedicalPatient(string Email, string FileId)
+        {
+            if (Email.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(Email));
+            }
+            if (FileId.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(FileId));
+            }
+        }
     }
 }

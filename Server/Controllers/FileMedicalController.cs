@@ -25,7 +25,7 @@ namespace Server.Controllers
 
 
         [HttpGet("GetMedicalFilePatient")]
-        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
         public async Task<ActionResult<List<FileMedicalPatientDto>>> GetFilesPatient()
         {
             try

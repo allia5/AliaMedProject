@@ -390,6 +390,101 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
             });
-       
+
+        public async Task<MedicalFileArchiveDto> GetMedecalArchivePatient(string Email, string FileId) =>
+            await TryCatch_(async () =>
+            {
+                MedicalFileArchiveDto medicalFileArchiveDto = new MedicalFileArchiveDto();
+                List<MedicalOrdresDto> medicalOrdres = new List<MedicalOrdresDto>();
+                MedicalOrdreDetails MedicalOrdreDetails = new MedicalOrdreDetails();
+                List<PrescriptionLineInformationDto> prescriptionLinesInformationDto = new List<PrescriptionLineInformationDto>();
+                List<RadioLineInformationDto> radioLinesInformationDto = new List<RadioLineInformationDto>();
+                List<AnalyseLineInformationDto> analyseLinesInformationDto = new List<AnalyseLineInformationDto>();
+                ValidateEntryOnGetArchiveOrdreFileMedicalPatient(Email, FileId);
+                var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccountDoctor);
+                /*var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccountDoctor.Id);
+                ValidationDoctorIsNull(Doctor);*/
+              /*  var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(AppointmentId));
+                ValidatePlanningIsNull(Appointment);
+                ValidateAppointmentWithDoctor(Appointment, Doctor);*/
+               /* var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Doctor.Id, Appointment.IdCabinet);
+                ValidateWorkDoctorIsNull(WorkDoctor);*/
+                var fileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(DecryptGuid(FileId));
+                validateeFileMedicalIsNull(fileMedical);
+                medicalFileArchiveDto.informationFileMedical = MapperToInformationFileMedical(fileMedical);
+                var ListOrdreMedical = await this.ordreMedicalManager.SelectListOrdreMedicalByIdMedicalFile(fileMedical.Id);
+                ListOrdreMedical = ListOrdreMedical.Where(e =>e.Status == Models.MedicalOrder.StatuseOrdreMedical.validate).ToList();
+                foreach (var ItemOrdreMedical in ListOrdreMedical)
+                {
+                    var UserAccountDoctorOrdreMedical = await this.userManager.SelectUserByIdDoctor(ItemOrdreMedical.IdDoctor);
+                    if (UserAccountDoctorOrdreMedical != null && UserAccountDoctorOrdreMedical.Status != UserStatus.Deactivated)
+                    {
+                        var Specialities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(ItemOrdreMedical.IdDoctor);
+                        var InformationDoctor = MapperToDoctorInformationDto(Specialities, UserAccountDoctorOrdreMedical);
+                        var Prescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(ItemOrdreMedical.Id);
+                        if (Prescription != null)
+                        {
+                            var ListPrescliptionLine = await this.PrescriptionLineManager.SelectLinePrescriptionByIdPrescription(Prescription.Id);
+                            foreach (var Line in ListPrescliptionLine)
+                            {
+                                var PrescriptionLinInformation = MapperToPrescriptionLineInformationDto(Line);
+                                prescriptionLinesInformationDto.Add(PrescriptionLinInformation);
+                            }
+                        }
+                        else
+                        {
+                            prescriptionLinesInformationDto = null;
+                        }
+                        var RadioMedical = await this.radioManager.SelectRadioByIdMedicalOrdre(ItemOrdreMedical.Id);
+                        if (RadioMedical != null)
+                        {
+                            var ListLineRadioMedical = await this.lineRadioMedicalManager.SelectAllLineMedicalByIdRadio(RadioMedical.Id);
+
+                            foreach (var LineRadio in ListLineRadioMedical)
+                            {
+                                var RadioLineInformation = MapperToRadioLineInformationDto(LineRadio);
+                                radioLinesInformationDto.Add(RadioLineInformation);
+                            }
+                        }
+                        else
+                        {
+                            radioLinesInformationDto = null;
+                        }
+                        var AnalyseMedical = await this.analyseManager.SelectAnalyseByOrdreMedicalId(ItemOrdreMedical.Id);
+                        if (AnalyseMedical != null)
+                        {
+                            var ListLineAnalyseMedical = await this.lineAnalyseMedicalManager.SelectLinesMedicalByIdAnalyseAsync(AnalyseMedical.Id);
+                            foreach (var LineAnalyse in ListLineAnalyseMedical)
+                            {
+                                var LineAnalyseInformation = MapperToAnalyseLineInformationDto(LineAnalyse);
+                                analyseLinesInformationDto.Add(LineAnalyseInformation);
+
+                            }
+                        }
+                        else
+                        {
+                            analyseLinesInformationDto = null;
+                        }
+                        MedicalOrdreDetails = MapperToMedicalOrdreDetails(ItemOrdreMedical, analyseLinesInformationDto, radioLinesInformationDto, prescriptionLinesInformationDto);
+                        var medicalOrdre = MapperToMedicalOrdresDto(MedicalOrdreDetails, InformationDoctor);
+                        medicalOrdres.Add(medicalOrdre);
+                        analyseLinesInformationDto = new List<AnalyseLineInformationDto>();
+                        radioLinesInformationDto = new List<RadioLineInformationDto>();
+                        prescriptionLinesInformationDto = new List<PrescriptionLineInformationDto>();
+
+
+                    }
+
+
+                }
+                medicalFileArchiveDto.medicalOrdres = medicalOrdres;
+
+                return medicalFileArchiveDto;
+
+
+
+
+            });
     }
 }

@@ -206,5 +206,31 @@ namespace Client.Services.Foundations.FileMedicalService
                 throw new ProblemException("intern Exception");
             }
         }
+
+        public async Task<List<FileMedicalPatientDto>> GetFilePatient()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/FileMedical/GetMedicalFilePatient");
+            var JwtBearer = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await httpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<List<FileMedicalPatientDto>>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+            }else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new PreconditionFailedException("failed Precodition Accec to ressource");
+            }
+            else
+            {
+                throw new ProblemException("Error intern");
+            }
+        }
     }
 }
