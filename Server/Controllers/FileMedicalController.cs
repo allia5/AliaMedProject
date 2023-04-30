@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models.Doctor.Exceptions;
 using Server.Services.Foundation.FileMedicalService;
+using Syncfusion.Pdf.Interactive;
 using System.Security.Claims;
 using System.Text;
 using System.Transactions;
@@ -23,7 +24,26 @@ namespace Server.Controllers
         }
 
 
-
+        [HttpGet("GetMedicalFilePatient")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult<List<FileMedicalPatientDto>>> GetFilesPatient()
+        {
+            try
+            {
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                
+                    return await this.FileMedicalService.GetFilesMedicalPatient(Email);
+              
+               
+            }
+            catch(ServiceException Ex)
+            {
+                return StatusCode(412);
+            }catch(Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
 
         [HttpGet("DownloadFilePrescription/{Id}")]
         public async Task<IActionResult> GetFilePrescription(string Id)

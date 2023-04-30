@@ -10,6 +10,7 @@ using static Server.Utility.Utility;
 using static Server.Services.Foundation.PlanningAppoimentService.PlanningAppoimentMapperService;
 using static Server.Services.Foundation.ChronicDiseasesService.ChronicDiseasesMapperService;
 using static Server.Services.Foundation.FileMedicalService.FileMedicalMapperService;
+using static Server.Services.Foundation.DoctorService.DoctorServiceMapper;
 using Server.Managers.Storages.ChronicDiseasesManager;
 using Server.Managers.Storages.FileChronicDiseasesManager;
 using Server.Managers.Storages.WorkDoctorManager;
@@ -19,6 +20,7 @@ using Server.Managers.Storages.CabinetMedicalManager;
 using Server.Managers.Storages.PrescriptionManager;
 using Server.Managers.Storages.RadioManager;
 using Server.Managers.Storages.AnalyseManager;
+using Server.Models.SpecialtieDoctor;
 
 namespace Server.Services.Foundation.FileMedicalService
 {
@@ -205,5 +207,43 @@ namespace Server.Services.Foundation.FileMedicalService
                 ValidateAnalyseIsNull(FileAnalyse);
                 return FileAnalyse.FileAnalyse;
             });
+
+        public async Task<List<FileMedicalPatientDto>> GetFilesMedicalPatient(string Email) =>
+            await TryCatch_(async () =>
+            {
+                List<FileMedicalPatientDto> fileMedicalPatientDtos = new List<FileMedicalPatientDto>();
+                List<chronicDiseasesDto> chronicDiseasesDtos = new List<chronicDiseasesDto>();
+                var UserAccount = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccount);
+                var FilesUserAccount = await this.fileMedicalManager.SelectFilesMedicalByIdUser(UserAccount.Id);
+                foreach (var File in FilesUserAccount)
+                {
+                    var UserAccountDoctor = await this.userManager.SelectUserByIdDoctor(File.IdDoctor);
+                    if(UserAccountDoctor != null)
+                    {
+                        var Specialities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(File.IdDoctor);
+                       // var DoctorInformation = MapperToDoctorInformationDto(Specialities, UserAccountDoctor);
+                        var ListOrdreMedicalFileMeicalPatient = await this.ordreMedicalManager.SelectListOrdreMedicalByIdMedicalFile(File.Id);
+                        var ChronicDeasesFileMedical = await this.chronicDiseasesManager.SelectChronicDiseasesByIdMedicalFileAsync(File.Id);
+                        foreach(var ItemChronicFile in ChronicDeasesFileMedical)
+                        {
+                            var ChrocinDisease = await this.chronicDiseasesManager.SelectChronicDiseasesByIdAsync(ItemChronicFile.IdChronicDisease);
+                            if(ChrocinDisease != null)
+                            {
+                              var  chronicDiseasesDto = MapperTochronicDiseasesDto(ChrocinDisease);
+                                chronicDiseasesDtos.Add(chronicDiseasesDto);
+                            }
+                        }
+                        if (UserAccountDoctor != null && chronicDiseasesDtos != null && Specialities != null)
+                        {
+                            var resultMappingFileMedicalPatientDto = MapperTofileMedicalPatientDtos(ListOrdreMedicalFileMeicalPatient.Count(), chronicDiseasesDtos, UserAccountDoctor, File, Specialities);
+                            fileMedicalPatientDtos.Add(resultMappingFileMedicalPatientDto);
+                        }
+                        chronicDiseasesDtos = new List<chronicDiseasesDto>();
+                    }
+                }
+                return fileMedicalPatientDtos;
+            });
+        
     }
 }

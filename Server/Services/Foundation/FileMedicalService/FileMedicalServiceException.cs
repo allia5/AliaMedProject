@@ -10,6 +10,23 @@ namespace Server.Services.Foundation.FileMedicalService
         public delegate Task<FileMedicalMainPatientDto> ReturningFileMedicalMainPatientAsync();
         public delegate Task ReturningUpdateFileMedical();
         public delegate Task<byte[]> ReturningByteFileMedical();
+        public delegate Task<List<FileMedicalPatientDto>> ReturningListFileMedicalPatientAsync();   
+
+        public async Task<List<FileMedicalPatientDto>> TryCatch_(ReturningListFileMedicalPatientAsync returningListFileMedical)
+        {
+            try
+            {
+                return await returningListFileMedical();
+            }
+            catch (NullException Ex)
+            {
+                throw new ServiceException(Ex);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         public async Task<byte[]> TryCatch(ReturningByteFileMedical returningByteFileMedical)
         {
