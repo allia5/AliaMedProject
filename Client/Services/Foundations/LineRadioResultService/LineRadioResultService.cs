@@ -55,5 +55,46 @@ namespace Client.Services.Foundations.LineRadioResultService
                 throw new ProblemException("Error Intern");
             }
         }
+
+        public async Task<FileResultDto> GetFileResultRadioPatient(string IdLineRadio)
+        {
+          
+            IdLineRadio = IdLineRadio.Replace("/", "-");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/ResultLineRadio/GetResultFileRadioPatient/{IdLineRadio}");
+            var JwtBearer = await this.LocalStorageService.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await HttpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<FileResultDto>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new BadRequestException("Request Denied");
+            }
+            else if (result.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException("Ressource Not Found");
+            }
+            else
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
     }
 }

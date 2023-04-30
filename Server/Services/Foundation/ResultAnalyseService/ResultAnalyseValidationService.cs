@@ -20,6 +20,13 @@ namespace Server.Services.Foundation.ResultAnalyseService
 {
     public partial class ResultAnalyseService
     {
+        public void ValidateEntryOnGetFileResultPatient(string Email ,string LineId)
+        {
+            if (Email.IsNullOrEmpty() ||  LineId.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException();
+            }
+        }
         public void ValidateEntryOnGetFileResult(string Email,string AppointmentId , string LineId)
         {
             if(Email.IsNullOrEmpty() || AppointmentId.IsNullOrEmpty() || LineId.IsNullOrEmpty())

@@ -77,7 +77,33 @@ namespace Server.Services.Foundation.ResultAnalyseService
 
 
             });
-        
+
+        public async Task<FileResultDto> GetFileResultAnalysePatient(string Email, string LineAnalyseId) =>
+            await TryCatch_(async () =>
+            {
+                ValidateEntryOnGetFileResultPatient(Email,LineAnalyseId);
+                var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccountDoctor);
+              /*  var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccountDoctor.Id);
+                ValidationDoctorIsNull(Doctor);
+                var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(AppointmentId));
+                ValidatePlanningIsNull(Appointment);
+                ValidateAppointmentWithDoctor(Appointment, Doctor);
+                var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Doctor.Id, Appointment.IdCabinet);
+                ValidateWorkDoctorIsNull(WorkDoctor);*/
+                /*-----*/
+                var LineAnalyse = await this.lineAnalyseMedicalManager.SelectLineAnalyseById(DecryptGuid(LineAnalyseId));
+                ValidateLineAnlayse(LineAnalyse);
+                var Analyse = await this.AnalyseManager.SelectAnalyseByIdAsync(LineAnalyse.IdAnalyse);
+                ValidateAnalyseIsNull(Analyse);
+                var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Analyse.IdOrdreMedical);
+                ValidateOrdreMedical(OrdreMedical);
+                var ResultLineAnalyse = await this.analyseResultManager.SelectResultAnalyseByIdLineMedcialAnalyse(LineAnalyse.Id);
+                ValidateResultLineMedical(ResultLineAnalyse);
+                return MapperToFileResultDto(ResultLineAnalyse);
+
+
+            });
 
         public async Task PostNewAnalyseResult(string Email, AnalyseResultToAdd analyseResultToAdd) =>
             await TryCatch(async () =>

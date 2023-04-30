@@ -48,5 +48,33 @@ namespace Server.Controllers
                 return Problem(e.Message);
             }
         }
+        [HttpGet("GetResultFileAnalysePatient/{LineAnalyseId}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
+        public async Task<ActionResult<FileResultDto>> GetFileResultAnalysePatient(string LineAnalyseId)
+        {
+            try
+            {
+          
+                LineAnalyseId = LineAnalyseId.Replace("-", "/");
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.resultAnalyseService.GetFileResultAnalysePatient(Email, LineAnalyseId);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest();
+            }
+            catch (StorageValidationException Ex)
+            {
+                return NotFound();
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
     }
 }

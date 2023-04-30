@@ -102,6 +102,30 @@ namespace Server.Services.Foundation.ResultRadioService
                 ValidateResultLineMedical(ResultLineRadio);
                 return MapperToFileResultDto(ResultLineRadio);
             });
-       
+
+        public async Task<FileResultDto> GetFileResultRadioPatient(string Email, string LineRadioId) =>
+            await TryCatch_(async () =>
+            {
+                ValidateEntryOnGetFileResulPatient(Email,LineRadioId);
+                var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccountDoctor);
+               /* var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccountDoctor.Id);
+                ValidationDoctorIsNull(Doctor);
+                var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(AppointmentId));
+                ValidatePlanningIsNull(Appointment);
+                ValidateAppointmentWithDoctor(Appointment, Doctor);
+                var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Doctor.Id, Appointment.IdCabinet);
+                ValidateWorkDoctorIsNull(WorkDoctor);*/
+                /****/
+                var LineRadio = await this.lineRadioMedicalManager.SelectLineRadioById(DecryptGuid(LineRadioId));
+                ValidateLineRadio(LineRadio);
+                var Radio = await this.radioManager.SelectRadioByIdAsync(LineRadio.IdRadio);
+                ValidateRadioIsNull(Radio);
+                var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Radio.IdOrdreMedical);
+                ValidateOrdreMedical(OrdreMedical);
+                var ResultLineRadio = await this.radioResultManager.SelectRadioResultByIdLineRadio(LineRadio.Id);
+                ValidateResultLineMedical(ResultLineRadio);
+                return MapperToFileResultDto(ResultLineRadio);
+            });
     }
 }

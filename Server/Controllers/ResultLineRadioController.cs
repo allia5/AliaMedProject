@@ -48,5 +48,33 @@ namespace Server.Controllers
                 return Problem(e.Message);
             }
         }
+        [HttpGet("GetResultFileRadioPatient/{LineRadioId}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult<FileResultDto>> GetFileResultRadioPatient( string LineRadioId)
+        {
+            try
+            {
+                
+                LineRadioId = LineRadioId.Replace("-", "/");
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.resultRadioService.GetFileResultRadioPatient(Email, LineRadioId);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest();
+            }
+            catch (StorageValidationException Ex)
+            {
+                return NotFound();
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
     }
 }

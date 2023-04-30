@@ -18,6 +18,13 @@ namespace Server.Services.Foundation.ResultRadioService
 {
     public partial class ResultRadioService
     {
+        public void ValidateEntryOnGetFileResulPatient(string Email , string LineId)
+        {
+            if (Email.IsNullOrEmpty() ||  LineId.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException();
+            }
+        }
         public void ValidateResultLineMedical(ResultRadio resultRadio)
         {
             if (resultRadio == null)

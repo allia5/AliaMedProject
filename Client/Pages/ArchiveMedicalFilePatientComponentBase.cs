@@ -75,7 +75,7 @@ namespace Client.Pages
 
 
                 // Save the file
-                var FileResult = await this.lineRadioResultService.GetFileResultRadio("", LineRadioId);
+                var FileResult = await this.lineRadioResultService.GetFileResultRadioPatient(LineRadioId);
                 if (FileResult.DataFile != null && FileResult.FileType != null)
                 {
                     MemoryStream stream = new MemoryStream(FileResult.DataFile);
@@ -108,7 +108,7 @@ namespace Client.Pages
 
 
                 // Save the file
-                var FileResult = await this.LineAnalyseResultService.GetFileResultAnalyse("", LineAnalyseId);
+                var FileResult = await this.LineAnalyseResultService.GetFileResultAnalysePatient(LineAnalyseId);
                 if (FileResult.DataFile != null && FileResult.FileType != null)
                 {
                     MemoryStream stream = new MemoryStream(FileResult.DataFile);
