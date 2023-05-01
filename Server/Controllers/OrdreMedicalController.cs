@@ -22,7 +22,7 @@ namespace Server.Controllers
         }
         [HttpGet("GetAllOrdreArchiveFileMedcialPatient/{FileId}")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
-        public async Task<ActionResult<MedicalFileArchiveDto>> GetMedicalArchivePatient( string FileId)
+        public async Task<ActionResult<MedicalFileArchivePatientDto>> GetMedicalArchivePatient( string FileId)
         {
             try
             {

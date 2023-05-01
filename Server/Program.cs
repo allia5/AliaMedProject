@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Server.Data;
 using Server.Hubs.PlanningAppoimentHub;
+using Server.Managers.Storages.AdviceManager;
 using Server.Managers.Storages.AnalyseManager;
 using Server.Managers.Storages.AnalyseResultManager;
 using Server.Managers.Storages.CabinetMedicalManager;
@@ -143,6 +144,7 @@ builder.Services.AddScoped<IPharmacistManager, PharmacistManager>();
 builder.Services.AddScoped<ILinePrescriptionMedicalManager, LinePrescriptionMedicalManager>();
 builder.Services.AddScoped<IPrescriptionLineService, PrescriptionLineService>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IAdviceManager, AdviceManager>();
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers();

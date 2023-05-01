@@ -28,6 +28,7 @@ using Server.Models.Prescriptions;
 using Server.Managers.Storages.LineRadioMedicalManager;
 using Server.Managers.Storages.LineAnalyseMedicalManager;
 using Server.Managers.Storages.LinePrescriptionMedicalManager;
+using Server.Managers.Storages.AdviceManager;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -52,9 +53,12 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public readonly IMailService mailService;
         public readonly ILineRadioMedicalManager lineRadioMedicalManager;
         public readonly ILineAnalyseMedicalManager lineAnalyseMedicalManager;
+        public readonly IAdviceManager adviceManager;
         
-        public OrdreMedicalService(ILineRadioMedicalManager lineRadioMedicalManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager,IMailService mailService,ISecretaryManager secretaryManager, IPrescriptionManager prescriptionManager, ILinePrescriptionMedicalManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
+        public OrdreMedicalService(IAdviceManager adviceManager,ILineRadioMedicalManager lineRadioMedicalManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager,IMailService mailService,ISecretaryManager secretaryManager, IPrescriptionManager prescriptionManager, ILinePrescriptionMedicalManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
         {
+            this.adviceManager = adviceManager;
+            this.doctorManager = doctorManager;
             this.lineAnalyseMedicalManager= lineAnalyseMedicalManager;
             this.lineRadioMedicalManager= lineRadioMedicalManager;
             this.mailService=mailService;
@@ -390,12 +394,13 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
             });
-
-        public async Task<MedicalFileArchiveDto> GetMedecalArchivePatient(string Email, string FileId) =>
-            await TryCatch_(async () =>
+        
+        public async Task<MedicalFileArchivePatientDto> GetMedecalArchivePatient(string Email, string FileId) =>
+            await _TryCatch_(async () =>
             {
-                MedicalFileArchiveDto medicalFileArchiveDto = new MedicalFileArchiveDto();
-                List<MedicalOrdresDto> medicalOrdres = new List<MedicalOrdresDto>();
+                MedicalFileArchivePatientDto medicalFileArchiveDto = new MedicalFileArchivePatientDto();
+                List<AdviceMedicalDto> adviceMedicalDtos = new List<AdviceMedicalDto>();
+                List<MedicalOrdresPatientDto> medicalOrdres = new List<MedicalOrdresPatientDto>();
                 MedicalOrdreDetails MedicalOrdreDetails = new MedicalOrdreDetails();
                 List<PrescriptionLineInformationDto> prescriptionLinesInformationDto = new List<PrescriptionLineInformationDto>();
                 List<RadioLineInformationDto> radioLinesInformationDto = new List<RadioLineInformationDto>();
@@ -403,13 +408,6 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 ValidateEntryOnGetArchiveOrdreFileMedicalPatient(Email, FileId);
                 var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(UserAccountDoctor);
-                /*var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccountDoctor.Id);
-                ValidationDoctorIsNull(Doctor);*/
-              /*  var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(AppointmentId));
-                ValidatePlanningIsNull(Appointment);
-                ValidateAppointmentWithDoctor(Appointment, Doctor);*/
-               /* var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Doctor.Id, Appointment.IdCabinet);
-                ValidateWorkDoctorIsNull(WorkDoctor);*/
                 var fileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(DecryptGuid(FileId));
                 validateeFileMedicalIsNull(fileMedical);
                 medicalFileArchiveDto.informationFileMedical = MapperToInformationFileMedical(fileMedical);
@@ -466,12 +464,28 @@ namespace Server.Services.Foundation.OrdreMedicalService
                         {
                             analyseLinesInformationDto = null;
                         }
-                        MedicalOrdreDetails = MapperToMedicalOrdreDetails(ItemOrdreMedical, analyseLinesInformationDto, radioLinesInformationDto, prescriptionLinesInformationDto);
-                        var medicalOrdre = MapperToMedicalOrdresDto(MedicalOrdreDetails, InformationDoctor);
-                        medicalOrdres.Add(medicalOrdre);
+                        if(analyseLinesInformationDto != null || radioLinesInformationDto!=null || prescriptionLinesInformationDto != null)
+                        {
+                            MedicalOrdreDetails = MapperToMedicalOrdreDetails(ItemOrdreMedical, analyseLinesInformationDto, radioLinesInformationDto, prescriptionLinesInformationDto);
+                           
+                            var ListAdvices = await this.adviceManager.adviceMedicalsByIdOrdreMedicalAsync(ItemOrdreMedical.Id);
+                            foreach(var ItemAdvice in ListAdvices)
+                            {
+                                var UserAccountSender = await this._UserManager.FindByIdAsync(ItemAdvice.TransmitterUserId);
+                                var UserAccountReceiver = await this._UserManager.FindByIdAsync(ItemAdvice.ReceiverUserId);
+                                var ItemAdviceMedicalDto = MapperToAdviceMedical(UserAccountSender, UserAccountReceiver,ItemAdvice);
+                                adviceMedicalDtos.Add(ItemAdviceMedicalDto);
+
+                            }
+                            var medicalOrdre = MapperToMedicalOrdresPatientDto(MedicalOrdreDetails, InformationDoctor,adviceMedicalDtos);
+                            medicalOrdres.Add(medicalOrdre);
+
+                        }
+                       
                         analyseLinesInformationDto = new List<AnalyseLineInformationDto>();
                         radioLinesInformationDto = new List<RadioLineInformationDto>();
                         prescriptionLinesInformationDto = new List<PrescriptionLineInformationDto>();
+                        adviceMedicalDtos = new List<AdviceMedicalDto>();
 
 
                     }

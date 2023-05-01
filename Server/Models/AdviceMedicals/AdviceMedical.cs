@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Server.Models.MedicalOrder;
 using Server.Models.UserAccount;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,6 +31,11 @@ namespace Server.Models.AdviceMedicals
 
         [Required]
         public string Message { get; set; }
+        [Required]
+        public DateTime DateSendMessage { get; set; }
+        [DefaultValue(1)]
         public StatusAdviceMedcial StatusAdviceMedcial { get; set; }
+        [DefaultValue(0)]
+        public StatusViewReceiver StatusViewReceiver { get; set; }
     }
 }

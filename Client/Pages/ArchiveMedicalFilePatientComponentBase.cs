@@ -16,8 +16,10 @@ namespace Client.Pages
         protected bool isLoading = false;
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
-        protected MedicalFileArchiveDto MedicalFileArchive = new MedicalFileArchiveDto();
-        protected List<MedicalOrdresDto> ListmedicalOrdre = new List<MedicalOrdresDto>();
+        protected MedicalFileArchivePatientDto MedicalFileArchive = new MedicalFileArchivePatientDto();
+        protected List<MedicalOrdresPatientDto> ListmedicalOrdre = new List<MedicalOrdresPatientDto>();
+        protected MedicalOrdresPatientDto medicalOrdresPatientDto = new MedicalOrdresPatientDto();
+        protected List<AdviceMedicalDto> adviceMedicalDtos =null;
         protected MedicalOrdreDetails medicalOrdreDetails = new MedicalOrdreDetails();
         protected PrescriptionLineInformationDto prescriptionLineInformation = new PrescriptionLineInformationDto();
         
@@ -76,6 +78,11 @@ namespace Client.Pages
                 this.NavigationManager.NavigateTo("/Login/Home", forceLoad: true);
             }
 
+        }
+        public async Task OpenAdviceMedical(string IdOrdreMedical)
+        {
+            var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
+            this.adviceMedicalDtos = OrdreMedical.adviceMedicalsDto.OrderBy(e=>e.DateSend).ToList();
         }
         protected async Task DownloadFileResultRadio(string LineRadioId)
         {
@@ -144,8 +151,8 @@ namespace Client.Pages
         }
         public async Task OnSelectOrdreMedical(string IdOrdreMedical)
         {
-            var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
-            this.medicalOrdreDetails = OrdreMedical?.medicalOrdreDetails ?? new MedicalOrdreDetails();
+           this.medicalOrdresPatientDto = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
+            this.medicalOrdreDetails = medicalOrdresPatientDto?.medicalOrdreDetails ?? new MedicalOrdreDetails();
         }
         protected async Task DownloadFilePrescription(string OrdreMedicalId)
         {

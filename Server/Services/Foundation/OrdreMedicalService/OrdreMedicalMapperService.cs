@@ -19,13 +19,25 @@ using System.Runtime.InteropServices;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Server.Models.LineRadioMedical;
 using Server.Models.LineAnalyseMedical;
+using Server.Models.AdviceMedicals;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
     public static class OrdreMedicalMapperService
     {
 
-
+        public static AdviceMedicalDto MapperToAdviceMedical(User UserAccountSender , User UserAccountReceiver,AdviceMedical adviceMedical)
+        {
+            return new AdviceMedicalDto
+            {
+              Id =  EncryptGuid( adviceMedical.Id),
+              DateSend = adviceMedical.DateSendMessage,
+              FullNameReceiver= UserAccountReceiver.Firstname + UserAccountReceiver.LastName,
+              FullNameSender = UserAccountSender.Firstname + UserAccountSender.LastName,
+              Message=adviceMedical.Message,
+              StatusViewReceiver= (StatusViewReceiverDto)adviceMedical.StatusViewReceiver
+            };
+        }
         public static PrescriptionLineInformationDto MapperToPrescriptionLineInformationDto(PrescriptionLines prescriptionLines)
         {
             return new PrescriptionLineInformationDto
@@ -77,6 +89,18 @@ namespace Server.Services.Foundation.OrdreMedicalService
             {
                 medicalOrdreDetails = medicalOrdreDetails,
                 doctorInformation = doctorInformationDto
+
+            };
+        }
+        public static MedicalOrdresPatientDto MapperToMedicalOrdresPatientDto(MedicalOrdreDetails medicalOrdreDetails, DoctorInformationDto doctorInformationDto,List<AdviceMedicalDto> adviceMedicalDtos)
+        {
+            return new MedicalOrdresPatientDto
+            {
+                medicalOrdreDetails = medicalOrdreDetails,
+                doctorInformation = doctorInformationDto,
+                adviceMedicalsDto = adviceMedicalDtos
+                
+                
 
             };
         }

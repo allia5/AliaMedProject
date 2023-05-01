@@ -207,7 +207,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
             }
         }
 
-        public async Task<MedicalFileArchiveDto> GetMedicalFileArchivePatient(string FileId)
+        public async Task<MedicalFileArchivePatientDto> GetMedicalFileArchivePatient(string FileId)
         {
             FileId = FileId.Replace("/", "-");
           
@@ -219,7 +219,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
             {
                 if (result.Content.Headers.ContentLength != 0)
                 {
-                    return await result.Content.ReadFromJsonAsync<MedicalFileArchiveDto>();
+                    return await result.Content.ReadFromJsonAsync<MedicalFileArchivePatientDto>();
                 }
                 else
                 {
