@@ -13,6 +13,10 @@ namespace Server.Services.Foundation.PrescriptionService
 {
     public partial class PrescriptionService
     {
+        public void ValidateStringIsNull(string Entry)
+        {
+            if (Entry == null) throw new ArgumentNullException(nameof(Entry));
+        }
         public void ValidateEntryOnGetPrescriptionInformation(string Email, string CodeQr)
         {
             if (string.IsNullOrEmpty(Email))

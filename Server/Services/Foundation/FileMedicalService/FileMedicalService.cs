@@ -178,35 +178,12 @@ namespace Server.Services.Foundation.FileMedicalService
 
             });
 
-        public async Task<byte[]> GetFilePrescriptionByIdOrdreMedical(string OrdreMedicalId) =>
-            await TryCatch(async () =>
-            {
-                ValidateStringIsNull(OrdreMedicalId);
-                var FileMedicalPrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(DecryptGuid(OrdreMedicalId));
-                ValidatePrescriptionIsNull(FileMedicalPrescription);
-                return FileMedicalPrescription.FilePrescription;
 
 
-            });
-
-        public async Task<byte[]> GetFileRadioByIdOrdreMedical(string OrdreMedicalId) =>
-            await TryCatch(async () =>
-            {
-                ValidateStringIsNull(OrdreMedicalId);
-                var FileRadio = await this.radioManager.SelectRadioByIdMedicalOrdre(DecryptGuid(OrdreMedicalId));
-                ValidateRadioIsNull(FileRadio);
-                return FileRadio.FileRadio;
-            });
+    
        
 
-        public async Task<byte[]> GetFileAnalyseByIdOrdreMedical(string OrdreMedicalId) =>
-            await TryCatch(async () =>
-            {
-                ValidateStringIsNull(OrdreMedicalId);
-                var FileAnalyse = await this.analyseManager.SelectAnalyseByOrdreMedicalId(DecryptGuid(OrdreMedicalId));
-                ValidateAnalyseIsNull(FileAnalyse);
-                return FileAnalyse.FileAnalyse;
-            });
+
 
         public async Task<List<FileMedicalPatientDto>> GetFilesMedicalPatient(string Email) =>
             await TryCatch_(async () =>

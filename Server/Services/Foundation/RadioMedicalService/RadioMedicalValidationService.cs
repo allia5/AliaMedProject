@@ -12,6 +12,10 @@ namespace Server.Services.Foundation.RadioMedicalService
 {
     public partial class RadioMedicalService
     {
+        public void ValidateStringIsNull(string Entry)
+        {
+            if (Entry == null) throw new ArgumentNullException(nameof(Entry));
+        }
         public void validationPatientIsNull(User PatientUser)
         {
             if(PatientUser == null || PatientUser.Status == UserStatus.Deactivated) throw new ArgumentNullException(nameof(PatientUser));

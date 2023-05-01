@@ -45,61 +45,7 @@ namespace Server.Controllers
             }
         }
 
-        [HttpGet("DownloadFilePrescription/{Id}")]
-        public async Task<IActionResult> GetFilePrescription(string Id)
-        {
-            try
-            {
-                Id = Id.Replace("-", "/");
-                var FilePrescription = await this.FileMedicalService.GetFilePrescriptionByIdOrdreMedical(Id);
-                using (MemoryStream pdfStream = new())
-                {
-                    pdfStream.Write(FilePrescription, 0, FilePrescription.Length);
-                    pdfStream.Position = 0;
-                    var result = File(pdfStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "sample.docx");
-                    return result;
-                }
-            }
-            catch(ValidationException Ex)
-            {
-                return BadRequest(Ex.Message);
-            }catch(ServiceException Ex)
-            {
-                return NotFound();
-            }catch(Exception e)
-            {
-                return Problem(e.Message);
-            }
-          
-        }
-
-        [HttpGet("DownloadFileRadio/{Id}")]
-        public async Task<IActionResult> GetFileRadio(string Id)
-        {
-            Id = Id.Replace("-", "/");
-            var FileRadio = await this.FileMedicalService.GetFileRadioByIdOrdreMedical(Id);
-            using (MemoryStream pdfStream = new())
-            {
-                pdfStream.Write(FileRadio, 0, FileRadio.Length);
-                pdfStream.Position = 0;
-                var result = File(pdfStream.ToArray(), "application/pdf", "sample.pdf");
-                return result;
-            }
-        }
-
-        [HttpGet("DownloadFileAnalyse/{Id}")]
-        public async Task<IActionResult> GetFileAnalyse(string Id)
-        {
-            Id = Id.Replace("-", "/");
-            var FileAnalyse = await this.FileMedicalService.GetFileAnalyseByIdOrdreMedical(Id);
-            using (MemoryStream pdfStream = new())
-            {
-                pdfStream.Write(FileAnalyse, 0, FileAnalyse.Length);
-                pdfStream.Position = 0;
-                var result = File(pdfStream.ToArray(), "application/pdf", "sample.pdf");
-                return result;
-            }
-        }
+       
 
 
 

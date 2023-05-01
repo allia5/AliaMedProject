@@ -53,6 +53,14 @@ namespace Server.Services.Foundation.RadioMedicalService
             this.fileChronicDiseasesManager= fileChronicDiseasesManager;
 
         }
+        public async Task<byte[]> GetFileRadioByIdOrdreMedical(string OrdreMedicalId) =>
+        await TryCatch(async () =>
+        {
+            ValidateStringIsNull(OrdreMedicalId);
+            var FileRadio = await this.radioManager.SelectRadioByIdMedicalOrdre(DecryptGuid(OrdreMedicalId));
+            ValidateRadioIsNull(FileRadio);
+            return FileRadio.FileRadio;
+        });
         public async Task<InformationRadioResultDto> GetInformationRadioMedicalResult(string Email, string CodeQr)=>
        
             await TryCatch(async () =>

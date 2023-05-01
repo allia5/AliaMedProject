@@ -13,6 +13,10 @@ namespace Server.Services.Foundation.AnalyseMedicalService
 {
     public partial class AnalyseMedicalService
     {
+        public void ValidateStringIsNull(string Entry)
+        {
+            if (Entry == null) throw new ArgumentNullException(nameof(Entry));
+        }
         public void ValidateSpecialisteAnalyseIsNull(SpecialisteAnalyse specialisteAnalyse)
         {
             if (specialisteAnalyse == null)

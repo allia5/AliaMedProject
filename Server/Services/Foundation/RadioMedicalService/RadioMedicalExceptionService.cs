@@ -7,6 +7,7 @@ namespace Server.Services.Foundation.RadioMedicalService
     public partial class RadioMedicalService
     {
         public delegate Task<InformationRadioResultDto> GetInformationRadioResultDtoDelegate();
+        public delegate Task<byte[]> ReturningByteFileMedical();
 
         public async Task<InformationRadioResultDto> TryCatch(GetInformationRadioResultDtoDelegate informationRadioResultDto)
         {
@@ -29,6 +30,21 @@ namespace Server.Services.Foundation.RadioMedicalService
             catch (FormatException Ex)
             {
                 throw new ValidationException(Ex);
+            }
+        }
+        public async Task<byte[]> TryCatch(ReturningByteFileMedical returningByteFileMedical)
+        {
+            try
+            {
+                return await returningByteFileMedical();
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ValidationException(ex);
+            }
+            catch (NullException ex)
+            {
+                throw new ServiceException(ex);
             }
         }
     }

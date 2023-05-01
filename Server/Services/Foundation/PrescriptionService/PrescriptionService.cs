@@ -93,9 +93,18 @@ namespace Server.Services.Foundation.PrescriptionService
             var InformationPrescriptionResult = MapperToInformationPrescriptionResultDto(FileInformation, InformationPatient, informationDoctor, PrescriptionInformation);
             return InformationPrescriptionResult;
         });
-           
+
+        public async Task<byte[]> GetFilePrescriptionByIdOrdreMedical(string OrdreMedicalId) =>
+         await TryCatch(async () =>
+         {
+             ValidateStringIsNull(OrdreMedicalId);
+             var FileMedicalPrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(DecryptGuid(OrdreMedicalId));
+             ValidatePrescriptionIsNull(FileMedicalPrescription);
+             return FileMedicalPrescription.FilePrescription;
 
 
-        
+         });
+
+
     }
 }

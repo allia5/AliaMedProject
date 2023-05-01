@@ -5,5 +5,6 @@ namespace Server.Services.Foundation.AnalyseMedicalService
     public interface IAnalyseMedicalService
     {
         public Task<InformationAnalyseResultDto> GetAllAnalyseResultByCode(string Email,string codeQr);
+        public Task<byte[]> GetFileAnalyseByIdOrdreMedical(string OrdreMedicalId);
     }
 }

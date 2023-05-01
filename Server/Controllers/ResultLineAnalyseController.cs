@@ -54,7 +54,6 @@ namespace Server.Controllers
         {
             try
             {
-          
                 LineAnalyseId = LineAnalyseId.Replace("-", "/");
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 return await this.resultAnalyseService.GetFileResultAnalysePatient(Email, LineAnalyseId);

@@ -131,81 +131,11 @@ namespace Client.Services.Foundations.FileMedicalService
             }
         }
 
-        public async Task<Stream> GetMedicalFilePrescription(string OrdreId)
-        {
-            //OrdreId = System.Web.HttpUtility.UrlEncode(OrdreId);
-            OrdreId = OrdreId.Replace("/", "-");
-            var result = await this.httpClient.GetAsync($"/api/FileMedical/DownloadFilePrescription/{OrdreId}");
-            if(result.StatusCode == HttpStatusCode.OK)
-            {
-                return await result.Content.ReadAsStreamAsync();
-            }else if(result.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException("File Not Found");
-            }else if(result.StatusCode==HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedException("Unauthorize DownloadFile");
-            }else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                throw new BadRequestException("Bade Request");
-            }
-            else 
-            {
-                throw new ProblemException("intern Exception");
-            }
-        }
+      
 
-        public async Task<Stream> GetMedicalFileRadio(string OrdreId)
-        {
-            OrdreId = OrdreId.Replace("/", "-");
-            var result = await this.httpClient.GetAsync($"/api/FileMedical/DownloadFileRadio/{OrdreId}");
-            if (result.StatusCode == HttpStatusCode.OK)
-            {
-                return await result.Content.ReadAsStreamAsync();
-            }
-            else if (result.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException("File Not Found");
-            }
-            else if (result.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedException("Unauthorize DownloadFile");
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                throw new BadRequestException("Bade Request");
-            }
-            else
-            {
-                throw new ProblemException("intern Exception");
-            }
-        }
+      
 
-        public async  Task<Stream> GetMedicalFileAnalyse(string OrdreId)
-        {
-            OrdreId = OrdreId.Replace("/", "-");
-           var result = await this.httpClient.GetAsync($"/api/FileMedical/DownloadFileAnalyse/{OrdreId}");
-            if (result.StatusCode == HttpStatusCode.OK)
-            {
-                return await result.Content.ReadAsStreamAsync();
-            }
-            else if (result.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException("File Not Found");
-            }
-            else if (result.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedException("Unauthorize DownloadFile");
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                throw new BadRequestException("Bade Request");
-            }
-            else
-            {
-                throw new ProblemException("intern Exception");
-            }
-        }
+      
 
         public async Task<List<FileMedicalPatientDto>> GetFilePatient()
         {

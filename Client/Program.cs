@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Client;
+using Client.Services.Foundations.AnalyseMedicalService;
 using Client.Services.Foundations.AuthentificationStatService;
 using Client.Services.Foundations.CabinetMedicalService;
 using Client.Services.Foundations.ChronicDiseasesService;
@@ -12,7 +13,9 @@ using Client.Services.Foundations.LoginService;
 using Client.Services.Foundations.MedicalPlanningService;
 using Client.Services.Foundations.OrdreMedicalService;
 using Client.Services.Foundations.PharmacistService;
+using Client.Services.Foundations.PrescriptionService;
 using Client.Services.Foundations.RadiologyService;
+using Client.Services.Foundations.RadioMedicalService;
 using Client.Services.Foundations.SecretaryService;
 using Client.Services.Foundations.SignInService;
 using Client.Services.Foundations.SpecialisteAnalyseService;
@@ -53,6 +56,11 @@ builder.Services.AddScoped<ISpecialisteAnalyseService, SpecialisteAnalyseService
 builder.Services.AddScoped<IPharmacistService, PharmacistService>();
 builder.Services.AddScoped<ILineAnalyseResultService, LineAnalyseResultService>();
 builder.Services.AddScoped<ILineRadioResultService, LineRadioResultService>();
+builder.Services.AddScoped<IRadioMedicalService, RadioMedicalService>();
+builder.Services.AddScoped<IAnalyseMedicalService , AnalyseMedicalService>();
+builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+
+
 builder.Services.AddScoped<AuthenticationStateProvider>((provider => provider.GetRequiredService<AuthentificationStatService>()));
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();

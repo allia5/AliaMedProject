@@ -18,6 +18,9 @@ using Microsoft.AspNetCore.Components.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using Client.Services.Foundations.PrescriptionService;
+using Client.Services.Foundations.RadioMedicalService;
+using Client.Services.Foundations.AnalyseMedicalService;
 
 namespace Client.Pages
 {
@@ -55,6 +58,12 @@ namespace Client.Pages
         public IOrdreMedicalService OrdreMedicalService { get; set; }
         [Inject]
         public IfileMedicalService fileMedicalService { get; set; }
+        [Inject]
+        public IPrescriptionService PrescriptionService { get; set; }
+        [Inject]
+        public IRadioMedicalService radioMedicalService { get; set; }
+        [Inject]
+        public IAnalyseMedicalService analyseMedicalService { get; set; }
         [Inject]
         public IJSRuntime jSRuntime { get; set; }
 
@@ -188,7 +197,7 @@ namespace Client.Pages
               
                
                 // Save the file
-                var stream = await this.fileMedicalService.GetMedicalFilePrescription(OrdreMedicalId);
+                var stream = await this.PrescriptionService.GetMedicalFilePrescription(OrdreMedicalId);
                 using var streamRef = new DotNetStreamReference(stream: stream);
                 var fileName = "File.pdf";
                 await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
@@ -206,14 +215,14 @@ namespace Client.Pages
         }
         protected async Task DownloadFileRadio()
         {
-            var stream = await this.fileMedicalService.GetMedicalFileRadio(OrdreMedicalId);
+            var stream = await this.radioMedicalService.GetMedicalFileRadio(OrdreMedicalId);
             using var streamRef = new DotNetStreamReference(stream: stream);
             var fileName = "FileRadio.pdf";
             await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
         }
         protected async Task DownloadFileAnalyse()
         {
-            var stream = await this.fileMedicalService.GetMedicalFileAnalyse(OrdreMedicalId);
+            var stream = await this.analyseMedicalService.GetMedicalFileAnalyse(OrdreMedicalId);
             using var streamRef = new DotNetStreamReference(stream: stream);
             var fileName = "FileAnalyse.pdf";
             await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);

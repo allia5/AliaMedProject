@@ -97,6 +97,13 @@ namespace Server.Services.Foundation.AnalyseMedicalService
 
 
             });
-        
+        public async Task<byte[]> GetFileAnalyseByIdOrdreMedical(string OrdreMedicalId) =>
+          await TryCatch(async () =>
+          {
+              ValidateStringIsNull(OrdreMedicalId);
+              var FileAnalyse = await this.AnalyseManager.SelectAnalyseByOrdreMedicalId(DecryptGuid(OrdreMedicalId));
+              ValidateAnalyseIsNull(FileAnalyse);
+              return FileAnalyse.FileAnalyse;
+          });
     }
 }

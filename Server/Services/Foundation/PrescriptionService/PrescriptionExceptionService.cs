@@ -7,7 +7,7 @@ namespace Server.Services.Foundation.PrescriptionService
     public partial class PrescriptionService
     {
         public delegate Task<InformationPrescriptionResultDto> GetInformationPrescriptionResultDtoDelegate();
-
+        public delegate Task<byte[]> ReturningByteFileMedical();
         public async Task<InformationPrescriptionResultDto> TryCatch(GetInformationPrescriptionResultDtoDelegate getInformationPrescriptionResultDtoDelegate)
         {
             try
@@ -29,6 +29,21 @@ namespace Server.Services.Foundation.PrescriptionService
             catch (FormatException Ex)
             {
                 throw new ValidationException(Ex);
+            }
+        }
+        public async Task<byte[]> TryCatch(ReturningByteFileMedical returningByteFileMedical)
+        {
+            try
+            {
+                return await returningByteFileMedical();
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ValidationException(ex);
+            }
+            catch (NullException ex)
+            {
+                throw new ServiceException(ex);
             }
         }
     }
