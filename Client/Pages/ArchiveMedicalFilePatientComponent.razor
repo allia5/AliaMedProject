@@ -86,15 +86,30 @@
             <div class="modal-body d-flex justify-content-around ">
                 @if (medicalOrdreDetails.prescriptionLinesInformation != null)
                 {
-                    <button data-bs-target="#exampleModalTogglePrescription" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-success">Prescription</button>
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Prescription</button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item"  @onclick="()=>DownloadFilePrescription(medicalOrdreDetails.Id)">Telecharger Prescription</a></li>
+                        <li><a   data-bs-target="#exampleModalTogglePrescription" data-bs-toggle="modal" data-bs-dismiss="modal" class="dropdown-item" href="#">View Detail Prescription</a></li>
+                       
+                    </ul>
                 }
                 @if (medicalOrdreDetails.analyseLinesInformation != null)
                 {
-                    <button data-bs-target="#exampleModalToggleAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-primary">Analyse</button>
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">Analyse</button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <li><a class="dropdown-item"  @onclick="()=>DownloadFileAnalyse(medicalOrdreDetails.Id)">Telecharger Analyse</a></li>
+                        <li><a data-bs-target="#exampleModalToggleAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal" class="dropdown-item" href="#">View Detail Analyse</a></li>
+
+                    </ul>
                 }
                 @if (medicalOrdreDetails.radioLinesInformation != null)
                 {
-                    <button data-bs-target="#exampleModalToggleRadio" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-danger">Radio</button>
+                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">Radio</button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                        <li><a  class="dropdown-item"  @onclick="()=>DownloadFileRadio(medicalOrdreDetails.Id)">Telecharger Radio</a></li>
+                        <li><a data-bs-target="#exampleModalToggleRadio" data-bs-toggle="modal"  data-bs-dismiss="modal" class="dropdown-item" href="#">View Detail Radio</a></li>
+
+                    </ul>
                 }
             </div>
 

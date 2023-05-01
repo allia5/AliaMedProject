@@ -200,10 +200,7 @@ namespace Client.Pages
                 var stream = await this.PrescriptionService.GetMedicalFilePrescription(OrdreMedicalId);
                 using var streamRef = new DotNetStreamReference(stream: stream);
                 var fileName = "File.pdf";
-                await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
-                
-               
-              
+                await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);         
             }
             catch(Exception e)
             {

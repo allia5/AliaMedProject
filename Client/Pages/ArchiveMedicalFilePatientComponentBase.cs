@@ -1,6 +1,9 @@
-﻿using Client.Services.Foundations.LineAnalyseResultService;
+﻿using Client.Services.Foundations.AnalyseMedicalService;
+using Client.Services.Foundations.LineAnalyseResultService;
 using Client.Services.Foundations.LineRadioResultService;
 using Client.Services.Foundations.OrdreMedicalService;
+using Client.Services.Foundations.PrescriptionService;
+using Client.Services.Foundations.RadioMedicalService;
 using DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -17,9 +20,15 @@ namespace Client.Pages
         protected List<MedicalOrdresDto> ListmedicalOrdre = new List<MedicalOrdresDto>();
         protected MedicalOrdreDetails medicalOrdreDetails = new MedicalOrdreDetails();
         protected PrescriptionLineInformationDto prescriptionLineInformation = new PrescriptionLineInformationDto();
+        
         [Parameter]
         public string FileId { get; set; }
-
+        [Inject]
+        protected IRadioMedicalService radioMedicalService { get; set; }
+        [Inject]
+        protected IAnalyseMedicalService analyseMedicalService { get; set; }
+        [Inject]
+        protected IPrescriptionService prescriptionService { get; set; }
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
         [Inject]
@@ -137,6 +146,40 @@ namespace Client.Pages
         {
             var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
             this.medicalOrdreDetails = OrdreMedical?.medicalOrdreDetails ?? new MedicalOrdreDetails();
+        }
+        protected async Task DownloadFilePrescription(string OrdreMedicalId)
+        {
+            try
+            {
+
+
+                // Save the file
+                var stream = await this.prescriptionService.GetMedicalFilePrescription(OrdreMedicalId);
+                using var streamRef = new DotNetStreamReference(stream: stream);
+                var fileName = "File.pdf";
+                await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+
+
+        }
+        protected async Task DownloadFileRadio(string OrdreMedicalId)
+        {
+            var stream = await this.radioMedicalService.GetMedicalFileRadio(OrdreMedicalId);
+            using var streamRef = new DotNetStreamReference(stream: stream);
+            var fileName = "FileRadio.pdf";
+            await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        }
+        protected async Task DownloadFileAnalyse(string OrdreMedicalId)
+        {
+            var stream = await this.analyseMedicalService.GetMedicalFileAnalyse(OrdreMedicalId);
+            using var streamRef = new DotNetStreamReference(stream: stream);
+            var fileName = "FileAnalyse.pdf";
+            await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
         }
     }
 }
