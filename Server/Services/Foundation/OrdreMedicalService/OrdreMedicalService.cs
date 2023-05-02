@@ -471,9 +471,9 @@ namespace Server.Services.Foundation.OrdreMedicalService
                             var ListAdvices = await this.adviceManager.adviceMedicalsByIdOrdreMedicalAsync(ItemOrdreMedical.Id);
                             foreach(var ItemAdvice in ListAdvices)
                             {
-                                var UserAccountSender = await this._UserManager.FindByIdAsync(ItemAdvice.TransmitterUserId);
-                                var UserAccountReceiver = await this._UserManager.FindByIdAsync(ItemAdvice.ReceiverUserId);
-                                var ItemAdviceMedicalDto = MapperToAdviceMedical(UserAccountSender, UserAccountReceiver,ItemAdvice);
+                                var UserAccountSender = await this._UserManager.FindByIdAsync(ItemAdvice.transmitterUserId);
+                            //    var UserAccountReceiver = await this._UserManager.FindByIdAsync(ItemAdvice.ReceiverUserId);
+                                var ItemAdviceMedicalDto = MapperToAdviceMedical(UserAccountSender,ItemAdvice);
                                 adviceMedicalDtos.Add(ItemAdviceMedicalDto);
 
                             }

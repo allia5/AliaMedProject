@@ -28,7 +28,7 @@ namespace DTO
     public class AdviceMedicalDto
     {
         public string Id { get; set; }
-        public string FullNameSender { get; set; }
+    
         public string FullNameReceiver { get; set; }
         public string Message { get; set; }
         public DateTime DateSend { get; set; }

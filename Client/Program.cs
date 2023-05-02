@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Client;
+using Client.Services.Foundations.AdviceMedicalService;
 using Client.Services.Foundations.AnalyseMedicalService;
 using Client.Services.Foundations.AuthentificationStatService;
 using Client.Services.Foundations.CabinetMedicalService;
@@ -59,6 +60,7 @@ builder.Services.AddScoped<ILineRadioResultService, LineRadioResultService>();
 builder.Services.AddScoped<IRadioMedicalService, RadioMedicalService>();
 builder.Services.AddScoped<IAnalyseMedicalService , AnalyseMedicalService>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IAdviceMedicalService, AdviceMedicalService>();
 
 
 builder.Services.AddScoped<AuthenticationStateProvider>((provider => provider.GetRequiredService<AuthentificationStatService>()));

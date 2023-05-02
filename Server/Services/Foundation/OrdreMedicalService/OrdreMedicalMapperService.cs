@@ -26,14 +26,14 @@ namespace Server.Services.Foundation.OrdreMedicalService
     public static class OrdreMedicalMapperService
     {
 
-        public static AdviceMedicalDto MapperToAdviceMedical(User UserAccountSender , User UserAccountReceiver,AdviceMedical adviceMedical)
+        public static AdviceMedicalDto MapperToAdviceMedical( User UserAccountReceiver,AdviceMedical adviceMedical)
         {
             return new AdviceMedicalDto
             {
               Id =  EncryptGuid( adviceMedical.Id),
               DateSend = adviceMedical.DateSendMessage,
               FullNameReceiver= UserAccountReceiver.Firstname + UserAccountReceiver.LastName,
-              FullNameSender = UserAccountSender.Firstname + UserAccountSender.LastName,
+             
               Message=adviceMedical.Message,
               StatusViewReceiver= (StatusViewReceiverDto)adviceMedical.StatusViewReceiver
             };

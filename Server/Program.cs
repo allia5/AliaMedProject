@@ -33,6 +33,7 @@ using Server.Managers.Storages.UserRoleManager;
 using Server.Managers.Storages.WorkDoctorManager;
 using Server.Managers.UserManager;
 using Server.Models.UserAccount;
+using Server.Services.Foundation.AdviceMedicalService;
 using Server.Services.Foundation.AnalyseMedicalService;
 using Server.Services.Foundation.CabinetMedicalService;
 using Server.Services.Foundation.ChronicDiseasesService;
@@ -145,6 +146,7 @@ builder.Services.AddScoped<ILinePrescriptionMedicalManager, LinePrescriptionMedi
 builder.Services.AddScoped<IPrescriptionLineService, PrescriptionLineService>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IAdviceManager, AdviceManager>();
+builder.Services.AddScoped<IAdviceMedicalService, AdviceMedicalService>();
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers();

@@ -1,4 +1,5 @@
-﻿using Client.Services.Foundations.AnalyseMedicalService;
+﻿using Client.Services.Foundations.AdviceMedicalService;
+using Client.Services.Foundations.AnalyseMedicalService;
 using Client.Services.Foundations.LineAnalyseResultService;
 using Client.Services.Foundations.LineRadioResultService;
 using Client.Services.Foundations.OrdreMedicalService;
@@ -44,6 +45,8 @@ namespace Client.Pages
         protected ILineAnalyseResultService LineAnalyseResultService { get; set; }
         [Inject]
         protected ILineRadioResultService lineRadioResultService { get; set; }
+        [Inject]
+        protected IAdviceMedicalService adviceMedicalService { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -64,6 +67,7 @@ namespace Client.Pages
 
                     this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchivePatient(FileId);
                     this.ListmedicalOrdre = this.MedicalFileArchive.medicalOrdres.OrderByDescending(e => e.medicalOrdreDetails.DateValidation).ToList();
+                  
                     isLoading = false;
                 }
                 catch (Exception Ex)
@@ -81,8 +85,9 @@ namespace Client.Pages
         }
         public async Task OpenAdviceMedical(string IdOrdreMedical)
         {
-            var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
-            this.adviceMedicalDtos = OrdreMedical.adviceMedicalsDto.OrderBy(e=>e.DateSend).ToList();
+            // var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
+            this.adviceMedicalDtos =  await this.adviceMedicalService.GetAdvicesMedical(IdOrdreMedical);
+            
         }
         protected async Task DownloadFileResultRadio(string LineRadioId)
         {

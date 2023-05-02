@@ -17,24 +17,17 @@ namespace Server.Models.AdviceMedicals
 
 
 
-        [ForeignKey("TransmitterUser")]
-        public string TransmitterUserId { get; set; }
-
-        [ForeignKey("ReceiverUser")]
-        public string ReceiverUserId { get; set; }
+        [ForeignKey("User")]
+        public string transmitterUserId { get; set; }
 
         [JsonIgnore]
-        public User TransmitterUser { get; set; }
-
-        [JsonIgnore]
-        public User ReceiverUser { get; set; }
+        public User User { get; set; }
 
         [Required]
         public string Message { get; set; }
         [Required]
         public DateTime DateSendMessage { get; set; }
-        [DefaultValue(1)]
-        public StatusAdviceMedcial StatusAdviceMedcial { get; set; }
+    
         [DefaultValue(0)]
         public StatusViewReceiver StatusViewReceiver { get; set; }
     }

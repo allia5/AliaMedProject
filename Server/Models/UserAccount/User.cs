@@ -53,9 +53,9 @@ namespace Server.Models.UserAccount
         public IEnumerable<UserRole> usersRoles { get; set; }
         [JsonIgnore]
         public IEnumerable<AdviceMedical> AdviceMedicalSender { get; set; }
-        [JsonIgnore]
+       /* [JsonIgnore]
         [InverseProperty("ReceiverUser")]
-        public IEnumerable<AdviceMedical> AdviceMedicalReceiver { get; set; }
+        public IEnumerable<AdviceMedical> AdviceMedicalReceiver { get; set; }*/
 
 
     }
