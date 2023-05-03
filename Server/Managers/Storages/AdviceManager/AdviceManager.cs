@@ -16,10 +16,10 @@ namespace Server.Managers.Storages.AdviceManager
             return await (from AdviceItem in this.serverDbContext.adviceMedicals where AdviceItem.OrdreMedicalId == OrdreMedicalId select AdviceItem).ToListAsync();
         }
 
-        public async Task<List<AdviceMedical>> SelectAdviceMedicalByIdOrdreMedicalIdUser(Guid OrdreMedicalId, string UserId)
+      /*  public async Task<List<AdviceMedical>> SelectAdviceMedicalByIdOrdreMedicalIdUser(Guid OrdreMedicalId, string UserId)
         {
           return await (from ItemAdvice in this.serverDbContext.adviceMedicals where ItemAdvice.OrdreMedicalId == OrdreMedicalId && ItemAdvice.transmitterUserId ==UserId select ItemAdvice).ToListAsync();
-        }
+        }*/
 
 
         public async Task<AdviceMedical> UpdateAdviceMedical(AdviceMedical adviceMedical)

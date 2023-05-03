@@ -92,16 +92,13 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
             };
         }
-        public static MedicalOrdresPatientDto MapperToMedicalOrdresPatientDto(MedicalOrdreDetails medicalOrdreDetails, DoctorInformationDto doctorInformationDto,List<AdviceMedicalDto> adviceMedicalDtos)
+        public static MedicalOrdresPatientDto MapperToMedicalOrdresPatientDto(MedicalOrdreDetails medicalOrdreDetails, DoctorInformationDto doctorInformationDto,int CountMessageNotViewed)
         {
             return new MedicalOrdresPatientDto
             {
                 medicalOrdreDetails = medicalOrdreDetails,
                 doctorInformation = doctorInformationDto,
-                adviceMedicalsDto = adviceMedicalDtos
-                
-                
-
+                CountMessageNotViewed = CountMessageNotViewed
             };
         }
         public static MailRequest MapperToMailRequestUpdateStatusOrdreMedical(User UserAccountPatient,User UserAccountDoctor)

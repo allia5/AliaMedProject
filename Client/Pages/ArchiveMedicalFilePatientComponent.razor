@@ -57,7 +57,7 @@
                 @if (OrdreMedicalItem != null)
                 {
                     <button @onclick="()=>OnSelectOrdreMedical(OrdreMedicalItem.medicalOrdreDetails.Id)" class="btn btn-primary" data-bs-target="#exampleModalToggleChoix" data-bs-toggle="modal" data-bs-dismiss="modal">Detail</button>
-                    <button data-bs-target="#exampleModalToggleReclamation" @onclick="()=>OpenAdviceMedical(OrdreMedicalItem.medicalOrdreDetails.Id)" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Send complaint</button>
+                    <button data-bs-target="#exampleModalToggleReclamation" @onclick="()=>OpenAdviceMedical(OrdreMedicalItem.medicalOrdreDetails.Id)" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Send complaint + @OrdreMedicalItem.CountMessageNotViewed</button>
                 }
 
             </div>
@@ -91,8 +91,7 @@
                         <div class="col-md-4">
                             <ul class="list-group">
                                 <li class="list-group-item active">Conversation</li>
-                                <li class="list-group-item">Utilisateur 1</li>
-                                <li class="list-group-item">Utilisateur 2</li>
+                               
                             </ul>
                         </div>
                         <div class="col-md-8">

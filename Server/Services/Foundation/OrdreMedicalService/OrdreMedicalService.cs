@@ -406,8 +406,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 List<RadioLineInformationDto> radioLinesInformationDto = new List<RadioLineInformationDto>();
                 List<AnalyseLineInformationDto> analyseLinesInformationDto = new List<AnalyseLineInformationDto>();
                 ValidateEntryOnGetArchiveOrdreFileMedicalPatient(Email, FileId);
-                var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
-                ValidateUserIsNull(UserAccountDoctor);
+                var UserAccountPatient = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccountPatient);
                 var fileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(DecryptGuid(FileId));
                 validateeFileMedicalIsNull(fileMedical);
                 medicalFileArchiveDto.informationFileMedical = MapperToInformationFileMedical(fileMedical);
@@ -469,15 +469,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                             MedicalOrdreDetails = MapperToMedicalOrdreDetails(ItemOrdreMedical, analyseLinesInformationDto, radioLinesInformationDto, prescriptionLinesInformationDto);
                            
                             var ListAdvices = await this.adviceManager.adviceMedicalsByIdOrdreMedicalAsync(ItemOrdreMedical.Id);
-                            foreach(var ItemAdvice in ListAdvices)
-                            {
-                                var UserAccountSender = await this._UserManager.FindByIdAsync(ItemAdvice.transmitterUserId);
-                            //    var UserAccountReceiver = await this._UserManager.FindByIdAsync(ItemAdvice.ReceiverUserId);
-                                var ItemAdviceMedicalDto = MapperToAdviceMedical(UserAccountSender,ItemAdvice);
-                                adviceMedicalDtos.Add(ItemAdviceMedicalDto);
-
-                            }
-                            var medicalOrdre = MapperToMedicalOrdresPatientDto(MedicalOrdreDetails, InformationDoctor,adviceMedicalDtos);
+                            var ListAdvicesNotViewd = ListAdvices.Where(e=>e.StatusViewReceiver== Models.AdviceMedicals.StatusViewReceiver.NotWatchIt && e.transmitterUserId != UserAccountPatient.Id).ToList();
+                            var medicalOrdre = MapperToMedicalOrdresPatientDto(MedicalOrdreDetails, InformationDoctor, ListAdvicesNotViewd.Count());
                             medicalOrdres.Add(medicalOrdre);
 
                         }

@@ -18,7 +18,8 @@ namespace DTO
     {
         public DoctorInformationDto doctorInformation { get; set; }
         public MedicalOrdreDetails medicalOrdreDetails { get; set; }
-        public List<AdviceMedicalDto> adviceMedicalsDto { get; set; }
+       // public List<AdviceMedicalDto> adviceMedicalsDto { get; set; }
+       public int CountMessageNotViewed { get; set; }
 
     }
 

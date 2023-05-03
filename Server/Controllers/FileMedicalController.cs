@@ -29,7 +29,7 @@ namespace Server.Controllers
             TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
-              
+                fileTransferDto.AppointmentId = fileTransferDto.AppointmentId.Replace("-","/");
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.FileMedicalService.TransferFileMedical(Email, fileTransferDto);
                 transaction.Complete();

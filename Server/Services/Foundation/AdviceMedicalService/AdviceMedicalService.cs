@@ -47,14 +47,16 @@ namespace Server.Services.Foundation.AdviceMedicalService
                 ValidationDoctor(Doctor);
                 var userAccountDoctor = await this.userManager.SelectUserByIdDoctor(Doctor.Id);
                 ValidateUser(userAccountDoctor);
-                var ListAdviceMedical =await  this.adviceManager.SelectAdviceMedicalByIdOrdreMedicalIdUser(DecryptGuid(OrdreMedicalId), UserAccountPatient.Id);
+                var ListAdviceMedical =await  this.adviceManager.adviceMedicalsByIdOrdreMedicalAsync(DecryptGuid(OrdreMedicalId));
                 foreach(var item in ListAdviceMedical)
                 {
-                    item.StatusViewReceiver = Models.AdviceMedicals.StatusViewReceiver.WatchIt;
-                    await this.adviceManager.UpdateAdviceMedical(item);
+                    if(item.transmitterUserId != UserAccountPatient.Id)
+                    {
+                        item.StatusViewReceiver = Models.AdviceMedicals.StatusViewReceiver.WatchIt;
+                        await this.adviceManager.UpdateAdviceMedical(item);
+                    }
                 }
-                var AdvicesMedical = await this.adviceManager.adviceMedicalsByIdOrdreMedicalAsync(DecryptGuid(OrdreMedicalId));
-                foreach(var item in AdvicesMedical)
+                foreach(var item in ListAdviceMedical)
                 {
                     var userAccountAdviceMedicalMessage = await this._UserManager.FindByIdAsync(item.transmitterUserId);
                     if(userAccountAdviceMedicalMessage != null)

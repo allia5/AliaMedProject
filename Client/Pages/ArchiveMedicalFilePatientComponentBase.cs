@@ -106,6 +106,8 @@ namespace Client.Pages
             // var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
             this.adviceMedicalDtos =  await this.adviceMedicalService.GetAdvicesMedical(IdOrdreMedical);
             this.adviceMedicalDtos= this.adviceMedicalDtos.OrderBy(e=>e.DateSend).ToList();
+            this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchivePatient(FileId);
+            this.ListmedicalOrdre = this.MedicalFileArchive.medicalOrdres.OrderByDescending(e => e.medicalOrdreDetails.DateValidation).ToList();
 
 
         }
