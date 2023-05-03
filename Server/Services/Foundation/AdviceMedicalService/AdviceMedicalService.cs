@@ -34,15 +34,20 @@ namespace Server.Services.Foundation.AdviceMedicalService
             {
                 List<AdviceMedicalDto> ListAdviceMedicalDtos = new List<AdviceMedicalDto>();
                 ValidateEntryOnGetAdvicesMedical(Email,OrdreMedicalId);
-                var UserAccount = await this._UserManager.FindByEmailAsync(Email);
-                ValidateUser(UserAccount);
+                var UserAccountPatient = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUser(UserAccountPatient);
                 var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(DecryptGuid(OrdreMedicalId));
                 ValidateOrdreMedical(OrdreMedical);
+                var fileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(OrdreMedical.IdFileMedical);
+                ValidateFileMedicalIsNull(fileMedical);
+                var UserAccountPatientFileMedical = await this._UserManager.FindByIdAsync(fileMedical.IdUser);
+                ValidateUser(UserAccountPatientFileMedical);
+                ValidationSimilarity(UserAccountPatient, UserAccountPatientFileMedical);
                 var Doctor = await this.doctorManager.SelectDoctorById(OrdreMedical.IdDoctor);
                 ValidationDoctor(Doctor);
                 var userAccountDoctor = await this.userManager.SelectUserByIdDoctor(Doctor.Id);
                 ValidateUser(userAccountDoctor);
-                var ListAdviceMedical =await  this.adviceManager.SelectAdviceMedicalByIdOrdreMedicalIdUser(DecryptGuid(OrdreMedicalId), UserAccount.Id);
+                var ListAdviceMedical =await  this.adviceManager.SelectAdviceMedicalByIdOrdreMedicalIdUser(DecryptGuid(OrdreMedicalId), UserAccountPatient.Id);
                 foreach(var item in ListAdviceMedical)
                 {
                     item.StatusViewReceiver = Models.AdviceMedicals.StatusViewReceiver.WatchIt;
@@ -63,7 +68,28 @@ namespace Server.Services.Foundation.AdviceMedicalService
 
 
             });
-       
 
+        public async Task PostNewAdviceMedicalPatient(string Email, MedicalAdviceToAddDto medicalAdviceToAddDto) =>
+            await TryCatch_(async () =>
+            {
+                ValidateEntryOnPostAdvicesMedical(Email, medicalAdviceToAddDto);
+                var UserAccountPatient = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUser(UserAccountPatient);
+                var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(DecryptGuid(medicalAdviceToAddDto.OrdreMedicalId));
+                ValidateOrdreMedical(OrdreMedical);
+                var fileMedical = await this.fileMedicalManager.SelectFileMedicalByIdAsync(OrdreMedical.IdFileMedical);
+                ValidateFileMedicalIsNull(fileMedical);
+                var UserAccountPatientFileMedical = await this._UserManager.FindByIdAsync(fileMedical.IdUser);
+                ValidateUser(UserAccountPatientFileMedical);
+                ValidationSimilarity(UserAccountPatient, UserAccountPatientFileMedical);
+                var Doctor = await this.doctorManager.SelectDoctorById(OrdreMedical.IdDoctor);
+                ValidationDoctor(Doctor);
+                var UserAccountDoctor = await this.userManager.SelectUserByIdDoctor(Doctor.Id);
+                ValidateUser(UserAccountDoctor);
+                var AdviceMedical = MapperToAdviceMedical(medicalAdviceToAddDto, UserAccountPatient.Id, OrdreMedical.Id);
+                await this.adviceManager.InsertAdviceMedical(AdviceMedical);
+
+            });
+       
     }
 }

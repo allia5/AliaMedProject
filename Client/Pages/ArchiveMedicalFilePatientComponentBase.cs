@@ -14,9 +14,11 @@ namespace Client.Pages
 {
     public class ArchiveMedicalFilePatientComponentBase:ComponentBase
     {
+        protected string MessageSend = "";
         protected bool isLoading = false;
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
+        protected string OrdreMedcialIdSelected = null;
         protected MedicalFileArchivePatientDto MedicalFileArchive = new MedicalFileArchivePatientDto();
         protected List<MedicalOrdresPatientDto> ListmedicalOrdre = new List<MedicalOrdresPatientDto>();
         protected MedicalOrdresPatientDto medicalOrdresPatientDto = new MedicalOrdresPatientDto();
@@ -83,11 +85,29 @@ namespace Client.Pages
             }
 
         }
+
+        public async Task PostNewAdviceMedical(string OrdreMedicalId)
+        {
+            try
+            {
+                await this.adviceMedicalService.PatientPostNewAdviceMedicalPatient(new MedicalAdviceToAddDto { Message = MessageSend, OrdreMedicalId = OrdreMedicalId });
+                this.adviceMedicalDtos = await this.adviceMedicalService.GetAdvicesMedical(OrdreMedicalId);
+                this.adviceMedicalDtos = this.adviceMedicalDtos.OrderBy(e => e.DateSend).ToList();
+            }
+            catch(Exception Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+            }
+          
+        }
         public async Task OpenAdviceMedical(string IdOrdreMedical)
         {
+            this.OrdreMedcialIdSelected = IdOrdreMedical;
             // var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
             this.adviceMedicalDtos =  await this.adviceMedicalService.GetAdvicesMedical(IdOrdreMedical);
-            
+            this.adviceMedicalDtos= this.adviceMedicalDtos.OrderBy(e=>e.DateSend).ToList();
+
+
         }
         protected async Task DownloadFileResultRadio(string LineRadioId)
         {
@@ -156,6 +176,7 @@ namespace Client.Pages
         }
         public async Task OnSelectOrdreMedical(string IdOrdreMedical)
         {
+           
            this.medicalOrdresPatientDto = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
             this.medicalOrdreDetails = medicalOrdresPatientDto?.medicalOrdreDetails ?? new MedicalOrdreDetails();
         }

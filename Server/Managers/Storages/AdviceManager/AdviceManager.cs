@@ -28,5 +28,12 @@ namespace Server.Managers.Storages.AdviceManager
             await this.serverDbContext.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task<AdviceMedical> InsertAdviceMedical(AdviceMedical adviceMedical)
+        {
+            var result =  this.serverDbContext.Add(adviceMedical);
+            await this.serverDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }

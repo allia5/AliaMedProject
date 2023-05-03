@@ -46,5 +46,11 @@ namespace Server.Managers.Storages.FileMedicalManager
                           on itemOrdreMedical.IdFileMedical equals itemFile.Id 
                           select itemFile).FirstOrDefaultAsync();
         }
+
+        public async Task<fileMedicals> SelectFilesMedicalByIdMedical(string IdMedical)
+        {
+           return await (from FileItem in this.ServerDbContext.fileMedicals
+                         where FileItem.MedicalIdentification == IdMedical select FileItem).FirstOrDefaultAsync();
+        }
     }
 }

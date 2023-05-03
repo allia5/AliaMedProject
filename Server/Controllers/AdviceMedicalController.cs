@@ -20,6 +20,30 @@ namespace Server.Controllers
         {
           this.adviceMedicalService = adviceMedicalService;
         }
+        [HttpPost("PatientPostNewAdviceMedical")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
+        public async Task<ActionResult> PatientPostAdviceMedical([FromBody] MedicalAdviceToAddDto medicalAdviceToAddDto)
+        {
+            try
+            {
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.adviceMedicalService.PostNewAdviceMedicalPatient(Email, medicalAdviceToAddDto);
+                return Ok();
+            }
+            catch(ValidationException Ex)
+            {
+                return BadRequest();
+
+            }
+            catch(ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch(Exception ex)
+            {
+                return Problem();
+            }
+        }
         [HttpGet("GetAdviceMedicalMessages/{OrdremEdiclaId}")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
         public async Task<ActionResult<List<AdviceMedicalDto>>> GetAdvicesMedical(string OrdremEdiclaId)

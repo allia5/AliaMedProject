@@ -21,6 +21,7 @@ using Server.Managers.Storages.PrescriptionManager;
 using Server.Managers.Storages.RadioManager;
 using Server.Managers.Storages.AnalyseManager;
 using Server.Models.SpecialtieDoctor;
+using Server.Services.Foundation.MailService;
 
 namespace Server.Services.Foundation.FileMedicalService
 {
@@ -40,9 +41,11 @@ namespace Server.Services.Foundation.FileMedicalService
         public readonly IPrescriptionManager prescriptionManager;
         public readonly IRadioManager radioManager;
         public readonly IAnalyseManager analyseManager;
+        public readonly IMailService mailService;
         
-        public FileMedicalService(IPrescriptionManager prescriptionManager,IRadioManager radioManager,IAnalyseManager analyseManager,ICabinetMedicalManager cabinetMedicalManager, ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
+        public FileMedicalService(IMailService mailService,IPrescriptionManager prescriptionManager,IRadioManager radioManager,IAnalyseManager analyseManager,ICabinetMedicalManager cabinetMedicalManager, ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
         {
+            this.mailService = mailService;
             this.prescriptionManager = prescriptionManager;
             this.radioManager = radioManager;
             this.analyseManager = analyseManager;
@@ -221,6 +224,30 @@ namespace Server.Services.Foundation.FileMedicalService
                 }
                 return fileMedicalPatientDtos;
             });
-        
+
+        public async Task TransferFileMedical(string Email, FileTransferDto fileTransfer) =>
+            await TryCatch(async () =>
+            {
+                ValidateEntryOnTransferFileMedical(Email, fileTransfer);
+                var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccountDoctor);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccountDoctor.Id);
+                ValidationDoctor(Doctor);
+                var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(fileTransfer.AppointmentId));
+                ValidatePlanningIsNull(Appointment);
+                ValidateAppointmentWithDoctor(Appointment, Doctor);
+                var UserAccountPatient = await this._UserManager.FindByIdAsync(Appointment.IdUser);
+                ValidateUserIsNull(UserAccountPatient);
+                var FileMedical = await this.fileMedicalManager.SelectFilesMedicalByIdMedical(fileTransfer.IdMedical);
+                var OldUserAccount = await this._UserManager.FindByIdAsync(FileMedical.IdUser);
+                validateeFileMedicalIsNull(FileMedical);
+               var MailRequest = MapperToMailRequestUpdateFileMedical(FileMedical, UserAccountDoctor, UserAccountPatient, OldUserAccount);
+                var newFileMedical = MapperToNewFileMedical(Doctor.Id, FileMedical, UserAccountPatient.Id);
+                await this.fileMedicalManager.UpdateFileMedicalAsync(newFileMedical);
+                await this.mailService.SendEmailNotification(MailRequest);
+
+
+            });
+       
     }
 }

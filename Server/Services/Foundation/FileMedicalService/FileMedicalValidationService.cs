@@ -15,6 +15,15 @@ namespace Server.Services.Foundation.FileMedicalService
 {
     public partial class FileMedicalService
     {
+        public void ValidateEntryOnTransferFileMedical(string Email,FileTransferDto fileTransferDto)
+        {
+            if (string.IsNullOrEmpty(Email)) { throw new ArgumentNullException(); }
+            if(ArePropertiesNull(fileTransferDto))
+            {
+                throw new ArgumentNullException();
+            }
+            
+        }
         public void ValidatePrescriptionIsNull(Prescription prescription)
         {
             if(prescription == null)
@@ -104,6 +113,14 @@ namespace Server.Services.Foundation.FileMedicalService
             if (user == null || user.Status == UserStatus.Deactivated)
             {
                 throw new NullException(nameof(user));
+            }
+        }
+        public void ValidationDoctor(Doctors doctor)
+        {
+            if (doctor == null || doctor.StatusDoctor == StatusDoctor.Deactivated)
+            {
+                throw new NullException(nameof(doctor));
+
             }
         }
         public void ValidationDoctorIsNull(Doctors doctor)

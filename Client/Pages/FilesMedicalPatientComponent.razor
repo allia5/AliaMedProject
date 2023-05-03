@@ -21,8 +21,30 @@
 {
     <WaitComponent />
 }
+<div class="d-flex justify-content-center">
+    <div class="input-group w-75">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="">Medical identification number</span>
+        </div>
+        <input type="text" @bind="MedicalIdentificationNumber" placeholder="Medical identification number" style="border-radius:25px;" class="form-control">
+      
+            <button @onclick="TransferFileMedical" class="btn btn-success " style="border-radius:25px;">
+                Move
+                @if (ButtonOnMove == true)
+                {
+
+
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span>
+                }
+            </button>
+        
+     
+    </div>
+</div>
 @if (FilesMainPatient != null)
 {
+    
 
 
     <div class="shadow-lg p-3 mb-5 bg-light rounded">

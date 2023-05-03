@@ -11,6 +11,8 @@ namespace Client.Pages
         protected bool IsLoading = true;
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
+        protected string MedicalIdentificationNumber = "";
+        protected bool ButtonOnMove = false;
         protected FileMedicalMainPatientDto FilesMainPatient = null;
         protected UpdateFileMedicalDto FileMedicalToUpdate =null;
         protected FileMedicalToAddDto fileMedicalToAdd = new FileMedicalToAddDto();
@@ -64,6 +66,7 @@ namespace Client.Pages
                 else
                 {
                     this.NavigationManager.NavigateTo("/Login/Home"); this.IsLoading = false;
+                 
                 }
             }
             catch(Exception ex)
@@ -75,7 +78,22 @@ namespace Client.Pages
 
           
         }
+        protected async Task TransferFileMedical()
+        {
+            try
+            {
+                ButtonOnMove = true;
+                await this.FilemedicalService.TransferFileMedical(new FileTransferDto {AppointmentId=IdAppointment,IdMedical=MedicalIdentificationNumber });
+                this.FilesMainPatient = await this.FilemedicalService.GetAllFileMedicalMainPatient(IdAppointment);
+                ButtonOnMove = false;
 
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
+                ButtonOnMove = false;
+            }
+        }
         /*function update File Medical*/
         public async Task OnUpdateFileMedical()
         {

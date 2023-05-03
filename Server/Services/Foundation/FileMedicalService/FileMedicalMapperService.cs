@@ -13,6 +13,16 @@ namespace Server.Services.Foundation.FileMedicalService
 {
     public static class FileMedicalMapperService
     {
+        public static MailRequest MapperToMailRequestUpdateFileMedical(fileMedicals FileMedical, User UserAccountDoctor,User NewUserAccount,User OldUserAccount)
+        {
+            return new MailRequest
+            {
+                ToEmail = OldUserAccount.Email,
+                Subject = "Notification",
+                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> AliaMed.Com </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> File Medical notification  </h5>\r\n        <p class=card-text>Your File Medical {FileMedical.Lastname},{FileMedical.firstname} Is Moved To User Account {NewUserAccount.LastName},{NewUserAccount.Firstname}   {DateTime.Now}  <br/> by Doctor :{UserAccountDoctor.Firstname} ,{UserAccountDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
+
+            };
+        }
         public static FileMedicalMainPatientDto MapperToFileMedicalMainPatientDto(List<FileMedicalPatientDto> fileMedicalPatientDtos,PatientInformationDto PatientInformationAccount)
         {
             return new FileMedicalMainPatientDto
@@ -20,6 +30,12 @@ namespace Server.Services.Foundation.FileMedicalService
                 fileMedicals = fileMedicalPatientDtos,
                 MainUser = PatientInformationAccount
             };
+        }
+
+        public static fileMedicals MapperToNewFileMedical(Guid DoctorId,fileMedicals fileMedicals,string UserId)
+        {
+            fileMedicals.IdDoctor = DoctorId;
+            fileMedicals.IdUser = UserId; return fileMedicals;
         }
         public static FileMedicalPatientDto MapperTofileMedicalPatientDtos(int CountmedicalOrdres ,List<chronicDiseasesDto> chronicDiseases,User UserAccountDoctor , fileMedicals fileMedical,List<Specialite> specialitiesDoctor)
         {

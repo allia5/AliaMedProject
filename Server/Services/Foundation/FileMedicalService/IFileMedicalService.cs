@@ -9,5 +9,6 @@ namespace Server.Services.Foundation.FileMedicalService
         public Task UpdateFileMedicalService(string Email, UpdateFileMedicalDto fileMedicalService);
   
         public Task<List<FileMedicalPatientDto>> GetFilesMedicalPatient(string Email);
+        public Task TransferFileMedical(string Email,FileTransferDto fileTransfer);
     }
 }

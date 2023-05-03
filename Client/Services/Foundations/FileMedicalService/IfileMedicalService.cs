@@ -9,5 +9,6 @@ namespace Client.Services.Foundations.FileMedicalService
         public Task<FileMedicalMainPatientDto> GetAllFileMedicalMainPatient(string IdAppointment);
         public Task UpdateFileMedicalPatient(UpdateFileMedicalDto updateFileMedicalDto);
         public Task<List<FileMedicalPatientDto>> GetFilePatient();
+        public Task TransferFileMedical(FileTransferDto fileTransferDto);
     }
 }

@@ -22,7 +22,33 @@ namespace Server.Controllers
         {
             this.FileMedicalService = fileMedicalService;
         }
-
+        [HttpPatch("TransferFileMedical")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult> TranferFileMedcial(FileTransferDto fileTransferDto)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+              
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.FileMedicalService.TransferFileMedical(Email, fileTransferDto);
+                transaction.Complete();
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+            finally { transaction.Dispose(); }
+        }
 
         [HttpGet("GetMedicalFilePatient")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]

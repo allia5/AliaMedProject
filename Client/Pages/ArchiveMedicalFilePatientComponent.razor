@@ -104,22 +104,30 @@
                                    
                                         @foreach (var ItemAdvice in adviceMedicalDtos)
                                     {
+                                            <EditForm Model="ItemAdvice">
+                                            <DataAnnotationsValidator></DataAnnotationsValidator>
+                                                <ValidationSummary />
                                         <div class="message">
                                             <p>@ItemAdvice.FullNameReceiver</p>
-                                            <p>@ItemAdvice.Message</p>
-                                            <span class="time-right">@ItemAdvice.DateSend</span>
-                                        </div>         
+                                           message:  <p>@ItemAdvice.Message</p>
+                                           Time : <span class="time-right">@ItemAdvice.DateSend</span>
+                                        </div>  
+                                        <hr />
+                                            </EditForm>
                                     }
                                     }
 
                                 </div>
                                 <div class="card-footer">
-                                    <form>
+                                    
                                         <div class="form-group">
-                                            <textarea class="form-control" placeholder="Votre message"></textarea>
+                                            <textarea @bind="MessageSend" class="form-control" placeholder="Votre message"></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Envoyer</button>
-                                    </form>
+                                  
+                                        <button type="button" @onclick="()=>PostNewAdviceMedical(OrdreMedcialIdSelected)" class="btn btn-primary">Envoyer</button>
+                                    
+                                  
+                                    
                                 </div>
                             </div>
                         </div>
