@@ -16,7 +16,7 @@ namespace Server.Managers.Storages.OrdreMedicalManager
             return await (from ordre in this.ServerDbContext.MedicalOrdres where ordre.IdFileMedical == FileId select ordre ).ToListAsync();
                  
         }
-
+        
         public async Task<MedicalOrdres> InsertOrdreMedicalAsync(MedicalOrdres MedicalOrdres)
         {
            
@@ -51,6 +51,15 @@ namespace Server.Managers.Storages.OrdreMedicalManager
         public async Task<MedicalOrdres> SelectMedicalOrdreByIdAsync(Guid OrdreMedicalId)
         {
             return await (from OrdreItem in this.ServerDbContext.MedicalOrdres where OrdreItem.Id == OrdreMedicalId select OrdreItem).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<MedicalOrdres>> SelectOrdreMedicalAdvicesDoctor(Guid DoctorId)
+        {
+            return await (from ItemAdvice in this.ServerDbContext.adviceMedicals
+                          join OrdreItem in this.ServerDbContext.MedicalOrdres
+                          on ItemAdvice.OrdreMedicalId equals OrdreItem.Id
+                          where OrdreItem.IdDoctor == DoctorId
+                          select OrdreItem).Distinct().ToListAsync();
         }
     }
 }

@@ -1,0 +1,283 @@
+﻿
+@page "/OrdreMedicalAdvaces"
+@inherits OrdreMedicalAdvicesDoctorComponentBase
+
+
+
+
+@if (ErrorMessage != null)
+{
+    <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}
+
+@if (SuccessMessage != null)
+{
+    <CorrectRoutingMessage></CorrectRoutingMessage>
+}
+
+@if (isLoading == true)
+{
+    <WaitComponent />
+}
+
+
+
+
+
+    @foreach (var ItemmedicalAdviceDoctorDtos in medicalAdviceDoctorDtos)
+    {
+        <div class="card text-center">
+            <div class="card-header">
+                Ordre Medical Information
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">By Doctor  :  @ItemmedicalAdviceDoctorDtos.FileMedicalInformation.FirstName , @ItemmedicalAdviceDoctorDtos.FileMedicalInformation.LastName</h5>
+                <h6 class="card-title">
+
+                </h6>
+                <p class="card-text"> @ItemmedicalAdviceDoctorDtos?.MedicalOrdreDetails?.Summary</p>
+                @if (ItemmedicalAdviceDoctorDtos != null)
+                {
+                    <button @onclick="()=>OnSelectOrdreMedical(ItemmedicalAdviceDoctorDtos.MedicalOrdreDetails.Id)" class="btn btn-primary" data-bs-target="#exampleModalToggleChoix" data-bs-toggle="modal" data-bs-dismiss="modal">Detail</button>
+                    <button data-bs-target="#exampleModalToggleReclamation" @onclick="()=>OpenAdviceMedical(ItemmedicalAdviceDoctorDtos.MedicalOrdreDetails.Id)" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="modal">Send complaint + @ItemmedicalAdviceDoctorDtos.CountMessageNotViewed</button>
+                }
+
+            </div>
+            <div class="card-footer text-muted">
+                @ItemmedicalAdviceDoctorDtos?.MedicalOrdreDetails?.DateValidation
+            </div>
+        </div>
+        <br />
+
+    }
+
+
+
+
+
+<!-- Modal Boit De Reclamation -->
+<div class="modal fade" id="exampleModalToggleReclamation" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-around ">
+                <div class="container">
+                    <h1>Boîte de messagerie</h1>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">Conversation</li>
+
+                            </ul>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    @if (adviceMedicalDtos != null)
+                                    {
+
+
+                                        @foreach (var ItemAdvice in adviceMedicalDtos)
+                                        {
+                                            <EditForm Model="ItemAdvice">
+                                                <DataAnnotationsValidator></DataAnnotationsValidator>
+                                                <ValidationSummary />
+                                                <div class="message">
+                                                    <p>@ItemAdvice.FullNameReceiver</p>
+                                                    message:  <p>@ItemAdvice.Message</p>
+                                                    Time : <span class="time-right">@ItemAdvice.DateSend</span>
+                                                </div>
+                                                <hr />
+                                            </EditForm>
+                                        }
+                                    }
+
+                                </div>
+                                <div class="card-footer">
+
+                                    <div class="form-group">
+                                        <textarea @bind="MessageSend" class="form-control" placeholder="Votre message"></textarea>
+                                    </div>
+
+                                    <button type="button" @onclick="()=>PostNewAdviceMedical(OrdreMedcialIdSelected)" class="btn btn-primary">Envoyer</button>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Choix -->
+<div class="modal fade" id="exampleModalToggleChoix" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-around ">
+                @if (medicalOrdreDetails.prescriptionLinesInformation != null)
+                {
+                    <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Prescription</button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" @onclick="()=>DownloadFilePrescription(medicalOrdreDetails.Id)">Telecharger Prescription</a></li>
+                        <li><a data-bs-target="#exampleModalTogglePrescription" data-bs-toggle="modal" data-bs-dismiss="modal" class="dropdown-item" href="#">View Detail Prescription</a></li>
+
+                    </ul>
+                }
+                @if (medicalOrdreDetails.analyseLinesInformation != null)
+                {
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">Analyse</button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                        <li><a class="dropdown-item" @onclick="()=>DownloadFileAnalyse(medicalOrdreDetails.Id)">Telecharger Analyse</a></li>
+                        <li><a data-bs-target="#exampleModalToggleAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal" class="dropdown-item" href="#">View Detail Analyse</a></li>
+
+                    </ul>
+                }
+                @if (medicalOrdreDetails.radioLinesInformation != null)
+                {
+                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">Radio</button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                        <li><a class="dropdown-item" @onclick="()=>DownloadFileRadio(medicalOrdreDetails.Id)">Telecharger Radio</a></li>
+                        <li><a data-bs-target="#exampleModalToggleRadio" data-bs-toggle="modal" data-bs-dismiss="modal" class="dropdown-item" href="#">View Detail Radio</a></li>
+
+                    </ul>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Prescription -->
+<div class="modal fade" id="exampleModalTogglePrescription" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Modal 1</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <td>Medicament Name</td>
+                        <td>Quantity</td>
+                        <td>Status Validation</td>
+                        <td>Date Validation</td>
+                    </tr>
+                    <tbody>
+                        @if (medicalOrdreDetails.prescriptionLinesInformation != null)
+                        {
+                            @foreach (var PrescriptionItem in medicalOrdreDetails.prescriptionLinesInformation)
+                            {
+                                <tr>
+                                    <td>@PrescriptionItem.MedicamentName</td>
+                                    <td>@PrescriptionItem.Quantity</td>
+                                    <td>@PrescriptionItem.statusPrescriptionLineDto.ToString()</td>
+                                    <td>@PrescriptionItem?.DateValidation</td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Modal Radio -->
+<div class="modal fade" id="exampleModalToggleRadio" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Information About Radio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <td>Description</td>
+                        <td>Status Validation</td>
+                        <td>Download</td>
+
+                    </tr>
+                    <tbody>
+                        @if (medicalOrdreDetails.radioLinesInformation != null)
+                        {
+                            @foreach (var RadioItem in medicalOrdreDetails.radioLinesInformation)
+                            {
+                                <tr>
+                                    <td>@RadioItem.Description</td>
+                                    <td>@RadioItem.statusRadio.ToString()</td>
+                                    @if (RadioItem.statusRadio == DTO.StatusRadioDto.validate)
+                                    {
+                                        <td><button @onclick="()=>DownloadFileResultRadio(RadioItem.IdLineRadio)" class="btn btn-secondary">Download</button></td>
+                                    }
+
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Modal Choix -->
+<div class="modal fade" id="exampleModalToggleAnalyse" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel">Information About Analyse</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <td>Description</td>
+                        <td>Status Validation</td>
+                        <td>Download</td>
+
+                    </tr>
+                    <tbody>
+                        @if (medicalOrdreDetails.analyseLinesInformation != null)
+                        {
+                            @foreach (var AnalyseItem in medicalOrdreDetails.analyseLinesInformation)
+                            {
+                                <tr>
+                                    <td>@AnalyseItem.Description</td>
+                                    <td>@AnalyseItem.statusAnalyse.ToString()</td>
+                                    @if (AnalyseItem.statusAnalyse == DTO.StatusAnalyseDto.validate)
+                                    {
+                                        <td><button @onclick="()=>DownloadFileResultAnalyse(AnalyseItem.IdLineAnalyse)" class="btn btn-secondary">Download</button></td>
+                                    }
+
+
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

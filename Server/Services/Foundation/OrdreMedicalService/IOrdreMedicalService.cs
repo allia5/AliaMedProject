@@ -10,6 +10,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public Task UpdateStatusOrdreMedicalService(string Email, UpdateOrdreMedicalDto updateOrdreMedicalDto);
         public Task<MedicalFileArchiveDto> GetListOrdreFileMedical(string Email, string AppointmentId, string FileId);
         public Task<MedicalFileArchivePatientDto> GetMedecalArchivePatient(string Email, string FileId);
+        public Task<List<MedicalAdviceDoctorDto>> GetMedicalAdviceDoctor(string Email);
 
 
     }

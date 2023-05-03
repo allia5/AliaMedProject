@@ -10,5 +10,6 @@ namespace Server.Managers.Storages.OrdreMedicalManager
         public Task<MedicalOrdres> SelectMedicalOrdreByIdByIdDoctorByIdCabinet(Guid OrdreMedicalId,Guid DoctorId,Guid CabinetId);
         public Task<MedicalOrdres> UpdateMedicalOrdreAsync(MedicalOrdres MedicalOrdres);
         public Task<MedicalOrdres> SelectMedicalOrdreByIdAsync(Guid OrdreMedicalId);
+        public Task<List<MedicalOrdres>> SelectOrdreMedicalAdvicesDoctor(Guid DoctorId);
     }
 }

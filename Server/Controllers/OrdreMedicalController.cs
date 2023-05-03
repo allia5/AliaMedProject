@@ -20,6 +20,28 @@ namespace Server.Controllers
         {
             this.ordreMedicalService = ordreMedicalService;
         }
+        [HttpGet("GetAllOrdreMedicalAdvices")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult< List<MedicalAdviceDoctorDto>>> GetOrdreMedicalAdvicesDoctor()
+        {
+            try
+            {
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.ordreMedicalService.GetMedicalAdviceDoctor(Email);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.Message);
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
         [HttpGet("GetAllOrdreArchiveFileMedcialPatient/{FileId}")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
         public async Task<ActionResult<MedicalFileArchivePatientDto>> GetMedicalArchivePatient( string FileId)

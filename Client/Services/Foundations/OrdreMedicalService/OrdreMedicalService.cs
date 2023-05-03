@@ -243,5 +243,40 @@ namespace Client.Services.Foundations.OrdreMedicalService
                 throw new ProblemException("Error Intern");
             }
         }
+
+        public async Task<List<MedicalAdviceDoctorDto>> GetMedicalAdviceDoctor()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/OrdreMedical/GetAllOrdreMedicalAdvices");
+            var JwtBearer = await this.LocalStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await HttpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<List<MedicalAdviceDoctorDto>>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new BadRequestException("Request Denied");
+            }
+            else
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
     }
 }

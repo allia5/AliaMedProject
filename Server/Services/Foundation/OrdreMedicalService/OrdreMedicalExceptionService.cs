@@ -11,7 +11,37 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public delegate Task ReturningFunctionOnUpdateStatusOrdreMedical();
         public delegate Task<MedicalFileArchiveDto> ReturningFunctionMedicalFileArchive();
         public delegate Task<MedicalFileArchivePatientDto> ReturningFunctionMedicalFileArchivePatient();
+        public delegate Task<List<MedicalAdviceDoctorDto>> ReturningFunctionMedicalAdviceDoctor();
 
+
+        public async Task<List<MedicalAdviceDoctorDto>> TryCatch__(ReturningFunctionMedicalAdviceDoctor returningFunctionMedicalAdviceDoctor)
+        {
+            try
+            {
+                return await returningFunctionMedicalAdviceDoctor();
+            }
+            catch (ArgumentNullException Ex)
+            {
+                throw new ValidationException(Ex);
+
+            }
+            catch (CompatibilityError Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch (StatusValidationException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch (NullException Ex)
+            {
+                throw new ServiceException(Ex);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
         public async Task<MedicalFileArchivePatientDto> _TryCatch_(ReturningFunctionMedicalFileArchivePatient returningFunctionMedicalFileArchivePatient)
         {
             try

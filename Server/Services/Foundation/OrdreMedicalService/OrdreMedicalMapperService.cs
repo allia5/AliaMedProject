@@ -25,7 +25,15 @@ namespace Server.Services.Foundation.OrdreMedicalService
 {
     public static class OrdreMedicalMapperService
     {
-
+        public static  MedicalAdviceDoctorDto MapperToMedicalAdviceDoctorDto(MedicalOrdreDetails medicalOrdreDetails,int CountMessageNotView,InformationFileMedical informationFileMedical)
+        {
+            return new MedicalAdviceDoctorDto
+            {
+                CountMessageNotViewed = CountMessageNotView,
+                FileMedicalInformation = informationFileMedical,
+                MedicalOrdreDetails = medicalOrdreDetails
+            };
+        }
         public static AdviceMedicalDto MapperToAdviceMedical( User UserAccountReceiver,AdviceMedical adviceMedical)
         {
             return new AdviceMedicalDto

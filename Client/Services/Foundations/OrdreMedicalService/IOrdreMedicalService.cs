@@ -9,6 +9,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
         public Task UpdateStatusOrdreMedicalBySecritary(UpdateOrdreMedicalDto updateOrdreMedicalDto);
         public Task<MedicalFileArchiveDto> GetMedicalFileArchive(string FileId, string AppointmentId);
         public Task<MedicalFileArchivePatientDto> GetMedicalFileArchivePatient(string FileId);
+        public Task<List<MedicalAdviceDoctorDto>>  GetMedicalAdviceDoctor();
 
 
 
