@@ -84,9 +84,6 @@ namespace Client.Pages
                 this.secritaryDtosActive.Add(result);
                 this.ButtonAddIsLoding = false;
                 this.SuccessMessage = "Add Operation seccess ";
-
-
-
             }
             catch (BadRequestException Ex)
             {

@@ -20,6 +20,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Server.Models.LineRadioMedical;
 using Server.Models.LineAnalyseMedical;
 using Server.Models.AdviceMedicals;
+using Server.Models.CabinetMedicals;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -208,11 +209,31 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
 
-       
 
 
 
 
+        public static byte[] AddInfromationCabinetMedicalToToPdf(byte[] pdfBytes, CabinetMedical cabinetMedical)
+        {
+            using (MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
+            {
+                using (MemoryStream outputPdfStream = new MemoryStream())
+                {
+                    PdfReader pdfReader = new PdfReader(inputPdfStream);
+                    PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
+                    PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
+                    var text = "Cabinet Medical name:  " + cabinetMedical.NameCabinet + "   Adress:" + cabinetMedical.Adress + "   Number Phone:" + cabinetMedical.numberPhone;
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                    pdfContentByte.BeginText();
+                    pdfContentByte.SetFontAndSize(baseFont, 12);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (1.45)), 0);
+
+                    pdfContentByte.EndText();
+                    pdfStamper.Close();
+                    return outputPdfStream.ToArray();
+                }
+            }
+        }
 
 
 
@@ -237,7 +258,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, pdfReader.GetPageSize(1).Height / (2), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (1.5)), 0);
 
                     pdfContentByte.EndText();
                     pdfStamper.Close();

@@ -86,7 +86,8 @@ namespace Server.Services.Foundation.FileMedicalService
                     var DoctorAccountCreatedFile = await this.userManager.SelectUserByIdDoctor(file.IdDoctor);
                     var specialitiesDoctor = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(file.IdDoctor);
                         var ListOrdreMedicalFileMeicalPatient = await this.ordreMedicalManager.SelectListOrdreMedicalByIdMedicalFile(file.Id);
-                        var ListChronicDiseases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdMedicalFileAsync(file.Id);
+                        ListOrdreMedicalFileMeicalPatient = ListOrdreMedicalFileMeicalPatient.Where(e => e.Status == Models.MedicalOrder.StatuseOrdreMedical.validate).ToList();
+                    var ListChronicDiseases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdMedicalFileAsync(file.Id);
                         foreach (var ItemChronicDeases in ListChronicDiseases)
                         {
                             var ChronicDiseases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdAsync(ItemChronicDeases.IdChronicDisease);
@@ -202,8 +203,8 @@ namespace Server.Services.Foundation.FileMedicalService
                     if(UserAccountDoctor != null)
                     {
                         var Specialities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(File.IdDoctor);
-                       // var DoctorInformation = MapperToDoctorInformationDto(Specialities, UserAccountDoctor);
                         var ListOrdreMedicalFileMeicalPatient = await this.ordreMedicalManager.SelectListOrdreMedicalByIdMedicalFile(File.Id);
+                        ListOrdreMedicalFileMeicalPatient = ListOrdreMedicalFileMeicalPatient.Where(e => e.Status == Models.MedicalOrder.StatuseOrdreMedical.validate).ToList();
                         var ChronicDeasesFileMedical = await this.chronicDiseasesManager.SelectChronicDiseasesByIdMedicalFileAsync(File.Id);
                         foreach(var ItemChronicFile in ChronicDeasesFileMedical)
                         {

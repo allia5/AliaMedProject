@@ -176,26 +176,24 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 var CabinetInformation = MapperToCabinetInformationAppointmentDto(Cabinet);
                 OrdreMedicalResult.cabinetInformation = CabinetInformation;
                var OrdreMedical = MapperToMedicalOrdre(Doctor.Id, Cabinet.Id, orderMedicalToAdd);
-                var OddreMedicalInsertResult = await this.ordreMedicalManager.InsertOrdreMedicalAsync(OrdreMedical);
+                var OrdreMedicalInsertResult = await this.ordreMedicalManager.InsertOrdreMedicalAsync(OrdreMedical);
                 
                 if(orderMedicalToAdd.Prescription != null)
                 {
                     ValidatePrescriptionOnAdd(orderMedicalToAdd.Prescription);
-                    var Prescription =MapperToPrescription(orderMedicalToAdd, OddreMedicalInsertResult);
+                    var Prescription =MapperToPrescription(orderMedicalToAdd, OrdreMedicalInsertResult);
                     Prescription.qrCode = GenerateQRCodeStringFromGuid(Prescription.Id);
                     var PrescriptionInsert = await this.prescriptionManager.InsertPrescriptionAsync(Prescription);
-                    PrescriptionInsert.FilePrescription = AddInfromationFileToToPdf(PrescriptionInsert.FilePrescription, FileMedical);
+                    PrescriptionInsert.FilePrescription = AddInfromationCabinetMedicalToToPdf(PrescriptionInsert.FilePrescription ,Cabinet);
+                  PrescriptionInsert.FilePrescription = AddInfromationFileToToPdf(PrescriptionInsert.FilePrescription, FileMedical);
                    var stringToAddFile = "";
-                    var ItemsAdd = "name Medicament" + "......................................................." + "Quantity";
                     float k = (float)0.02;
-                    PrescriptionInsert.FilePrescription = AddTextToPdf(PrescriptionInsert.FilePrescription, ItemsAdd, (float)k);
-                     k = (float)(k + 0.02);
                     foreach (var item in orderMedicalToAdd.Prescription.prescriptionLines)
                     {
                         ValidatePrecriptionLineOnAdd(item);
                        var prescriptionLineInsert = MapperToPrescriptionLine(PrescriptionInsert.Id, item);
                         await this.PrescriptionLineManager.InsertPrescriptionLineAsync(prescriptionLineInsert);
-                         stringToAddFile =item.MedicamentName + "..............................................................." + item.Quantity + Environment.NewLine;
+                        stringToAddFile = "medicament name:" + item.MedicamentName + " Quatity:" + item.Quantity;
                         PrescriptionInsert.FilePrescription = AddTextToPdf(PrescriptionInsert.FilePrescription, stringToAddFile,k);
                         k = (float)(k + 0.02);
                     }
@@ -209,9 +207,10 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 if (orderMedicalToAdd.RadioToAdd != null)
                 {
                     ValidateRadioOnAdd(orderMedicalToAdd.RadioToAdd);
-                   var Radio = MapperToRadio(orderMedicalToAdd.RadioToAdd, OddreMedicalInsertResult.Id);
+                   var Radio = MapperToRadio(orderMedicalToAdd.RadioToAdd, OrdreMedicalInsertResult.Id);
                     Radio.QrCode = GenerateQRCodeStringFromGuid(Radio.Id);
                     var RadioInser = await this.radioManager.InsertRadioAsync(Radio);
+                    Radio.FileRadio = AddInfromationCabinetMedicalToToPdf(Radio.FileRadio, Cabinet);
                     Radio.FileRadio = AddInfromationFileToToPdf(Radio.FileRadio, FileMedical);
                     float k = (float)0.02;
                     foreach (var item in orderMedicalToAdd.RadioToAdd.LineRadioMedicals)
@@ -219,7 +218,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                         ValidateRadioLineOnAdd(item);
                         var RadioLineInsert = MapperToRadioLine(Radio.Id, item);
                         await this.lineRadioMedicalManager.InsertLineRadioMedical(RadioLineInsert);
-                       var stringToAddFile = item.Description + "........." + item.Instruction + Environment.NewLine;
+                       var stringToAddFile = "Description: "+item.Description + " Instruction: " + item.Instruction + Environment.NewLine;
                         Radio.FileRadio = AddTextToPdf(Radio.FileRadio, stringToAddFile, k);
                         k = (float)(k + 0.02);
                     }
@@ -233,10 +232,10 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 if(orderMedicalToAdd.AnalyseToAdd != null)
                 {
                     ValidateAnalyseOnAdd(orderMedicalToAdd.AnalyseToAdd);
-                    var Analyse =MapperToAnalyse(orderMedicalToAdd.AnalyseToAdd, OddreMedicalInsertResult.Id);
+                    var Analyse =MapperToAnalyse(orderMedicalToAdd.AnalyseToAdd, OrdreMedicalInsertResult.Id);
                     Analyse.QrCode = GenerateQRCodeStringFromGuid(Analyse.Id);
                     var AnalyseInsert = await this.analyseManager.InsertAnalyseAsync(Analyse);
-                  
+                    Analyse.FileAnalyse = AddInfromationCabinetMedicalToToPdf(Analyse.FileAnalyse, Cabinet);
                     Analyse.FileAnalyse = AddInfromationFileToToPdf(Analyse.FileAnalyse, FileMedical);
                     float k = (float)0.02;
                     foreach (var item in orderMedicalToAdd.AnalyseToAdd.LineAnalyseMedicals)
@@ -244,7 +243,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                         ValidateAnalyseLineOnAdd(item);
                         var AnalyseLine = MapperToAnalyseLine(Analyse.Id, item);
                         await this.lineAnalyseMedicalManager.InsertLineAnalyseMedical(AnalyseLine);
-                        var stringToAddFile = item.Description + "................." + item.Instruction + Environment.NewLine;
+                        var stringToAddFile = "Description: " + item.Description +" Instruction:"+ item.Instruction + Environment.NewLine;
                         Analyse.FileAnalyse = AddTextToPdf(Analyse.FileAnalyse, stringToAddFile, k);
                         k = (float)(k + 0.02);
                     }

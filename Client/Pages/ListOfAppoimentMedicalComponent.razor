@@ -7,7 +7,7 @@
 
 
 <div class="container d-flex">
-    <input @bind="DateAppoiment" type="date" class="form-control" /><button @onclick="OnSearch" class="btn btn-dark">
+    <input @bind="DateAppoiment" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" /><button @onclick="OnSearch" class="btn btn-dark">
         Search
       
     </button>

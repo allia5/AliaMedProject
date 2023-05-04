@@ -96,6 +96,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var User = await this._userManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(User);
                 var ListAllPlanningMedicalUser = await this.planningAppoimentManager.SelectMedicalPlanningByIdUser(User.Id);
+                ListAllPlanningMedicalUser = ListAllPlanningMedicalUser.Where(e => e.AppointmentDate.Date >= DateTime.Now.Date).ToList();
                 foreach (var ItemPlanning in ListAllPlanningMedicalUser)
                 {
                     var JobPlanning = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(ItemPlanning.IdDoctor, ItemPlanning.IdCabinet);

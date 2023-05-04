@@ -64,7 +64,8 @@ namespace Server.Services.Foundation.SecretaryService
                 LastName = SecretaryUser.LastName,
                 NumberPhone = SecretaryUser.PhoneNumber,
                 sexe = (Sexe)SecretaryUser.Sexe,
-                StatusSecritary = (StatusSecritary)secretarys.Status
+                StatusSecritary = (StatusSecritary)secretarys.Status,
+                NationelNumber = SecretaryUser.NationalNumber
 
             };
         }

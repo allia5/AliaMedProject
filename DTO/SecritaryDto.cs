@@ -15,6 +15,7 @@ namespace DTO
         public DateTime DateOfBirth { get; set; }
         public string Email { get; set; }
         public string NumberPhone { get; set; }
+        public string NationelNumber { get; set; }
         public StatusSecritary StatusSecritary { get; set; }
 
     }
