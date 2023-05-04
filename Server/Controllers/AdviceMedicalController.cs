@@ -20,9 +20,33 @@ namespace Server.Controllers
         {
           this.adviceMedicalService = adviceMedicalService;
         }
+        [HttpPost("DoctorPostNewAdviceMedical")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult> PatientPostAdviceMedical([FromBody] MedicalAdviceToAddDto medicalAdviceToAddDto)
+        {
+            try
+            {
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.adviceMedicalService.PostNewAdviceMedicalDoctor(Email, medicalAdviceToAddDto);
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest();
+
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception ex)
+            {
+                return Problem();
+            }
+        }
         [HttpPost("PatientPostNewAdviceMedical")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
-        public async Task<ActionResult> PatientPostAdviceMedical([FromBody] MedicalAdviceToAddDto medicalAdviceToAddDto)
+        public async Task<ActionResult> DoctorPostAdviceMedical([FromBody] MedicalAdviceToAddDto medicalAdviceToAddDto)
         {
             try
             {
@@ -44,21 +68,51 @@ namespace Server.Controllers
                 return Problem();
             }
         }
-        [HttpGet("GetAdviceMedicalMessages/{OrdremEdiclaId}")]
+        [HttpGet("GetAdviceMedicalMessages/{OrdreMedicalId}")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
-        public async Task<ActionResult<List<AdviceMedicalDto>>> GetAdvicesMedical(string OrdremEdiclaId)
+        public async Task<ActionResult<List<AdviceMedicalDto>>> PatientGetAdvicesMedical(string OrdreMedicalId)
         {
             TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
-                OrdremEdiclaId = OrdremEdiclaId.Replace("-","/");
+                OrdreMedicalId = OrdreMedicalId.Replace("-","/");
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
-                var result=await this.adviceMedicalService.GetAdviceMedical(Email, OrdremEdiclaId);
+                var result=await this.adviceMedicalService.PatientGetAdviceMedical(Email, OrdreMedicalId);
                 transaction.Complete();
                 return result;
             }catch(ValidationException Ex)
             {
                 return BadRequest(Ex.Message); 
+            }
+            catch (ServiceException Ex)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
+        }
+        [HttpGet("DoctorGetAdviceMedicalMessages/{OrdreMedicalId}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult<List<AdviceMedicalDto>>> DoctorGetAdvicesMedical(string OrdreMedicalId)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+                OrdreMedicalId = OrdreMedicalId.Replace("-", "/");
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                var result = await this.adviceMedicalService.DoctorGetAdviceMedical(Email, OrdreMedicalId);
+                transaction.Complete();
+                return result;
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.Message);
             }
             catch (ServiceException Ex)
             {

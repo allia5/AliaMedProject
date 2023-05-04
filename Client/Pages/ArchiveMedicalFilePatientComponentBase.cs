@@ -91,7 +91,7 @@ namespace Client.Pages
             try
             {
                 await this.adviceMedicalService.PatientPostNewAdviceMedicalPatient(new MedicalAdviceToAddDto { Message = MessageSend, OrdreMedicalId = OrdreMedicalId });
-                this.adviceMedicalDtos = await this.adviceMedicalService.GetAdvicesMedical(OrdreMedicalId);
+                this.adviceMedicalDtos = await this.adviceMedicalService.GetAdvicesMedicalPatient(OrdreMedicalId);
                 this.adviceMedicalDtos = this.adviceMedicalDtos.OrderBy(e => e.DateSend).ToList();
             }
             catch(Exception Ex)
@@ -104,7 +104,7 @@ namespace Client.Pages
         {
             this.OrdreMedcialIdSelected = IdOrdreMedical;
             // var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
-            this.adviceMedicalDtos =  await this.adviceMedicalService.GetAdvicesMedical(IdOrdreMedical);
+            this.adviceMedicalDtos =  await this.adviceMedicalService.GetAdvicesMedicalPatient(IdOrdreMedical);
             this.adviceMedicalDtos= this.adviceMedicalDtos.OrderBy(e=>e.DateSend).ToList();
             this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchivePatient(FileId);
             this.ListmedicalOrdre = this.MedicalFileArchive.medicalOrdres.OrderByDescending(e => e.medicalOrdreDetails.DateValidation).ToList();

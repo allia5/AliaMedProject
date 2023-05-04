@@ -211,7 +211,7 @@ namespace Client.Services.Foundations.OrdreMedicalService
         {
             FileId = FileId.Replace("/", "-");
           
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/OrdreMedical/GetAllOrdreArchiveFileMedcialPatient/{FileId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/OrdreMedical/GetAllOrdreArchiveFileMedicalPatient/{FileId}");
             var JwtBearer = await this.LocalStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
             var result = await HttpClient.SendAsync(request);

@@ -87,8 +87,8 @@ namespace Client.Pages
         {
             try
             {
-                await this.adviceMedicalService.PatientPostNewAdviceMedicalPatient(new MedicalAdviceToAddDto { Message = MessageSend, OrdreMedicalId = OrdreMedicalId });
-                this.adviceMedicalDtos = await this.adviceMedicalService.GetAdvicesMedical(OrdreMedicalId);
+                await this.adviceMedicalService.DoctorPostNewAdviceMedicalPatient(new MedicalAdviceToAddDto { Message = MessageSend, OrdreMedicalId = OrdreMedicalId });
+                this.adviceMedicalDtos = await this.adviceMedicalService.GetAdvicesMedicalDoctor(OrdreMedicalId);
                 this.adviceMedicalDtos = this.adviceMedicalDtos.OrderBy(e => e.DateSend).ToList();
             }
             catch (Exception Ex)
@@ -100,17 +100,17 @@ namespace Client.Pages
         public async Task OpenAdviceMedical(string IdOrdreMedical)
         {
             this.OrdreMedcialIdSelected = IdOrdreMedical;
-            // var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
-            this.adviceMedicalDtos = await this.adviceMedicalService.GetAdvicesMedical(IdOrdreMedical);
+            this.adviceMedicalDtos = await this.adviceMedicalService.GetAdvicesMedicalDoctor(IdOrdreMedical);
             this.adviceMedicalDtos = this.adviceMedicalDtos.OrderBy(e => e.DateSend).ToList();
+            this.medicalAdviceDoctorDtos = await this.OrdreMedicalService.GetMedicalAdviceDoctor();
+            this.medicalAdviceDoctorDtos = this.medicalAdviceDoctorDtos.OrderByDescending(e => e.CountMessageNotViewed).ToList();
+
 
         }
         protected async Task DownloadFileResultRadio(string LineRadioId)
         {
             try
             {
-
-
                 // Save the file
                 var FileResult = await this.lineRadioResultService.GetFileResultRadioPatient(LineRadioId);
                 if (FileResult.DataFile != null && FileResult.FileType != null)
@@ -125,17 +125,11 @@ namespace Client.Pages
                     throw new Exception("File Is Empty");
                 }
 
-
-
-
             }
             catch (Exception e)
             {
                 this.ErrorMessage = e.Message;
             }
-
-
-
         }
 
         protected async Task DownloadFileResultAnalyse(string LineAnalyseId)
@@ -166,9 +160,6 @@ namespace Client.Pages
             {
                 this.ErrorMessage = e.Message;
             }
-
-
-
         }
         public async Task OnSelectOrdreMedical(string IdOrdreMedical)
         {
@@ -176,7 +167,7 @@ namespace Client.Pages
             var OrdreMedicalAdvice = this.medicalAdviceDoctorDtos.Where(e => e.MedicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
             this.medicalOrdreDetails = OrdreMedicalAdvice?.MedicalOrdreDetails ?? new MedicalOrdreDetails();
         }
-        protected async Task DownloadFilePrescription(string OrdreMedicalId)
+      /*  protected async Task DownloadFilePrescription(string OrdreMedicalId)
         {
             try
             {
@@ -209,6 +200,6 @@ namespace Client.Pages
             using var streamRef = new DotNetStreamReference(stream: stream);
             var fileName = "FileAnalyse.pdf";
             await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
-        }
+        }*/
     }
 }

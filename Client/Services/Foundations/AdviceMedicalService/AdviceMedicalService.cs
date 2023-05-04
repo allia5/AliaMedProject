@@ -18,7 +18,44 @@ namespace Client.Services.Foundations.AdviceMedicalService
             HttpClient = httpClient;
             this.LocalStorageService = LocalStorageService;
         }
-        public async  Task<List<AdviceMedicalDto>> GetAdvicesMedical(string OrdreMedicalId)
+
+        public async Task<List<AdviceMedicalDto>> GetAdvicesMedicalDoctor(string OrdreMedicalId)
+        {
+            OrdreMedicalId = OrdreMedicalId.Replace("/", "-");
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/AdviceMedical/DoctorGetAdviceMedicalMessages/{OrdreMedicalId}");
+            var JwtBearer = await this.LocalStorageService.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await HttpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<List<AdviceMedicalDto>>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new BadRequestException("Request Denied");
+            }
+            else
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+        public async  Task<List<AdviceMedicalDto>> GetAdvicesMedicalPatient(string OrdreMedicalId)
         {
             OrdreMedicalId = OrdreMedicalId.Replace("/", "-");
 
@@ -81,5 +118,36 @@ namespace Client.Services.Foundations.AdviceMedicalService
                 throw new ProblemException("Error Intern");
             }
         }
+
+       
+
+        public async Task DoctorPostNewAdviceMedicalPatient(MedicalAdviceToAddDto medicalAdviceToAddDto)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/AdviceMedical/DoctorPostNewAdviceMedical");
+            var MedicalAdviceToAdd = JsonSerializer.Serialize(medicalAdviceToAddDto);
+            request.Content = new StringContent(MedicalAdviceToAdd, Encoding.UTF8, "application/json");
+            var JwtBearer = await this.LocalStorageService.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await HttpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new PreconditionFailedException("Condition User denied");
+            }
+
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+
+       
     }
 }

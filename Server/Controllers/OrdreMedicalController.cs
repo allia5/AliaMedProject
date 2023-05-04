@@ -42,8 +42,8 @@ namespace Server.Controllers
                 return Problem(e.Message);
             }
         }
-        [HttpGet("GetAllOrdreArchiveFileMedcialPatient/{FileId}")]
-        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        [HttpGet("GetAllOrdreArchiveFileMedicalPatient/{FileId}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
         public async Task<ActionResult<MedicalFileArchivePatientDto>> GetMedicalArchivePatient( string FileId)
         {
             try
