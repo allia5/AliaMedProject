@@ -6,5 +6,6 @@ namespace Server.Services.Foundation.RadioMedicalService
     {
         public Task<InformationRadioResultDto> GetInformationRadioMedicalResult(string Email, string CodeQr);
         public Task<byte[]> SecritaryGetFileRadioByIdOrdreMedical(string Email, string OrdreMedicalId, string CabinetId);
+        public Task<byte[]> PatientGetFileRadioByIdOrdreMedical(string Email, string OrdreMedicalId);
     }
 }

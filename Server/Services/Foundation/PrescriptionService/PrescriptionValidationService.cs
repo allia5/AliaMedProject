@@ -30,7 +30,12 @@ namespace Server.Services.Foundation.PrescriptionService
                 throw new NullException(nameof(secretarys));
             }
         }
-        public void ValidateEntryOnGetFilePrescription(string Email,string OrdreMedicalId,string CabinetId)
+        public void ValidateEntryOnGetFilePrescriptionByPatient(string Email, string OrdreMedicalId)
+        {
+            if (Email.IsNullOrEmpty()) throw new ArgumentNullException(nameof(Email));
+            if (OrdreMedicalId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(OrdreMedicalId));
+        }
+        public void ValidateEntryOnGetFilePrescriptionBySecritary(string Email,string OrdreMedicalId,string CabinetId)
         {
             if (Email.IsNullOrEmpty()) throw new ArgumentNullException(nameof(Email));
             if (OrdreMedicalId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(OrdreMedicalId));
@@ -63,7 +68,7 @@ namespace Server.Services.Foundation.PrescriptionService
         }
         public void ValidationDoctorIsNull(Doctors doctor)
         {
-            if (doctor == null)
+            if (doctor == null && doctor?.StatusDoctor == StatusDoctor.Deactivated)
             {
                 throw new NullException(nameof(doctor));
 

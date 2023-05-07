@@ -33,6 +33,22 @@ namespace Server.Controllers
                 return result;
             }
         }
+        [HttpGet("DownloadFileRadio/{OrdreMedcialId}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetFileRadio(string OrdreMedcialId)
+        {
+            
+            OrdreMedcialId = OrdreMedcialId.Replace("-", "/");
+            var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+            var FileRadio = await this.RadioMedicalService.PatientGetFileRadioByIdOrdreMedical(Email, OrdreMedcialId);
+            using (MemoryStream pdfStream = new())
+            {
+                pdfStream.Write(FileRadio, 0, FileRadio.Length);
+                pdfStream.Position = 0;
+                var result = File(pdfStream.ToArray(), "application/pdf", "sample.pdf");
+                return result;
+            }
+        }
 
     }
 }

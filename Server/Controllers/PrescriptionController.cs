@@ -58,7 +58,7 @@ namespace Server.Controllers
             {
                 var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 OrdreMedicalId = OrdreMedicalId.Replace("-", "/");
-                var FilePrescription = await this.PrescriptionService.GetFilePrescriptionByIdOrdreMedical(Email, OrdreMedicalId);
+                var FilePrescription = await this.PrescriptionService.PatientGetFilePrescriptionByIdOrdreMedical(Email, OrdreMedicalId);
                 using (MemoryStream pdfStream = new())
                 {
                     pdfStream.Write(FilePrescription, 0, FilePrescription.Length);

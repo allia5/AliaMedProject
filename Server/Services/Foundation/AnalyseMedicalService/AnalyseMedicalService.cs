@@ -104,6 +104,24 @@ namespace Server.Services.Foundation.AnalyseMedicalService
 
 
             });
+
+        public async Task<byte[]> PatientGetFileAnalyseByIdOrdreMedical(string Email, string OrdreMedicalId) =>
+          await TryCatch(async () =>
+          {
+              ValidateEntryOnGetFileAnalyseByPatient(Email, OrdreMedicalId);
+              var UserAccount = await this._UserManager.FindByEmailAsync(Email);
+              ValidateUserIsNull(UserAccount);
+              var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(DecryptGuid(OrdreMedicalId));
+              ValidateOrdreMedical(OrdreMedical);
+              var DoctorAccount = await this.userManager.SelectUserByIdDoctor(OrdreMedical.IdDoctor);
+              ValidateUserIsNull(DoctorAccount);
+              var Doctor = await this.doctorManager.SelectDoctorByIdUser(DoctorAccount.Id);
+              ValidationDoctorIsNull(Doctor);
+              var FileAnalyse = await this.AnalyseManager.SelectAnalyseByOrdreMedicalId(DecryptGuid(OrdreMedicalId));
+              ValidateAnalyseIsNull(FileAnalyse);
+              return FileAnalyse.FileAnalyse;
+          });
+
         public async Task<byte[]> SecritaryGetFileAnalyseByIdOrdreMedical(string Email,string OrdreMedicalId,string CabinetId) =>
           await TryCatch(async () =>
           {

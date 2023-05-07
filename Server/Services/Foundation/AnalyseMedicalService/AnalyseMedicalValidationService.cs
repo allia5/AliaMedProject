@@ -16,6 +16,18 @@ namespace Server.Services.Foundation.AnalyseMedicalService
 {
     public partial class AnalyseMedicalService
     {
+        public void ValidateOrdreMedical(MedicalOrdres medicalOrdres)
+        {
+            if (medicalOrdres == null || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
+            {
+                throw new ArgumentNullException(nameof(medicalOrdres));
+            }
+        }
+        public void ValidateEntryOnGetFileAnalyseByPatient(string Email, string OrdreMedicalId)
+        {
+            if (Email.IsNullOrEmpty()) throw new ArgumentNullException(nameof(Email));
+            if (OrdreMedicalId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(OrdreMedicalId));
+        }
         public void ValidateCabinetMedical(CabinetMedical cabinetMedical)
         {
             if (cabinetMedical == null && cabinetMedical.statusService == StatusService.OffLine)

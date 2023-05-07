@@ -15,6 +15,11 @@ namespace Server.Services.Foundation.RadioMedicalService
 {
     public partial class RadioMedicalService
     {
+        public void ValidateEntryOnGetFileRadioByPatient(string Email, string OrdreMedicalId)
+        {
+            if (Email.IsNullOrEmpty()) throw new ArgumentNullException(nameof(Email));
+            if (OrdreMedicalId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(OrdreMedicalId));
+        }
         public void ValidateCabinetMedical(CabinetMedical cabinetMedical)
         {
             if (cabinetMedical == null && cabinetMedical.statusService == Models.CabinetMedicals.StatusService.OffLine)

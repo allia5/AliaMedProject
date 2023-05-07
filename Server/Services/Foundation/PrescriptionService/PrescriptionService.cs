@@ -103,7 +103,7 @@ namespace Server.Services.Foundation.PrescriptionService
         public async Task<byte[]> GetFilePrescriptionByIdOrdreMedical(string Email, string OrdreMedicalId, string CabinetId) =>
          await TryCatch(async () =>
          {
-             ValidateEntryOnGetFilePrescription(Email,OrdreMedicalId,CabinetId);
+             ValidateEntryOnGetFilePrescriptionBySecritary(Email,OrdreMedicalId,CabinetId);
              var UserAccountSecritary = await this._UserManager.FindByEmailAsync(Email);
              ValidateUserIsNull(UserAccountSecritary);
              var Secritary = await this.secretaryManager.SelectSecretaryByIdUserIdCabinet(UserAccountSecritary.Id,DecryptGuid(CabinetId));
@@ -119,6 +119,23 @@ namespace Server.Services.Foundation.PrescriptionService
 
          });
 
+        public async Task<byte[]> PatientGetFilePrescriptionByIdOrdreMedical(string Email, string OrdreMedicalId) =>
+         await TryCatch(async () =>
+         {
+             ValidateEntryOnGetFilePrescriptionByPatient(Email, OrdreMedicalId);
+             var UserAccount= await this._UserManager.FindByEmailAsync(Email);
+             ValidateUserIsNull(UserAccount);
+             var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(DecryptGuid(OrdreMedicalId));
+             ValidateOrdreMedical(OrdreMedical);
+             var DoctorAccount = await this.userManager.SelectUserByIdDoctor(OrdreMedical.IdDoctor);
+             ValidateUserIsNull(DoctorAccount);
+             var Doctor = await this.doctorManager.SelectDoctorByIdUser(DoctorAccount.Id);
+             ValidationDoctorIsNull(Doctor);
+             var FileMedicalPrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(OrdreMedical.Id);
+             ValidatePrescriptionIsNull(FileMedicalPrescription);
+             return FileMedicalPrescription.FilePrescription;
 
+
+         });
     }
 }
