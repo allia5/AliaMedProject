@@ -40,9 +40,11 @@ namespace Server.Services.Foundation.PrescriptionService
         public readonly IPharmacistManager pharmacistManager;
         public readonly ISecretaryManager secretaryManager;
         public readonly ICabinetMedicalManager cabinetMedicalManager;
+        public readonly IConfiguration configuration;
 
-        public PrescriptionService(ICabinetMedicalManager cabinetMedicalManager,ISecretaryManager secretaryManager,IPharmacistManager pharmacistManager,IFileMedicalManager fileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _userManager, IOrdreMedicalManager ordreMedicalManager, IPrescriptionManager prescriptionManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, ISpecialitiesManager specialitiesManager, ILinePrescriptionMedicalManager linePrescriptionMedicalManager)
+        public PrescriptionService(IConfiguration configuration,ICabinetMedicalManager cabinetMedicalManager,ISecretaryManager secretaryManager,IPharmacistManager pharmacistManager,IFileMedicalManager fileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _userManager, IOrdreMedicalManager ordreMedicalManager, IPrescriptionManager prescriptionManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, ISpecialitiesManager specialitiesManager, ILinePrescriptionMedicalManager linePrescriptionMedicalManager)
         {
+            this.configuration = configuration;
             this.cabinetMedicalManager = cabinetMedicalManager;
             this.pharmacistManager = pharmacistManager;
             this.FileMedicalManager = fileMedicalManager;
@@ -69,7 +71,7 @@ namespace Server.Services.Foundation.PrescriptionService
             ValidateUserIsNull(UserAcountPharmacist);
             var Pharmacist = await this.pharmacistManager.SelectPharmacistByIdUser(UserAcountPharmacist.Id);
             ValidatePharmacist(Pharmacist);
-            var Prescription = await this.prescriptionManager.SelectPrescriptionByCode(DecryptString(Code, "AJFNJjfjJZFJNdzj=="));
+            var Prescription = await this.prescriptionManager.SelectPrescriptionByCode(DecryptString(Code, configuration["KeysQrCod:KeyOrdreMedical"]));
             ValidatePrescriptionIsNull(Prescription);
             var ordreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Prescription.IdMedicalOrdre);
             ValidateOrdreMedical(ordreMedical);

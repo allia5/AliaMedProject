@@ -27,6 +27,7 @@ namespace Server.Services.Foundation.FileMedicalService
 {
     public partial class FileMedicalService : IFileMedicalService
     {
+        public readonly IConfiguration configuration;
         public readonly UserManager<User> _UserManager;
         public readonly IChronicDiseasesManager chronicDiseasesManager;
         public readonly IFileChronicDiseasesManager fileChronicDiseasesManager;
@@ -43,8 +44,9 @@ namespace Server.Services.Foundation.FileMedicalService
         public readonly IAnalyseManager analyseManager;
         public readonly IMailService mailService;
         
-        public FileMedicalService(IMailService mailService,IPrescriptionManager prescriptionManager,IRadioManager radioManager,IAnalyseManager analyseManager,ICabinetMedicalManager cabinetMedicalManager, ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
+        public FileMedicalService(IConfiguration configuration,IMailService mailService,IPrescriptionManager prescriptionManager,IRadioManager radioManager,IAnalyseManager analyseManager,ICabinetMedicalManager cabinetMedicalManager, ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager, IPlanningAppoimentManager planningAppoimentManager)
         {
+            this.configuration = configuration;
             this.mailService = mailService;
             this.prescriptionManager = prescriptionManager;
             this.radioManager = radioManager;
@@ -239,7 +241,7 @@ namespace Server.Services.Foundation.FileMedicalService
                 ValidateAppointmentWithDoctor(Appointment, Doctor);
                 var UserAccountPatient = await this._UserManager.FindByIdAsync(Appointment.IdUser);
                 ValidateUserIsNull(UserAccountPatient);
-                var FileMedical = await this.fileMedicalManager.SelectFilesMedicalByIdMedical(fileTransfer.IdMedical);
+                var FileMedical = await this.fileMedicalManager.SelectFilesMedicalByIdMedical(DecryptString(fileTransfer.IdMedical, configuration["KeysQrCod:KeyIdMedical"]));
                 var OldUserAccount = await this._UserManager.FindByIdAsync(FileMedical.IdUser);
                 validateeFileMedicalIsNull(FileMedical);
                var MailRequest = MapperToMailRequestUpdateFileMedical(FileMedical, UserAccountDoctor, UserAccountPatient, OldUserAccount);

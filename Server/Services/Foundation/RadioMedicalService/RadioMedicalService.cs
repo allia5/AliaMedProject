@@ -40,9 +40,11 @@ namespace Server.Services.Foundation.RadioMedicalService
         public readonly ILineRadioMedicalManager lineRadioMedicalManager;
         public readonly ISecretaryManager secretaryManager;
         public readonly ICabinetMedicalManager cabinetMedicalManager;
+        public readonly IConfiguration configuration;
 
-        public RadioMedicalService(ICabinetMedicalManager cabinetMedicalManager, ISecretaryManager secretaryManager, ILineRadioMedicalManager lineRadioMedicalManager, ISpecialitiesManager specialitiesManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IRadioManager radioManager)
+        public RadioMedicalService(IConfiguration configuration,ICabinetMedicalManager cabinetMedicalManager, ISecretaryManager secretaryManager, ILineRadioMedicalManager lineRadioMedicalManager, ISpecialitiesManager specialitiesManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IRadioManager radioManager)
         {
+            this.configuration = configuration;
             this.secretaryManager = secretaryManager;
             this.cabinetMedicalManager = cabinetMedicalManager;
             this.lineRadioMedicalManager = lineRadioMedicalManager;
@@ -86,7 +88,7 @@ namespace Server.Services.Foundation.RadioMedicalService
                 ValidateUserIsNull(UserAcccountRadiology);
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAcccountRadiology.Id);
                 ValidationDoctorIsNull(Doctor);
-                var codeQr = DecryptString(CodeQr, "AJFNJjfjJZFJNdzj==");
+                var codeQr = DecryptString(CodeQr, configuration["KeysQrCod:KeyOrdreMedical"]);
                 var Radio = await this.radioManager.SelectRadioByCodeAsync(codeQr);
                 ValidateRadioIsNull(Radio);
                 var LinesRadio = await this.lineRadioMedicalManager.SelectAllLineMedicalByIdRadio(Radio.Id);

@@ -36,7 +36,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
     public partial class OrdreMedicalService : IOrdreMedicalService
     {
         public readonly UserManager<User> _UserManager;
-       
+        public readonly IConfiguration configuration;
         public readonly IFileMedicalService FileMedicalService;
         public readonly IUserManager userManager;
         public readonly IDoctorManager doctorManager;
@@ -56,8 +56,9 @@ namespace Server.Services.Foundation.OrdreMedicalService
         public readonly ILineAnalyseMedicalManager lineAnalyseMedicalManager;
         public readonly IAdviceManager adviceManager;
         
-        public OrdreMedicalService(IAdviceManager adviceManager,ILineRadioMedicalManager lineRadioMedicalManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager,IMailService mailService,ISecretaryManager secretaryManager, IPrescriptionManager prescriptionManager, ILinePrescriptionMedicalManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
+        public OrdreMedicalService(IConfiguration configuration,IAdviceManager adviceManager,ILineRadioMedicalManager lineRadioMedicalManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager,IMailService mailService,ISecretaryManager secretaryManager, IPrescriptionManager prescriptionManager, ILinePrescriptionMedicalManager PrescriptionLineManager, IRadioManager radioManager, IAnalyseManager analyseManager, ICabinetMedicalManager cabinetMedicalManager, IFileMedicalService FileMedicalService,ISpecialitiesManager specialitiesManager, IOrdreMedicalManager ordreMedicalManager, IWorkDoctorManager workDoctorManager, IPlanningAppoimentManager planningAppoimentManager, UserManager<User> _UserManager, IUserManager userManager, IDoctorManager doctorManager, IFileMedicalManager fileMedicalManager)
         {
+            this.configuration = configuration;
             this.adviceManager = adviceManager;
             this.doctorManager = doctorManager;
             this.lineAnalyseMedicalManager= lineAnalyseMedicalManager;
@@ -199,8 +200,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     }
 
                     PrescriptionInsert.FilePrescription = AddInfromationDoctorToToPdf(PrescriptionInsert.FilePrescription, UserAccountDoctor, k);
-                    PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription, FileMedical.MedicalIdentification, 100, 0);
-                    PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription,EncryptString( Prescription.qrCode,"AJFNJjfjJZFJNdzj=="),0,0);
+                    PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription,EncryptString(FileMedical.MedicalIdentification, configuration["KeysQrCod:KeyIdMedical"]), 100, 0);
+                    PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription,EncryptString( Prescription.qrCode, configuration["KeysQrCod:KeyOrdreMedical"]),0,0);
                     await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
                     OrdreMedicalResult.Lines = orderMedicalToAdd.Prescription.prescriptionLines;
                 }
@@ -224,8 +225,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     }
                    
                     Radio.FileRadio = AddInfromationDoctorToToPdf(Radio.FileRadio, UserAccountDoctor, (float)k);
-                    Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio, FileMedical.MedicalIdentification, 100, 0);
-                    Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString(Radio.QrCode,"AJFNJjfjJZFJNdzj=="), 0, 0);
+                    Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString( FileMedical.MedicalIdentification, configuration["KeysQrCod:KeyIdMedical"]), 100, 0);
+                    Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString(Radio.QrCode, configuration["KeysQrCod:KeyOrdreMedical"]), 0, 0);
                     var RadioInsert =  await this.radioManager.UpdateRadioAsync(Radio);
                     OrdreMedicalResult.ResultFileMedicalRadio = RadioInsert.FileRadio;
                 }
@@ -249,8 +250,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     }
                 
                     Analyse.FileAnalyse = AddInfromationDoctorToToPdf(Analyse.FileAnalyse, UserAccountDoctor, (float)k);
-                    Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse, FileMedical.MedicalIdentification, 100, 0);
-                    Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( Analyse.QrCode, "AJFNJjfjJZFJNdzj=="), 0, 0);
+                    Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( FileMedical.MedicalIdentification, configuration["KeysQrCod:KeyIdMedical"]), 100, 0);
+                    Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( Analyse.QrCode, configuration["KeysQrCod:KeyOrdreMedical"]), 0, 0);
                     var NewAnalyseInsert = await this.analyseManager.UpdateAnalyseAsync(Analyse);
                     OrdreMedicalResult.ResultFileMedicalAnalyse = Analyse.FileAnalyse;
                 }

@@ -26,6 +26,7 @@ namespace Server.Services.Foundation.AnalyseMedicalService
 {
     public partial class AnalyseMedicalService : IAnalyseMedicalService
     {
+        public readonly IConfiguration configuration;
         public readonly IFileMedicalManager FileMedicalManager;
         public readonly IUserManager userManager;
         public readonly IDoctorManager doctorManager;
@@ -40,8 +41,9 @@ namespace Server.Services.Foundation.AnalyseMedicalService
         public readonly ISecretaryManager secretaryManager;
         public readonly ICabinetMedicalManager cabinetMedicalManager;
 
-        public AnalyseMedicalService(ICabinetMedicalManager cabinetMedicalManager,ISecretaryManager secretaryManager,ISpecialisteAnalyseManager specialisteAnalyseManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager, ISpecialitiesManager specialitiesManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IAnalyseManager AnalyseManager)
+        public AnalyseMedicalService(IConfiguration configuration,ICabinetMedicalManager cabinetMedicalManager,ISecretaryManager secretaryManager,ISpecialisteAnalyseManager specialisteAnalyseManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager, ISpecialitiesManager specialitiesManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IAnalyseManager AnalyseManager)
         {
+            this.configuration = configuration;
             this.specialisteAnalyseManager = specialisteAnalyseManager;
             this.lineAnalyseMedicalManager = lineAnalyseMedicalManager;
             this.specialitiesManager = specialitiesManager;
@@ -69,10 +71,10 @@ namespace Server.Services.Foundation.AnalyseMedicalService
                 ValidateUserIsNull(UserAccountSpecialisteAnalyse);
                 var SpecialistAnalyse = await this.specialisteAnalyseManager.SelectSpecialisteAnalyseByIdUser(UserAccountSpecialisteAnalyse.Id);
                 ValidateSpecialisteAnalyseIsNull(SpecialistAnalyse);
-                var Analyse = await this.AnalyseManager.SelectAnalyseByCodeAsync(DecryptString(codeQr, "AJFNJjfjJZFJNdzj=="));
+                var Analyse = await this.AnalyseManager.SelectAnalyseByCodeAsync(DecryptString(codeQr, configuration["KeysQrCod:KeyOrdreMedical"]));
                 ValidateAnalyseIsNull(Analyse);
                 var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Analyse.IdOrdreMedical);
-                ValidateOrdreMedicalIsNull(OrdreMedical);
+                ValidateOrdreMedical(OrdreMedical);
                 var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdOrdreMedicalAsync(OrdreMedical.Id);
                 ValidateFileMedicalIsNull(FileMedical);
                 var UserAccountPatient = await this._UserManager.FindByIdAsync(FileMedical.IdUser);
