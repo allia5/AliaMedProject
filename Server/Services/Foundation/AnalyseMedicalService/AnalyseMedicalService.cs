@@ -19,6 +19,8 @@ using static Server.Services.Foundation.PlanningAppoimentService.PlanningAppoime
 using static Server.Services.Foundation.DoctorService.DoctorServiceMapper;
 using static Server.Services.Foundation.AnalyseMedicalService.AnalyseMedicalMapperService;
 using Server.Models.FileChronicDisease;
+using Server.Managers.Storages.CabinetMedicalManager;
+using Server.Managers.Storages.SecretaryManager;
 
 namespace Server.Services.Foundation.AnalyseMedicalService
 {
@@ -35,8 +37,10 @@ namespace Server.Services.Foundation.AnalyseMedicalService
         public readonly ISpecialitiesManager specialitiesManager;
         public readonly ILineAnalyseMedicalManager lineAnalyseMedicalManager;
         public readonly ISpecialisteAnalyseManager specialisteAnalyseManager;
+        public readonly ISecretaryManager secretaryManager;
+        public readonly ICabinetMedicalManager cabinetMedicalManager;
 
-        public AnalyseMedicalService(ISpecialisteAnalyseManager specialisteAnalyseManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager, ISpecialitiesManager specialitiesManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IAnalyseManager AnalyseManager)
+        public AnalyseMedicalService(ICabinetMedicalManager cabinetMedicalManager,ISecretaryManager secretaryManager,ISpecialisteAnalyseManager specialisteAnalyseManager,ILineAnalyseMedicalManager lineAnalyseMedicalManager, ISpecialitiesManager specialitiesManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IAnalyseManager AnalyseManager)
         {
             this.specialisteAnalyseManager = specialisteAnalyseManager;
             this.lineAnalyseMedicalManager = lineAnalyseMedicalManager;
@@ -49,6 +53,9 @@ namespace Server.Services.Foundation.AnalyseMedicalService
             this.AnalyseManager = AnalyseManager;
             this.chronicDiseasesManager = chronicDiseasesManager;
             this.fileChronicDiseasesManager = fileChronicDiseasesManager;
+            this.cabinetMedicalManager = cabinetMedicalManager;
+            this.secretaryManager = secretaryManager;
+
 
         }
         public async Task<InformationAnalyseResultDto> GetAllAnalyseResultByCode(string Email, string codeQr) =>
@@ -97,10 +104,18 @@ namespace Server.Services.Foundation.AnalyseMedicalService
 
 
             });
-        public async Task<byte[]> GetFileAnalyseByIdOrdreMedical(string OrdreMedicalId) =>
+        public async Task<byte[]> SecritaryGetFileAnalyseByIdOrdreMedical(string Email,string OrdreMedicalId,string CabinetId) =>
           await TryCatch(async () =>
           {
-              ValidateStringIsNull(OrdreMedicalId);
+              ValidateEntryOnGetFileAnalyse(Email, OrdreMedicalId, CabinetId);
+              var UserAccountSecritary = await this._UserManager.FindByEmailAsync(Email);
+              ValidateUserIsNull(UserAccountSecritary);
+              var Secritary = await this.secretaryManager.SelectSecretaryByIdUserIdCabinet(UserAccountSecritary.Id, DecryptGuid(CabinetId));
+              ValidateSecritary(Secritary);
+              var CabinetMedical = await this.cabinetMedicalManager.SelectCabinetMedicalById(Secritary.IdCabinetMedical);
+              ValidateCabinetMedical(CabinetMedical);
+              var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(DecryptGuid(OrdreMedicalId));
+              ValidateOrdreMedicalIsNull(OrdreMedical);
               var FileAnalyse = await this.AnalyseManager.SelectAnalyseByOrdreMedicalId(DecryptGuid(OrdreMedicalId));
               ValidateAnalyseIsNull(FileAnalyse);
               return FileAnalyse.FileAnalyse;

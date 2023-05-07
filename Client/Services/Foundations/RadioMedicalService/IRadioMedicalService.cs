@@ -2,6 +2,6 @@
 {
     public interface IRadioMedicalService
     {
-        public Task<Stream> GetMedicalFileRadio(string OrdreId);
+        public Task<Stream> SecritaryGetMedicalFileRadio(string OrdreId,string CabinetId);
     }
 }

@@ -197,7 +197,7 @@ namespace Client.Pages
               
                
                 // Save the file
-                var stream = await this.PrescriptionService.GetMedicalFilePrescription(OrdreMedicalId);
+                var stream = await this.PrescriptionService.SecritaryGetMedicalFilePrescription(OrdreMedicalId,CabinetId);
                 using var streamRef = new DotNetStreamReference(stream: stream);
                 var fileName = "File.pdf";
                 await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);         
@@ -212,14 +212,14 @@ namespace Client.Pages
         }
         protected async Task DownloadFileRadio()
         {
-            var stream = await this.radioMedicalService.GetMedicalFileRadio(OrdreMedicalId);
+            var stream = await this.radioMedicalService.SecritaryGetMedicalFileRadio(OrdreMedicalId,CabinetId);
             using var streamRef = new DotNetStreamReference(stream: stream);
             var fileName = "FileRadio.pdf";
             await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
         }
         protected async Task DownloadFileAnalyse()
         {
-            var stream = await this.analyseMedicalService.GetMedicalFileAnalyse(OrdreMedicalId);
+            var stream = await this.analyseMedicalService.SecritaryGetMedicalFileAnalyse(OrdreMedicalId,CabinetId);
             using var streamRef = new DotNetStreamReference(stream: stream);
             var fileName = "FileAnalyse.pdf";
             await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);

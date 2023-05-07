@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Services.Foundation.AnalyseMedicalService;
 using Server.Services.Foundation.RadioMedicalService;
+using System.Security.Claims;
 
 namespace Server.Controllers
 {
@@ -14,11 +17,14 @@ namespace Server.Controllers
         {
             this.RadioMedicalService = RadioMedicalService;
         }
-        [HttpGet("DownloadFileRadio/{Id}")]
-        public async Task<IActionResult> GetFileRadio(string Id)
+        [HttpGet("SecritaryDownloadFileRadio/{OrdreMedcialId}/{CabinetId}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE")]
+        public async Task<IActionResult> GetFileRadio(string OrdreMedcialId,string CabinetId)
         {
-            Id = Id.Replace("-", "/");
-            var FileRadio = await this.RadioMedicalService.GetFileRadioByIdOrdreMedical(Id);
+            CabinetId = CabinetId.Replace("-", "/");
+            OrdreMedcialId = OrdreMedcialId.Replace("-", "/");
+            var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+            var FileRadio = await this.RadioMedicalService.SecritaryGetFileRadioByIdOrdreMedical(Email,OrdreMedcialId,CabinetId);
             using (MemoryStream pdfStream = new())
             {
                 pdfStream.Write(FileRadio, 0, FileRadio.Length);

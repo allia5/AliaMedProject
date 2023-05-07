@@ -2,6 +2,6 @@
 {
     public interface IPrescriptionService
     {
-        public Task<Stream> GetMedicalFilePrescription(string OrdreId);
+        public Task<Stream> SecritaryGetMedicalFilePrescription(string OrdreId, string CabinetId);
     }
 }

@@ -1,4 +1,6 @@
-﻿using Server.Models.Analyse;
+﻿using Microsoft.IdentityModel.Tokens;
+using Server.Models.Analyse;
+using Server.Models.CabinetMedicals;
 using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
@@ -6,6 +8,7 @@ using Server.Models.fileMedical;
 using Server.Models.MedicalOrder;
 using Server.Models.Radiologys;
 using Server.Models.RadioMedical;
+using Server.Models.secretary;
 using Server.Models.SpecialisteAnalyses;
 using Server.Models.UserAccount;
 
@@ -13,6 +16,26 @@ namespace Server.Services.Foundation.AnalyseMedicalService
 {
     public partial class AnalyseMedicalService
     {
+        public void ValidateCabinetMedical(CabinetMedical cabinetMedical)
+        {
+            if (cabinetMedical == null && cabinetMedical.statusService == StatusService.OffLine)
+            {
+                throw new NullException(nameof(cabinetMedical));
+            }
+        }
+        public void ValidateSecritary(Secretarys secretarys)
+        {
+            if (secretarys == null || secretarys.Status != StatusSecretary.Active)
+            {
+                throw new NullException(nameof(secretarys));
+            }
+        }
+        public void ValidateEntryOnGetFileAnalyse(string Email, string OrdreMedicalId, string CabinetId)
+        {
+            if (Email.IsNullOrEmpty()) throw new ArgumentNullException(nameof(Email));
+            if (OrdreMedicalId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(OrdreMedicalId));
+            if (CabinetId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(CabinetId));
+        }
         public void ValidateStringIsNull(string Entry)
         {
             if (Entry == null) throw new ArgumentNullException(nameof(Entry));
@@ -54,7 +77,7 @@ namespace Server.Services.Foundation.AnalyseMedicalService
        
         public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
         {
-            if (medicalOrdres == null || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
+            if (medicalOrdres == null )
             {
                 throw new ArgumentNullException(nameof(medicalOrdres));
             }

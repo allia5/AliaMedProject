@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models.Doctor.Exceptions;
 using Server.Services.Foundation.AnalyseMedicalService;
+using System.Security.Claims;
 
 namespace Server.Controllers
 {
@@ -20,11 +23,14 @@ namespace Server.Controllers
 
        
 
-        [HttpGet("DownloadFileAnalyse/{Id}")]
-        public async Task<IActionResult> GetFileAnalyse(string Id)
+        [HttpGet("SecritaryDownloadFileAnalyse/{OrdreMedicalId}/{CabinetId}")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE")]
+        public async Task<IActionResult> GetFileAnalyse(string OrdreMedicalId,string CabinetId)
         {
-            Id = Id.Replace("-", "/");
-            var FileAnalyse = await this.AnalyseMedicalService.GetFileAnalyseByIdOrdreMedical(Id);
+            CabinetId = CabinetId.Replace("-", "/");
+            OrdreMedicalId = OrdreMedicalId.Replace("-", "/");
+            var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+            var FileAnalyse = await this.AnalyseMedicalService.SecritaryGetFileAnalyseByIdOrdreMedical(Email,OrdreMedicalId,CabinetId);
             using (MemoryStream pdfStream = new())
             {
                 pdfStream.Write(FileAnalyse, 0, FileAnalyse.Length);

@@ -1,10 +1,11 @@
 ﻿using Client.Services.Exceptions;
 using Client.Services.Foundations.LocalStorageService;
+using DTO;
 using System.Net;
 
 namespace Client.Services.Foundations.AnalyseMedicalService
 {
-    public class AnalyseMedicalService:IAnalyseMedicalService
+    public partial class AnalyseMedicalService:IAnalyseMedicalService
     {
         public HttpClient httpClient { get; set; }
         public ILocalStorageServices localStorageServices { get; set; }
@@ -13,10 +14,14 @@ namespace Client.Services.Foundations.AnalyseMedicalService
             this.httpClient = httpClient;
             this.localStorageServices = localStorageServices;
             }
-    public async Task<Stream> GetMedicalFileAnalyse(string OrdreId)
+    public async Task<Stream> SecritaryGetMedicalFileAnalyse(string OrdreId, string CabinetId)
         {
             OrdreId = OrdreId.Replace("/", "-");
-            var result = await this.httpClient.GetAsync($"/api/AnalyseMedical/DownloadFileAnalyse/{OrdreId}");
+            CabinetId = CabinetId.Replace("/", "-");
+            var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            var requestHttp = new HttpRequestMessage(HttpMethod.Get, $"/api/AnalyseMedical/SecritaryDownloadFileAnalyse/{OrdreId}/{CabinetId}");
+            requestHttp.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
+            var result = await this.httpClient.SendAsync(requestHttp);
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 return await result.Content.ReadAsStreamAsync();

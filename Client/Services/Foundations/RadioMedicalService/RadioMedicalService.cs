@@ -1,5 +1,6 @@
 ﻿using Client.Services.Exceptions;
 using Client.Services.Foundations.LocalStorageService;
+using DTO;
 using System.Net;
 
 namespace Client.Services.Foundations.RadioMedicalService
@@ -13,10 +14,14 @@ namespace Client.Services.Foundations.RadioMedicalService
             this.httpClient = httpClient;
             this.localStorageServices = localStorageServices;
             }
-    public async Task<Stream> GetMedicalFileRadio(string OrdreId)
+    public async Task<Stream> SecritaryGetMedicalFileRadio(string OrdreId,string CabinetId)
         {
             OrdreId = OrdreId.Replace("/", "-");
-            var result = await this.httpClient.GetAsync($"/api/RadioMedical/DownloadFileRadio/{OrdreId}");
+            CabinetId = CabinetId.Replace("/", "-");
+            var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            var requestHttp = new HttpRequestMessage(HttpMethod.Get, $"/api/RadioMedical/SecritaryDownloadFileRadio/{OrdreId}/{CabinetId}");
+            requestHttp.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
+            var result = await this.httpClient.SendAsync(requestHttp);
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 return await result.Content.ReadAsStreamAsync();

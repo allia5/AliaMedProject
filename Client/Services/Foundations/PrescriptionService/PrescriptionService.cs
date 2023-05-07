@@ -1,5 +1,7 @@
 ﻿using Client.Services.Exceptions;
 using Client.Services.Foundations.LocalStorageService;
+using DTO;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace Client.Services.Foundations.PrescriptionService
@@ -13,11 +15,15 @@ namespace Client.Services.Foundations.PrescriptionService
             this.localStorageServices = localStorageServices;
             this.httpClient = httpClient;
             }
-        public async Task<Stream> GetMedicalFilePrescription(string OrdreId)
+        public async Task<Stream> SecritaryGetMedicalFilePrescription(string OrdreId,string CabinetId)
         {
             //OrdreId = System.Web.HttpUtility.UrlEncode(OrdreId);
             OrdreId = OrdreId.Replace("/", "-");
-            var result = await this.httpClient.GetAsync($"/api/Prescription/DownloadFilePrescription/{OrdreId}");
+            CabinetId = CabinetId.Replace("/", "-");
+            var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            var requestHttp = new HttpRequestMessage(HttpMethod.Get, $"/api/Prescription/SecritaryDownloadFilePrescription/{OrdreId}/{CabinetId}");
+            requestHttp.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
+            var result = await this.httpClient.SendAsync(requestHttp);
             if (result.StatusCode == HttpStatusCode.OK)
             {
                 return await result.Content.ReadAsStreamAsync();

@@ -7,11 +7,34 @@ using Server.Models.RadioMedical;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 using Server.Models.fileMedical;
+using Microsoft.IdentityModel.Tokens;
+using Server.Models.secretary;
+using Server.Models.CabinetMedicals;
 
 namespace Server.Services.Foundation.RadioMedicalService
 {
     public partial class RadioMedicalService
     {
+        public void ValidateCabinetMedical(CabinetMedical cabinetMedical)
+        {
+            if (cabinetMedical == null && cabinetMedical.statusService == Models.CabinetMedicals.StatusService.OffLine)
+            {
+                throw new NullException(nameof(cabinetMedical));
+            }
+        }
+        public void ValidateSecritary(Secretarys secretarys)
+        {
+            if (secretarys == null || secretarys.Status != StatusSecretary.Active)
+            {
+                throw new NullException(nameof(secretarys));
+            }
+        }
+        public void ValidateEntryOnGetFileRadio(string Email, string OrdreMedicalId, string CabinetId)
+        {
+            if (Email.IsNullOrEmpty()) throw new ArgumentNullException(nameof(Email));
+            if (OrdreMedicalId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(OrdreMedicalId));
+            if (CabinetId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(CabinetId));
+        }
         public void ValidateStringIsNull(string Entry)
         {
             if (Entry == null) throw new ArgumentNullException(nameof(Entry));
@@ -42,9 +65,16 @@ namespace Server.Services.Foundation.RadioMedicalService
                 throw new ArgumentNullException("codeQr");
             }
         }
+        public void ValidateOrdreMedical(MedicalOrdres medicalOrdres)
+        {
+            if (medicalOrdres == null || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
+            {
+                throw new ArgumentNullException(nameof(medicalOrdres));
+            }
+        }
         public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
         {
-            if (medicalOrdres == null || medicalOrdres.Status== StatuseOrdreMedical.NotValidate)
+            if (medicalOrdres == null)
             {
                 throw new ArgumentNullException(nameof(medicalOrdres));
             }

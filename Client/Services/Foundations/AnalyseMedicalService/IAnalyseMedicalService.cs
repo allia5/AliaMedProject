@@ -2,6 +2,6 @@
 {
     public interface IAnalyseMedicalService
     {
-        public Task<Stream> GetMedicalFileAnalyse(string OrdreId);
+        public Task<Stream> SecritaryGetMedicalFileAnalyse(string OrdreId, string CabinetId);
     }
 }

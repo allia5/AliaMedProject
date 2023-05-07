@@ -56,6 +56,8 @@ namespace Client.Pages
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
 
+  
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
@@ -266,7 +268,9 @@ namespace Client.Pages
 
                     await this.OrdreMedicalService.PostOrdreMedicalPatient(OrderMedicalToAddDro);
 
-                    SuccessMessage = "Operation Success";
+                this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchive(FileId, AppointmentId);
+                this.ListmedicalOrdre = this.MedicalFileArchive.medicalOrdres.OrderByDescending(e => e.medicalOrdreDetails.DateValidation).ToList();
+                SuccessMessage = "Operation Success";
                     this.isLoading = false;
                 this.ErrorMessage = null;
 

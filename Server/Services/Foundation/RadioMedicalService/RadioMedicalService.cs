@@ -38,9 +38,13 @@ namespace Server.Services.Foundation.RadioMedicalService
         public readonly IChronicDiseasesManager chronicDiseasesManager;
         public readonly ISpecialitiesManager specialitiesManager;
         public readonly ILineRadioMedicalManager lineRadioMedicalManager;
-        
-        public RadioMedicalService(ILineRadioMedicalManager lineRadioMedicalManager,ISpecialitiesManager specialitiesManager,IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IRadioManager radioManager)
+        public readonly ISecretaryManager secretaryManager;
+        public readonly ICabinetMedicalManager cabinetMedicalManager;
+
+        public RadioMedicalService(ICabinetMedicalManager cabinetMedicalManager,ISecretaryManager secretaryManager,ILineRadioMedicalManager lineRadioMedicalManager,ISpecialitiesManager specialitiesManager,IFileChronicDiseasesManager fileChronicDiseasesManager,IChronicDiseasesManager chronicDiseasesManager,UserManager<User> _UserManager, IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, IPlanningAppoimentManager planningAppoimentManager, IOrdreMedicalManager ordreMedicalManager, IRadioManager radioManager)
         {
+            this.secretaryManager = secretaryManager;
+            this.cabinetMedicalManager = cabinetMedicalManager;
             this.lineRadioMedicalManager = lineRadioMedicalManager;
             this.specialitiesManager = specialitiesManager;
             this.doctorManager = doctorManager;
@@ -53,10 +57,18 @@ namespace Server.Services.Foundation.RadioMedicalService
             this.fileChronicDiseasesManager= fileChronicDiseasesManager;
 
         }
-        public async Task<byte[]> GetFileRadioByIdOrdreMedical(string OrdreMedicalId) =>
+        public async Task<byte[]> SecritaryGetFileRadioByIdOrdreMedical(string Email, string OrdreMedicalId, string CabinetId) =>
         await TryCatch(async () =>
         {
-            ValidateStringIsNull(OrdreMedicalId);
+            ValidateEntryOnGetFileRadio(Email, OrdreMedicalId, CabinetId);
+            var UserAccountSecritary = await this._UserManager.FindByEmailAsync(Email);
+            ValidateUserIsNull(UserAccountSecritary);
+            var Secritary = await this.secretaryManager.SelectSecretaryByIdUserIdCabinet(UserAccountSecritary.Id, DecryptGuid(CabinetId));
+            ValidateSecritary(Secritary);
+            var CabinetMedical = await this.cabinetMedicalManager.SelectCabinetMedicalById(Secritary.IdCabinetMedical);
+            ValidateCabinetMedical(CabinetMedical);
+            var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(DecryptGuid(OrdreMedicalId));
+            ValidateOrdreMedicalIsNull(OrdreMedical);
             var FileRadio = await this.radioManager.SelectRadioByIdMedicalOrdre(DecryptGuid(OrdreMedicalId));
             ValidateRadioIsNull(FileRadio);
             return FileRadio.FileRadio;
@@ -80,7 +92,7 @@ namespace Server.Services.Foundation.RadioMedicalService
                 var LinesRadio = await this.lineRadioMedicalManager.SelectAllLineMedicalByIdRadio(Radio.Id);
                 LinesRadio = LinesRadio.Where(e => e.Status == Models.RadioMedical.StatusRadio.notValidate).ToList();
                 var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Radio.IdOrdreMedical);
-                ValidateOrdreMedicalIsNull(OrdreMedical);
+                ValidateOrdreMedical(OrdreMedical);
                 var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdAsync(OrdreMedical.IdFileMedical);
                 ValidateFileMedicalIsNull(FileMedical);
                 var FileChronicDeases = await this.chronicDiseasesManager.SelectChronicDiseasesByIdMedicalFileAsync(FileMedical.Id);

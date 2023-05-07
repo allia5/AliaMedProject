@@ -20,6 +20,8 @@ using Server.Managers.Storages.PharmacistManager;
 using Server.Models.Prescriptions;
 using Microsoft.AspNetCore.Http.Features;
 using Server.Models.Specialites;
+using Server.Managers.Storages.SecretaryManager;
+using Server.Managers.Storages.CabinetMedicalManager;
 
 namespace Server.Services.Foundation.PrescriptionService
 {
@@ -36,12 +38,15 @@ namespace Server.Services.Foundation.PrescriptionService
         public readonly ISpecialitiesManager specialitiesManager;
         public readonly ILinePrescriptionMedicalManager linePrescriptionMedicalManager;
         public readonly IPharmacistManager pharmacistManager;
+        public readonly ISecretaryManager secretaryManager;
+        public readonly ICabinetMedicalManager cabinetMedicalManager;
 
-        public PrescriptionService(IPharmacistManager pharmacistManager,IFileMedicalManager fileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _userManager, IOrdreMedicalManager ordreMedicalManager, IPrescriptionManager prescriptionManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, ISpecialitiesManager specialitiesManager, ILinePrescriptionMedicalManager linePrescriptionMedicalManager)
+        public PrescriptionService(ICabinetMedicalManager cabinetMedicalManager,ISecretaryManager secretaryManager,IPharmacistManager pharmacistManager,IFileMedicalManager fileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _userManager, IOrdreMedicalManager ordreMedicalManager, IPrescriptionManager prescriptionManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, ISpecialitiesManager specialitiesManager, ILinePrescriptionMedicalManager linePrescriptionMedicalManager)
         {
+            this.cabinetMedicalManager = cabinetMedicalManager;
             this.pharmacistManager = pharmacistManager;
-            FileMedicalManager = fileMedicalManager;
-            _UserManager = _userManager;
+            this.FileMedicalManager = fileMedicalManager;
+            this._UserManager = _userManager;
             this.doctorManager = doctorManager;
             this.userManager = userManager;
             this.ordreMedicalManager = ordreMedicalManager;
@@ -50,6 +55,7 @@ namespace Server.Services.Foundation.PrescriptionService
             this.chronicDiseasesManager = chronicDiseasesManager;
             this.specialitiesManager = specialitiesManager;
             this.linePrescriptionMedicalManager = linePrescriptionMedicalManager;
+            this.secretaryManager = secretaryManager;
         }
 
         public async Task<InformationPrescriptionResultDto> GetPrescriptionInformation(string Email, string Code) =>
@@ -66,7 +72,7 @@ namespace Server.Services.Foundation.PrescriptionService
             var Prescription = await this.prescriptionManager.SelectPrescriptionByCode(DecryptString(Code, "AJFNJjfjJZFJNdzj=="));
             ValidatePrescriptionIsNull(Prescription);
             var ordreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(Prescription.IdMedicalOrdre);
-            ValidateOrdreMedicalIsNull(ordreMedical);
+            ValidateOrdreMedical(ordreMedical);
             var FileMedical = await this.FileMedicalManager.SelectFileMedicalByIdOrdreMedicalAsync(ordreMedical.Id);
             ValidateFileMedicalIsNull(FileMedical);
             var UserAccountPatient = await this._UserManager.FindByIdAsync(FileMedical.IdUser);
@@ -94,11 +100,19 @@ namespace Server.Services.Foundation.PrescriptionService
             return InformationPrescriptionResult;
         });
 
-        public async Task<byte[]> GetFilePrescriptionByIdOrdreMedical(string OrdreMedicalId) =>
+        public async Task<byte[]> GetFilePrescriptionByIdOrdreMedical(string Email, string OrdreMedicalId, string CabinetId) =>
          await TryCatch(async () =>
          {
-             ValidateStringIsNull(OrdreMedicalId);
-             var FileMedicalPrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(DecryptGuid(OrdreMedicalId));
+             ValidateEntryOnGetFilePrescription(Email,OrdreMedicalId,CabinetId);
+             var UserAccountSecritary = await this._UserManager.FindByEmailAsync(Email);
+             ValidateUserIsNull(UserAccountSecritary);
+             var Secritary = await this.secretaryManager.SelectSecretaryByIdUserIdCabinet(UserAccountSecritary.Id,DecryptGuid(CabinetId));
+             ValidateSecritary(Secritary);
+             var CabinetMedical = await this.cabinetMedicalManager.SelectCabinetMedicalById(Secritary.IdCabinetMedical);
+             ValidateCabinetMedical(CabinetMedical);
+             var OrdreMedical = await this.ordreMedicalManager.SelectMedicalOrdreByIdAsync(DecryptGuid(OrdreMedicalId));
+             ValidateOrdreMedicalIsNull(OrdreMedical);
+             var FileMedicalPrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(OrdreMedical.Id);
              ValidatePrescriptionIsNull(FileMedicalPrescription);
              return FileMedicalPrescription.FilePrescription;
 

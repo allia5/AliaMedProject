@@ -1,4 +1,6 @@
-﻿using Server.Models.Doctor;
+﻿using Microsoft.IdentityModel.Tokens;
+using Server.Models.CabinetMedicals;
+using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.fileMedical;
@@ -6,6 +8,7 @@ using Server.Models.MedicalOrder;
 using Server.Models.Pharmacist;
 using Server.Models.Prescriptions;
 using Server.Models.RadioMedical;
+using Server.Models.secretary;
 using Server.Models.SpecialisteAnalyses;
 using Server.Models.UserAccount;
 
@@ -13,9 +16,25 @@ namespace Server.Services.Foundation.PrescriptionService
 {
     public partial class PrescriptionService
     {
-        public void ValidateStringIsNull(string Entry)
+        public void ValidateCabinetMedical(CabinetMedical cabinetMedical)
         {
-            if (Entry == null) throw new ArgumentNullException(nameof(Entry));
+            if(cabinetMedical == null && cabinetMedical.statusService == StatusService.OffLine)
+            {
+                throw new NullException(nameof(cabinetMedical));
+            }
+        }
+        public void ValidateSecritary(Secretarys secretarys)
+        {
+            if (secretarys == null || secretarys.Status != StatusSecretary.Active)
+            {
+                throw new NullException(nameof(secretarys));
+            }
+        }
+        public void ValidateEntryOnGetFilePrescription(string Email,string OrdreMedicalId,string CabinetId)
+        {
+            if (Email.IsNullOrEmpty()) throw new ArgumentNullException(nameof(Email));
+            if (OrdreMedicalId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(OrdreMedicalId));
+            if (CabinetId.IsNullOrEmpty()) throw new ArgumentNullException(nameof(CabinetId));
         }
         public void ValidateEntryOnGetPrescriptionInformation(string Email, string CodeQr)
         {
@@ -28,9 +47,16 @@ namespace Server.Services.Foundation.PrescriptionService
                 throw new ArgumentNullException("codeQr");
             }
         }
-        public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
+        public void ValidateOrdreMedical(MedicalOrdres medicalOrdres)
         {
             if (medicalOrdres == null || medicalOrdres.Status == StatuseOrdreMedical.NotValidate)
+            {
+                throw new ArgumentNullException(nameof(medicalOrdres));
+            }
+        }
+        public void ValidateOrdreMedicalIsNull(MedicalOrdres medicalOrdres)
+        {
+            if (medicalOrdres == null )
             {
                 throw new ArgumentNullException(nameof(medicalOrdres));
             }

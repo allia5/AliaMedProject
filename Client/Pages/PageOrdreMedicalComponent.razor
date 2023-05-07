@@ -62,7 +62,7 @@
                
             </div>
             <div class="card-footer text-muted">
-                @OrdreMedicalItem?.medicalOrdreDetails?.DateValidation
+               Validated Date : @OrdreMedicalItem?.medicalOrdreDetails?.DateValidation
             </div>
         </div>
         <br /> 
@@ -111,7 +111,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel">Modal 1</h5>
+                <h5 class="modal-title" id="exampleModalToggleLabel">Prescription</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -246,13 +246,13 @@
                 {
                     
                         <div class="form-control d-flex">
-                        <input class="form-control w-50" @bind="PrescriptionItem.MedicamentName" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="PrescriptionItem.Description" type="text" placeholder="Description">   <input @bind="PrescriptionItem.Quantity" class="form-control w-25" type="number" min="0" placeholder="Quantity">
+                        <input class="form-control w-50" @bind="PrescriptionItem.MedicamentName" type="text" placeholder="Name Of Medicament">  <input class="form-control w-25" @bind="PrescriptionItem.Description" type="text" placeholder="Description">   <input @bind="PrescriptionItem.Quantity" class="form-control w-25" type="number" min="1" placeholder="Quantity">
                         </div>
                 }
               
                
                     <div class="form-control d-flex">
-                        <input class="form-control w-50" @bind="PrescriptionLineDto.MedicamentName" type="text" placeholder="Medicament Name">  <input class="form-control w-25" @bind="PrescriptionLineDto.Description" type="text" placeholder="Description">   <input @bind="PrescriptionLineDto.Quantity" class="form-control w-25" type="number" min="0" placeholder="Quantity">
+                        <input class="form-control w-50" @bind="PrescriptionLineDto.MedicamentName" type="text" placeholder="Medicament Name">  <input class="form-control w-25" @bind="PrescriptionLineDto.Description" type="text" placeholder="Description">   <input @bind="PrescriptionLineDto.Quantity" class="form-control w-25" type="number" min="1" placeholder="Quantity">
                     </div>
                     <input class="form-control" @bind="PrescriptionDto.Instruction" type="text" placeholder="Instruction">
                 
