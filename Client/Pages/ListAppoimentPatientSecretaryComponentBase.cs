@@ -204,7 +204,7 @@ namespace Client.Pages
             }
             catch(Exception e)
             {
-                throw new Exception(e.Message);
+                this.ErrorMessage = e.Message;
             }
             
            
@@ -212,17 +212,33 @@ namespace Client.Pages
         }
         protected async Task DownloadFileRadio()
         {
-            var stream = await this.radioMedicalService.SecritaryGetMedicalFileRadio(OrdreMedicalId,CabinetId);
-            using var streamRef = new DotNetStreamReference(stream: stream);
-            var fileName = "FileRadio.pdf";
-            await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            try
+            {
+                var stream = await this.radioMedicalService.SecritaryGetMedicalFileRadio(OrdreMedicalId, CabinetId);
+                using var streamRef = new DotNetStreamReference(stream: stream);
+                var fileName = "FileRadio.pdf";
+                await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+            
         }
         protected async Task DownloadFileAnalyse()
         {
-            var stream = await this.analyseMedicalService.SecritaryGetMedicalFileAnalyse(OrdreMedicalId,CabinetId);
-            using var streamRef = new DotNetStreamReference(stream: stream);
-            var fileName = "FileAnalyse.pdf";
-            await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            try
+            {
+                var stream = await this.analyseMedicalService.SecritaryGetMedicalFileAnalyse(OrdreMedicalId, CabinetId);
+                using var streamRef = new DotNetStreamReference(stream: stream);
+                var fileName = "FileAnalyse.pdf";
+                await jSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+           
         }
         protected async Task OnValidateOrdreMedical(string OrdreId)
         {
@@ -256,15 +272,23 @@ namespace Client.Pages
         }
         protected async Task OnSearch()
         {
-            IndexBtnSearshloading = true;
-            this.planningDtos = await this.medicalPlanningService.GetAppointmentInformationPatientSecretaryDto(new KeysAppoimentInformationSecretary { CabinetId = CabinetId, IdDoctor = DoctorId, DateAppoiment = DateAppoiment });
-            this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
-            this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
-            this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
-            this.informationOrderMedicalSecritaries = await this.OrdreMedicalService.GetAllOrdreMedicalSecritary(new KeysAppoimentInformationSecretary { CabinetId = CabinetId, IdDoctor = DoctorId, DateAppoiment = DateAppoiment });
-            this.informationOrderMedicalSecritariesNotValidate = this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.statusOrdreMedical == StatusOrdreMedicalDto.NotValidate).ToList();
-            this.informationOrderMedicalSecritariesValidate = this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.statusOrdreMedical == StatusOrdreMedicalDto.validate).ToList();
-            IndexBtnSearshloading = false;
+            try
+            {
+                IndexBtnSearshloading = true;
+                this.planningDtos = await this.medicalPlanningService.GetAppointmentInformationPatientSecretaryDto(new KeysAppoimentInformationSecretary { CabinetId = CabinetId, IdDoctor = DoctorId, DateAppoiment = DateAppoiment });
+                this.planningDtosStill = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Still || e.PatientAppoimentInformation.Status == StatusPlaningDto.Delayed).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+                this.planningDtosAbsent = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.absent).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+                this.planningDtosTreated = planningDtos.Where(e => e.PatientAppoimentInformation.Status == StatusPlaningDto.Treated).OrderBy(e => e.PatientAppoimentInformation.AppoimentCount).ToList();
+                this.informationOrderMedicalSecritaries = await this.OrdreMedicalService.GetAllOrdreMedicalSecritary(new KeysAppoimentInformationSecretary { CabinetId = CabinetId, IdDoctor = DoctorId, DateAppoiment = DateAppoiment });
+                this.informationOrderMedicalSecritariesNotValidate = this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.statusOrdreMedical == StatusOrdreMedicalDto.NotValidate).ToList();
+                this.informationOrderMedicalSecritariesValidate = this.informationOrderMedicalSecritaries.Where(e => e.informationOrdreMedical.statusOrdreMedical == StatusOrdreMedicalDto.validate).ToList();
+                IndexBtnSearshloading = false;
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage= e.Message;
+            }
+           
         }
         public async Task OnTreated(string IdAppoiment)
         {
@@ -272,8 +296,6 @@ namespace Client.Pages
             {
                 IndexBtnTwo = IdAppoiment;
                 await this.medicalPlanningService.UpdateStatusApoimentPatient(new UpdateStatusAppoimentDto { Id = IdAppoiment, statusPlaningDto = StatusPlaningDto.Treated });
-                /*var itemTreated=  this.planningDtos.Where(e=>e.PatientAppoimentInformation.Id == IdAppoiment).FirstOrDefault();
-                if(itemTreated != null) { this.planningDtosTreated.Add(itemTreated); this.planningDtosStill.Remove(itemTreated); }*/
                 IndexBtnTwo = null;
             
 

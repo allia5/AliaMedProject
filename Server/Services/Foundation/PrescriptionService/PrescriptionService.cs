@@ -116,8 +116,8 @@ namespace Server.Services.Foundation.PrescriptionService
              ValidateOrdreMedicalIsNull(OrdreMedical);
              var FileMedicalPrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(OrdreMedical.Id);
              ValidatePrescriptionIsNull(FileMedicalPrescription);
-             return FileMedicalPrescription.FilePrescription;
-
+             var result = DecryptFile( FileMedicalPrescription.FilePrescription);
+             return result;
 
          });
 
@@ -135,8 +135,8 @@ namespace Server.Services.Foundation.PrescriptionService
              ValidationDoctorIsNull(Doctor);
              var FileMedicalPrescription = await this.prescriptionManager.SelectPrescriptionByIdMedicalOrdreAsync(OrdreMedical.Id);
              ValidatePrescriptionIsNull(FileMedicalPrescription);
-             return FileMedicalPrescription.FilePrescription;
-
+             var result = DecryptFile( FileMedicalPrescription.FilePrescription);
+             return result;
 
          });
     }

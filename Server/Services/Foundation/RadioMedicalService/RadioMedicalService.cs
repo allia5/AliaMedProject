@@ -73,7 +73,7 @@ namespace Server.Services.Foundation.RadioMedicalService
             ValidateOrdreMedicalIsNull(OrdreMedical);
             var FileRadio = await this.radioManager.SelectRadioByIdMedicalOrdre(DecryptGuid(OrdreMedicalId));
             ValidateRadioIsNull(FileRadio);
-            return FileRadio.FileRadio;
+            return DecryptFile(FileRadio.FileRadio);
         });
         public async Task<InformationRadioResultDto> GetInformationRadioMedicalResult(string Email, string CodeQr) =>
 
@@ -137,7 +137,7 @@ namespace Server.Services.Foundation.RadioMedicalService
             ValidationDoctorIsNull(Doctor);
             var FileRadio = await this.radioManager.SelectRadioByIdMedicalOrdre(DecryptGuid(OrdreMedicalId));
             ValidateRadioIsNull(FileRadio);
-            return FileRadio.FileRadio;
+            return DecryptFile( FileRadio.FileRadio);
         });
 
     }

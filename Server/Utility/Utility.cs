@@ -19,6 +19,10 @@ namespace Server.Utility
         private static readonly byte[] Salt = Encoding.ASCII.GetBytes("ASJCXLlJDTqJDHDRvcSEAHbc==");
 
 
+
+
+
+
         public static string GetFileType(byte[] byteArray)
         {
             // Define the file signatures for each supported file type
@@ -189,5 +193,55 @@ namespace Server.Utility
                 return new Guid(guidBytes);
             }
         }
-    }
+
+
+        ///////////////////////
+        private static readonly byte[] Key = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
+    0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
+    0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x61,
+    0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69 };
+        private static readonly byte[] IV = {  0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+    0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10 };
+
+        public static byte[] EncryptFile(byte[] fileBytes)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aesAlg.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cryptoStream.Write(fileBytes, 0, fileBytes.Length);
+                        cryptoStream.FlushFinalBlock();
+                        return memoryStream.ToArray();
+                    }
+                }
+            }
+        }
+
+        public static byte[] DecryptFile(byte[] encryptedFileBytes)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aesAlg.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cryptoStream.Write(encryptedFileBytes, 0, encryptedFileBytes.Length);
+                        cryptoStream.FlushFinalBlock();
+                        return memoryStream.ToArray();
+                    }
+                }
+            }
+        }
+    
+
+
+}
 }

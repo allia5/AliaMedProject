@@ -49,7 +49,7 @@ namespace Server.Controllers
             }
         }
         [HttpGet("GetResultFileRadioPatient/{LineRadioId}")]
-        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
         public async Task<ActionResult<FileResultDto>> GetFileResultRadioPatient( string LineRadioId)
         {
             try

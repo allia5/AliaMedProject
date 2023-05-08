@@ -3,6 +3,7 @@ using Server.Models.LineAnalyseMedical;
 using Server.Models.LineRadioMedical;
 using Server.Models.ResultAnalyses;
 using Server.Models.UserAccount;
+using static Server.Utility.Utility;
 
 namespace Server.Services.Foundation.ResultAnalyseService
 {
@@ -12,7 +13,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
         {
             return new FileResultDto
             {
-                DataFile = resultAnalyse?.AnalyseResult,
+                DataFile =DecryptFile( resultAnalyse?.AnalyseResult),
                 FileType = resultAnalyse?.fileType
             };
         }
@@ -20,7 +21,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
         {
             return new ResultAnalyse
             {
-                AnalyseResult=fileUpload,
+                AnalyseResult= EncryptFile(fileUpload),
                 fileType=FileType,
                 IdLineAnalyse=IdLineAnalyse,
                 Id=Guid.NewGuid()

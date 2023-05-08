@@ -202,6 +202,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     PrescriptionInsert.FilePrescription = AddInfromationDoctorToToPdf(PrescriptionInsert.FilePrescription, UserAccountDoctor, k);
                     PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription,EncryptString(FileMedical.MedicalIdentification, configuration["KeysQrCod:KeyIdMedical"]), 100, 0);
                     PrescriptionInsert.FilePrescription = InsertCodeQrIntoPdf(PrescriptionInsert.FilePrescription,EncryptString( Prescription.qrCode, configuration["KeysQrCod:KeyOrdreMedical"]),0,0);
+                    PrescriptionInsert.FilePrescription = EncryptFile(PrescriptionInsert.FilePrescription);
+               
                     await this.prescriptionManager.UpdatePrescriptionAsync(PrescriptionInsert);
                     OrdreMedicalResult.Lines = orderMedicalToAdd.Prescription.prescriptionLines;
                 }
@@ -227,6 +229,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     Radio.FileRadio = AddInfromationDoctorToToPdf(Radio.FileRadio, UserAccountDoctor, (float)k);
                     Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString( FileMedical.MedicalIdentification, configuration["KeysQrCod:KeyIdMedical"]), 100, 0);
                     Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString(Radio.QrCode, configuration["KeysQrCod:KeyOrdreMedical"]), 0, 0);
+                    Radio.FileRadio = EncryptFile(Radio.FileRadio);
                     var RadioInsert =  await this.radioManager.UpdateRadioAsync(Radio);
                     OrdreMedicalResult.ResultFileMedicalRadio = RadioInsert.FileRadio;
                 }
@@ -252,6 +255,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     Analyse.FileAnalyse = AddInfromationDoctorToToPdf(Analyse.FileAnalyse, UserAccountDoctor, (float)k);
                     Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( FileMedical.MedicalIdentification, configuration["KeysQrCod:KeyIdMedical"]), 100, 0);
                     Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( Analyse.QrCode, configuration["KeysQrCod:KeyOrdreMedical"]), 0, 0);
+                    Analyse.FileAnalyse = EncryptFile(Analyse.FileAnalyse);
                     var NewAnalyseInsert = await this.analyseManager.UpdateAnalyseAsync(Analyse);
                     OrdreMedicalResult.ResultFileMedicalAnalyse = Analyse.FileAnalyse;
                 }

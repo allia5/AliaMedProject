@@ -138,7 +138,7 @@ namespace Server.Services.Foundation.AnalyseMedicalService
               ValidateOrdreMedicalIsNull(OrdreMedical);
               var FileAnalyse = await this.AnalyseManager.SelectAnalyseByOrdreMedicalId(DecryptGuid(OrdreMedicalId));
               ValidateAnalyseIsNull(FileAnalyse);
-              return FileAnalyse.FileAnalyse;
+              return DecryptFile( FileAnalyse.FileAnalyse);
           });
     }
 }

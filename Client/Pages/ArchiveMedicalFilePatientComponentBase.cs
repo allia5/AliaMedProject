@@ -102,12 +102,20 @@ namespace Client.Pages
         }
         public async Task OpenAdviceMedical(string IdOrdreMedical)
         {
-            this.OrdreMedcialIdSelected = IdOrdreMedical;
-            // var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
-            this.adviceMedicalDtos =  await this.adviceMedicalService.GetAdvicesMedicalPatient(IdOrdreMedical);
-            this.adviceMedicalDtos= this.adviceMedicalDtos.OrderBy(e=>e.DateSend).ToList();
-            this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchivePatient(FileId);
-            this.ListmedicalOrdre = this.MedicalFileArchive.medicalOrdres.OrderByDescending(e => e.medicalOrdreDetails.DateValidation).ToList();
+            try
+            {
+                this.OrdreMedcialIdSelected = IdOrdreMedical;
+                // var OrdreMedical = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
+                this.adviceMedicalDtos = await this.adviceMedicalService.GetAdvicesMedicalPatient(IdOrdreMedical);
+                this.adviceMedicalDtos = this.adviceMedicalDtos.OrderBy(e => e.DateSend).ToList();
+                this.MedicalFileArchive = await this.OrdreMedicalService.GetMedicalFileArchivePatient(FileId);
+                this.ListmedicalOrdre = this.MedicalFileArchive.medicalOrdres.OrderByDescending(e => e.medicalOrdreDetails.DateValidation).ToList();
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+           
 
 
         }
@@ -130,10 +138,6 @@ namespace Client.Pages
                 {
                     throw new Exception("File Is Empty");
                 }
-
-
-
-
             }
             catch (Exception e)
             {
@@ -178,9 +182,16 @@ namespace Client.Pages
         }
         public async Task OnSelectOrdreMedical(string IdOrdreMedical)
         {
-           
-           this.medicalOrdresPatientDto = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
-            this.medicalOrdreDetails = medicalOrdresPatientDto?.medicalOrdreDetails ?? new MedicalOrdreDetails();
+            try
+            {
+                this.medicalOrdresPatientDto = this.MedicalFileArchive.medicalOrdres.Where(e => e.medicalOrdreDetails.Id == IdOrdreMedical).FirstOrDefault();
+                this.medicalOrdreDetails = medicalOrdresPatientDto?.medicalOrdreDetails ?? new MedicalOrdreDetails();
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+     
         }
         protected async Task DownloadFilePrescription(string OrdreMedicalId)
         {
@@ -196,7 +207,7 @@ namespace Client.Pages
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+              this.ErrorMessage =e.Message;
             }
 
 
@@ -204,17 +215,33 @@ namespace Client.Pages
         }
         protected async Task DownloadFileRadio(string OrdreMedicalId)
         {
-            var stream = await this.radioMedicalService.PatientGetMedicalFileRadio(OrdreMedicalId);
-            using var streamRef = new DotNetStreamReference(stream: stream);
-            var fileName = "FileRadio.pdf";
-            await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            try
+            {
+                var stream = await this.radioMedicalService.PatientGetMedicalFileRadio(OrdreMedicalId);
+                using var streamRef = new DotNetStreamReference(stream: stream);
+                var fileName = "FileRadio.pdf";
+                await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+           
         }
         protected async Task DownloadFileAnalyse(string OrdreMedicalId)
         {
-            var stream = await this.analyseMedicalService.PatientGetMedicalFileAnalyse(OrdreMedicalId);
-            using var streamRef = new DotNetStreamReference(stream: stream);
-            var fileName = "FileAnalyse.pdf";
-            await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            try
+            {
+                var stream = await this.analyseMedicalService.PatientGetMedicalFileAnalyse(OrdreMedicalId);
+                using var streamRef = new DotNetStreamReference(stream: stream);
+                var fileName = "FileAnalyse.pdf";
+                await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+            }
+            catch(Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+        
         }
     }
 }

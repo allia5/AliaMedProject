@@ -52,7 +52,7 @@ namespace Server.Services.Foundation.ResultRadioService
         public async Task AddRadioResultService(string Email, RadioResultToAddDto RadioResultToAddDto) =>
             await TryCatch(async () =>
             {
-               ValidateResultRadioOnAdd(Email, RadioResultToAddDto);
+                ValidateResultRadioOnAdd(Email, RadioResultToAddDto);
                 var UserAccountRadiology = await this._UserManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(UserAccountRadiology);
                 var Doctor = await this.doctorManager.SelectDoctorByIdUserWithStatusActive(UserAccountRadiology.Id);
@@ -109,14 +109,6 @@ namespace Server.Services.Foundation.ResultRadioService
                 ValidateEntryOnGetFileResulPatient(Email,LineRadioId);
                 var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(UserAccountDoctor);
-               /* var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccountDoctor.Id);
-                ValidationDoctorIsNull(Doctor);
-                var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(AppointmentId));
-                ValidatePlanningIsNull(Appointment);
-                ValidateAppointmentWithDoctor(Appointment, Doctor);
-                var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Doctor.Id, Appointment.IdCabinet);
-                ValidateWorkDoctorIsNull(WorkDoctor);*/
-                /****/
                 var LineRadio = await this.lineRadioMedicalManager.SelectLineRadioById(DecryptGuid(LineRadioId));
                 ValidateLineRadio(LineRadio);
                 var Radio = await this.radioManager.SelectRadioByIdAsync(LineRadio.IdRadio);

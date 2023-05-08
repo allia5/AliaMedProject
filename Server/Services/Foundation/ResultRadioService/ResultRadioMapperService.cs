@@ -6,7 +6,7 @@ using Server.Models.RadioMedical;
 using Server.Models.ResultAnalyses;
 using Server.Models.ResultsRadio;
 using Server.Models.UserAccount;
-
+using static Server.Utility.Utility;
 namespace Server.Services.Foundation.ResultRadioService
 {
     public static class ResultRadioMapperService
@@ -15,7 +15,7 @@ namespace Server.Services.Foundation.ResultRadioService
         {
             return new FileResultDto
             {
-                DataFile = resultRadio?.FileResult,
+                DataFile = DecryptFile( resultRadio?.FileResult),
                 FileType = resultRadio?.fileType
             };
         }
@@ -24,7 +24,7 @@ namespace Server.Services.Foundation.ResultRadioService
             return new ResultRadio
             {
                 Id=Guid.NewGuid(),
-                FileResult=resultToAddDto.FileUpload,
+                FileResult=EncryptFile(resultToAddDto.FileUpload),
                 IdLineRadio = LineRadioId,
                 fileType =TypeFileUpload
                  

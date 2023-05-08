@@ -84,14 +84,6 @@ namespace Server.Services.Foundation.ResultAnalyseService
                 ValidateEntryOnGetFileResultPatient(Email,LineAnalyseId);
                 var UserAccountDoctor = await this._UserManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(UserAccountDoctor);
-              /*  var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccountDoctor.Id);
-                ValidationDoctorIsNull(Doctor);
-                var Appointment = await this.planningAppoimentManager.SelectMedicalPlannigById(DecryptGuid(AppointmentId));
-                ValidatePlanningIsNull(Appointment);
-                ValidateAppointmentWithDoctor(Appointment, Doctor);
-                var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusWorkActive(Doctor.Id, Appointment.IdCabinet);
-                ValidateWorkDoctorIsNull(WorkDoctor);*/
-                /*-----*/
                 var LineAnalyse = await this.lineAnalyseMedicalManager.SelectLineAnalyseById(DecryptGuid(LineAnalyseId));
                 ValidateLineAnlayse(LineAnalyse);
                 var Analyse = await this.AnalyseManager.SelectAnalyseByIdAsync(LineAnalyse.IdAnalyse);
