@@ -1,6 +1,8 @@
 ﻿using DTO;
+using Server.Managers.Storages.MedicalAnalyseClinicManager;
 using Server.Models.LineAnalyseMedical;
 using Server.Models.LineRadioMedical;
+using Server.Models.MedicalsAnalysisClinic;
 using Server.Models.ResultAnalyses;
 using Server.Models.UserAccount;
 using static Server.Utility.Utility;
@@ -36,7 +38,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
             lineAnalyseMedicals.Status = Models.Analyse.StatusAnalyse.validate;
             return lineAnalyseMedicals;
         }
-        public static MailRequest MapperToMailRequestAddAnalyseResult(User UserAccountPatient, User UserAccountSpecialisteAnalyse, LineAnalyseMedicals lineAnalyseMedicals)
+        public static MailRequest MapperToMailRequestAddAnalyseResult(User UserAccountPatient, MedicalAnalysisClinic medicalAnalysisClinic, LineAnalyseMedicals lineAnalyseMedicals)
         {
             return new MailRequest
             {
@@ -45,8 +47,8 @@ namespace Server.Services.Foundation.ResultAnalyseService
                 Body = $"<div class=card>\r\n    <div class=card-header>\r\n      " +
                 $" <h3> AliaMed.Com </h3>\r\n  " +
                 $"  </div>\r\n    <div class=card-body>\r\n  " +
-                $"    <h5 class=card-title> The x-ray results {lineAnalyseMedicals.description}  are ready  <br/>" +
-                $" <h1 class=\"display-1\"></h1><br/> by Doctor : {UserAccountSpecialisteAnalyse.LastName} , {UserAccountSpecialisteAnalyse.Firstname} </p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
+                $"    <h5 class=card-title> The Analyse results {lineAnalyseMedicals.description}  are ready  <br/>" +
+                $" <h1 class=\"display-1\"></h1><br/> by Clinic Analyse : {medicalAnalysisClinic.MedicalAnalysisName}  </p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
 
             };
         }

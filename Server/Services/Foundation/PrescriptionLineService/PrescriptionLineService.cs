@@ -6,6 +6,7 @@ using Server.Managers.Storages.FileMedicalManager;
 using Server.Managers.Storages.LinePrescriptionMedicalManager;
 using Server.Managers.Storages.OrdreMedicalManager;
 using Server.Managers.Storages.PharmacistManager;
+using Server.Managers.Storages.PharmacyManager;
 using Server.Managers.Storages.PrescriptionManager;
 using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.UserManager;
@@ -30,9 +31,11 @@ namespace Server.Services.Foundation.PrescriptionLineService
         public readonly ILinePrescriptionMedicalManager linePrescriptionMedicalManager;
         public readonly IPharmacistManager pharmacistManager;
         public readonly IMailService mailService;
+        public readonly IPharmacyManager pharmacyManager;
 
-        public PrescriptionLineService(IMailService mailService,IPharmacistManager pharmacistManager, IFileMedicalManager fileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _userManager, IOrdreMedicalManager ordreMedicalManager, IPrescriptionManager prescriptionManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, ISpecialitiesManager specialitiesManager, ILinePrescriptionMedicalManager linePrescriptionMedicalManager)
+        public PrescriptionLineService(IPharmacyManager pharmacyManager,IMailService mailService,IPharmacistManager pharmacistManager, IFileMedicalManager fileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _userManager, IOrdreMedicalManager ordreMedicalManager, IPrescriptionManager prescriptionManager, IFileChronicDiseasesManager fileChronicDiseasesManager, IChronicDiseasesManager chronicDiseasesManager, ISpecialitiesManager specialitiesManager, ILinePrescriptionMedicalManager linePrescriptionMedicalManager)
         {
+            this.pharmacyManager = pharmacyManager;
             this.mailService = mailService;
             this.pharmacistManager = pharmacistManager;
             FileMedicalManager = fileMedicalManager;
@@ -54,6 +57,8 @@ namespace Server.Services.Foundation.PrescriptionLineService
                 ValidateUserIsNull(UserAccountPharmacist);
                 var Pharmaciste = await this.pharmacistManager.SelectPharmacistByIdUser(UserAccountPharmacist.Id);
                 ValidatePharmacist(Pharmaciste);
+                var Pharmacy = await this.pharmacyManager.SelectPharmacyById(Pharmaciste.PharmacyId);
+                ValidatePharmacyIsNull(Pharmacy);
                 var PrescriptionLine = await this.linePrescriptionMedicalManager.SelectLinePrescriptionById(DecryptGuid(PrecriptionLineId));
                 ValidatePrescriptionLine(PrescriptionLine);
                 var Prescription = await this.prescriptionManager.SelectPrescriptioById(PrescriptionLine.IdPrescription);
@@ -68,7 +73,7 @@ namespace Server.Services.Foundation.PrescriptionLineService
                 validationPatientIsNull(UserAccountDoctor);
                 var NewPrescriptionLine = MapperToPrescriptionLines(PrescriptionLine, Pharmaciste.Id);
                 await this.linePrescriptionMedicalManager.UpdatePrescriptionLine(NewPrescriptionLine);
-                var MailRequest = MapperToMailRequestOnUpdateStatusPrescriptionLine(NewPrescriptionLine, Pharmaciste, UserAccountPatient);
+                var MailRequest = MapperToMailRequestOnUpdateStatusPrescriptionLine(NewPrescriptionLine, Pharmacy, UserAccountPatient);
                 await this.mailService.SendEmailNotification(MailRequest);
             });
         

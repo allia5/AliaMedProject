@@ -15,7 +15,9 @@ using Server.Models.LineRadioMedical;
 using Server.Models.MedicalAnalysis;
 using Server.Models.MedicalOrder;
 using Server.Models.MedicalPlannings;
+using Server.Models.MedicalsAnalysisClinic;
 using Server.Models.Pharmacist;
+using Server.Models.Pharmacys;
 using Server.Models.PrescriptionLine;
 using Server.Models.Prescriptions;
 using Server.Models.Radiologys;
@@ -396,7 +398,8 @@ namespace Server.Data
         public DbSet<Secretarys> Secretarys { get; set; }
         public DbSet<Specialite> specialites { get; set; }
         public DbSet<SpecialtiesDoctor> specialtiesDoctors { get; set; }
-
+        public DbSet<Pharmacy> Pharmacy { get; set; }
+        public DbSet<MedicalAnalysisClinic> MedicalAnalysisClinic { get; set; }
         public DbSet<WorkDoctors> WorkDoctors { get; set; }
         public DbSet<Role> roles { get; set; }
         public DbSet<UserRole> userRoles { get; set; }

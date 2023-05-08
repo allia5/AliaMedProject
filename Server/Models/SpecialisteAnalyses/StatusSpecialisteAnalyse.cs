@@ -7,7 +7,7 @@ namespace Server.Models.SpecialisteAnalyses
 {
     public enum StatusSpecialisteAnalyse
     {
-        Activated,
-        Deactivated
+        Activated=1,
+        Deactivated=0
     }
 }

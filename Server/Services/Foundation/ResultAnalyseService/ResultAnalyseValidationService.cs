@@ -9,6 +9,7 @@ using Server.Models.LineAnalyseMedical;
 using Server.Models.LineRadioMedical;
 using Server.Models.MedicalOrder;
 using Server.Models.MedicalPlannings;
+using Server.Models.MedicalsAnalysisClinic;
 using Server.Models.Radiologys;
 using Server.Models.RadioMedical;
 using Server.Models.ResultAnalyses;
@@ -20,6 +21,13 @@ namespace Server.Services.Foundation.ResultAnalyseService
 {
     public partial class ResultAnalyseService
     {
+        public void ValidateMedicalAnalyseIsNull(MedicalAnalysisClinic medicalAnalysisClinic)
+        {
+            if (medicalAnalysisClinic== null)
+            {
+                throw new ArgumentNullException(nameof(medicalAnalysisClinic));
+            }
+        }
         public void ValidateEntryOnGetFileResultPatient(string Email ,string LineId)
         {
             if (Email.IsNullOrEmpty() ||  LineId.IsNullOrEmpty())

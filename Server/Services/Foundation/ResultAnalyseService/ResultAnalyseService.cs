@@ -6,6 +6,7 @@ using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.FileMedicalManager;
 using Server.Managers.Storages.LineAnalyseMedicalManager;
 using Server.Managers.Storages.LineRadioMedicalManager;
+using Server.Managers.Storages.MedicalAnalyseClinicManager;
 using Server.Managers.Storages.OrdreMedicalManager;
 using Server.Managers.Storages.PlanningAppoimentManager;
 using Server.Managers.Storages.RadiologyManager;
@@ -35,8 +36,10 @@ namespace Server.Services.Foundation.ResultAnalyseService
         public readonly IAnalyseResultManager analyseResultManager;
         public readonly IPlanningAppoimentManager planningAppoimentManager;
         public readonly IWorkDoctorManager workDoctorManager;
-        public ResultAnalyseService(IWorkDoctorManager workDoctorManager,IPlanningAppoimentManager planningAppoimentManager,IAnalyseResultManager analyseResultManager,IMailService mailService,ISpecialisteAnalyseManager SpecialisteAnalyseManager, ILineAnalyseMedicalManager lineAnalyseMedicalManager,IAnalyseManager AnalyseManager,IOrdreMedicalManager ordreMedicalManager,IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _UserManager)
+        public readonly IMedicalAnalyseClinicManager medicalAnalyseClinicManager;
+        public ResultAnalyseService(IMedicalAnalyseClinicManager medicalAnalyseClinicManager,IWorkDoctorManager workDoctorManager,IPlanningAppoimentManager planningAppoimentManager,IAnalyseResultManager analyseResultManager,IMailService mailService,ISpecialisteAnalyseManager SpecialisteAnalyseManager, ILineAnalyseMedicalManager lineAnalyseMedicalManager,IAnalyseManager AnalyseManager,IOrdreMedicalManager ordreMedicalManager,IFileMedicalManager FileMedicalManager, IUserManager userManager, IDoctorManager doctorManager, UserManager<User> _UserManager)
         { 
+            this.medicalAnalyseClinicManager = medicalAnalyseClinicManager;
             this.workDoctorManager= workDoctorManager;
             this.planningAppoimentManager= planningAppoimentManager;
             this.analyseResultManager = analyseResultManager;
@@ -105,6 +108,8 @@ namespace Server.Services.Foundation.ResultAnalyseService
                 ValidateUserIsNull(UserAccountSpecialisteAnalyse);
                 var SpecialistAnalyse = await this.SpecialisteAnalyseManager.SelectSpecialisteAnalyseByIdUser(UserAccountSpecialisteAnalyse.Id);
                 ValidateSpecialisteAnalyse(SpecialistAnalyse);
+                var MedicalAnalyseClinic = await this.medicalAnalyseClinicManager.SelectMedicalAnalysisClinicById(SpecialistAnalyse.MedicalAnalyseClinicId);
+                ValidateMedicalAnalyseIsNull(MedicalAnalyseClinic);
                 var LignAnalyse = await this.lineAnalyseMedicalManager.SelectLineAnalyseById(DecryptGuid(analyseResultToAdd.IdLineAnalyse));
                 ValidateLineAnalyseIsNull(LignAnalyse);
                 var Analyse = await this.AnalyseManager.SelectAnalyseByIdAsync(LignAnalyse.IdAnalyse);
@@ -122,7 +127,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
                 await this.analyseResultManager.InsertAnalyseResultAsync(AnalyseResult);
                 var newLineAnalyseMedical = MapperToLineAnalyseMedicals(LignAnalyse, SpecialistAnalyse.Id);
                 await this.lineAnalyseMedicalManager.UpdateLineAnalyseAsync(newLineAnalyseMedical);
-                var mailRequest = MapperToMailRequestAddAnalyseResult(PatientInformationAccount, UserAccountSpecialisteAnalyse, newLineAnalyseMedical);
+                var mailRequest = MapperToMailRequestAddAnalyseResult(PatientInformationAccount, MedicalAnalyseClinic, newLineAnalyseMedical);
                 await this.mailService.SendEmailNotification(mailRequest);
             });
         

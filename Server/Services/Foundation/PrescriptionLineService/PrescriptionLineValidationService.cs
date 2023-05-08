@@ -4,6 +4,7 @@ using Server.Models.Exceptions;
 using Server.Models.fileMedical;
 using Server.Models.MedicalOrder;
 using Server.Models.Pharmacist;
+using Server.Models.Pharmacys;
 using Server.Models.PrescriptionLine;
 using Server.Models.Prescriptions;
 using Server.Models.UserAccount;
@@ -12,6 +13,13 @@ namespace Server.Services.Foundation.PrescriptionLineService
 {
     public partial class PrescriptionLineService
     {
+        public void ValidatePharmacyIsNull(Pharmacy pharmacy)
+        {
+            if (pharmacy == null)
+            {
+                throw new ArgumentNullException(nameof(pharmacy));
+            }
+        }
         public void ValidatePrescriptionLine(PrescriptionLines prescriptionLines)
         {
             if (prescriptionLines == null )
