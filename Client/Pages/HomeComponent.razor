@@ -78,7 +78,9 @@
                                         <p class="card-text">Number Patien Accepted  :@Item.JobSearchDto.NumberPatientAvailble</p>
 
                                         <p class="card-text"><small class="text-muted">Le Début De Travaille Il est : @Item.JobSearchDto.ReadyTime.TimeOfDay : et le fin de travaille il est : @Item.JobSearchDto.EndTime.TimeOfDay</small></p>
-                                        <button @onclick="()=>OnSelctionReservation(DoctorsAvailble.Id,Item.Id,Item.JobSearchDto.Id)" class="btn btn-primary  float-right">Reservation</button>
+                                        <button @onclick="()=>OnSelctionReservation(DoctorsAvailble.Id,Item.Id,Item.JobSearchDto.Id)" class="btn btn-primary  float-right">
+                                            Reservation
+                                        </button>
                                     </div>
                                 </div>
                             </div>
