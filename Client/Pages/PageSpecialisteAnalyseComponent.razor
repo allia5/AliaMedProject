@@ -102,6 +102,12 @@
                     <InputFile class="form-control" type="file" OnChange="HandleFileAnalyseResultSelected" />
                     <button class="btn btn-success" @onclick="()=>OnAddAnalyseResult(line.IdLineAnalyse)">
                         Validate Result
+                        @if (ButtonLoaddingOnAddResult == line.IdLineAnalyse)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                       
                       
                     </button>
                 </div>

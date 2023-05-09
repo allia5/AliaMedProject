@@ -74,8 +74,6 @@ namespace Server.Services.Foundation.MailService
 
             };
             await SendEmail(mailRequest);
-
-            // await SendEmail(mailRequest);
         }
 
         private async Task SendEmail(MailRequest userEmailOptions)
