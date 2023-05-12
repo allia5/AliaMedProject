@@ -57,7 +57,7 @@ namespace Client.Pages
             }
             else
             {
-                this.ListDoctorsAvailble = this.ListDoctorsAvailble.Where(e => e.LastName.ToString().StartsWith(this.Entry) || e.FirstName.ToString().StartsWith(this.Entry)).ToList();
+                this.ListDoctorsAvailble = this.ListDoctorsAvailble.Where(e => e.LastName.ToString().ToLower().StartsWith(this.Entry.ToLower()) || e.FirstName.ToString().ToLower().StartsWith(this.Entry.ToLower())).ToList();
             }
 
             

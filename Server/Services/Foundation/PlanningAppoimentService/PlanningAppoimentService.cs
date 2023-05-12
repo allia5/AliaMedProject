@@ -163,7 +163,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var User = await this._userManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(User);
                 var PlanningMedical = await this.planningAppoimentManager.SelectPalnningMedicalByIdPlanningIdUser(DecryptGuid(IdPlanning), User.Id);
-                ValidatePlanningIsNull(PlanningMedical);
+                ValidatePlanning(PlanningMedical);
                 await this.planningAppoimentManager.DeletePlanningMedical(PlanningMedical);
                 var ListPlanningMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinetWithoutPlanningPassedPlanningAbsent(PlanningMedical.IdCabinet,PlanningMedical.IdDoctor, PlanningMedical.AppointmentDate);
                 ListPlanningMedical= ListPlanningMedical.Where(e => e.IdUser != User.Id).ToList();

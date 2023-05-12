@@ -12,24 +12,28 @@
             Appointment Information
         </div>
         <div class="card-body">
-            <h5 class="card-title">@appointmentInformation.CabinetInformation.Name</h5>
+            <h5 class="card-title">Clinic Name : @appointmentInformation.CabinetInformation.Name</h5>
             <p class="card-text">Date Reservation :@appointmentInformation.DateAppoiment</p>
-            <p class="card-text">count : @appointmentInformation.CountOfPatient</p>
-            <p class="card-text">FullName Doctor :@appointmentInformation.DoctorInformation.FirstName @appointmentInformation.DoctorInformation.LastName</p>
-            <p class="card-text">Time Ready : @appointmentInformation.DoctorInformation.TimeReady.TimeOfDay</p>
-            <p class="card-text">Time End : @appointmentInformation.DoctorInformation.TimeEnd.TimeOfDay</p>
-            <p class="card-text">Number Of Aptient Accepte in the clinic : @appointmentInformation.DoctorInformation.NumberPatientAccepted</p>
+            <p class="card-text">patient arrangement : @appointmentInformation.CountOfPatient</p>
+            <p class="card-text">The full name of the doctor :@appointmentInformation.DoctorInformation.FirstName @appointmentInformation.DoctorInformation.LastName</p>
+            <p class="card-text">Work start time : @appointmentInformation.DoctorInformation.TimeReady.TimeOfDay</p>
+            <p class="card-text">Work end time: @appointmentInformation.DoctorInformation.TimeEnd.TimeOfDay</p>
+            <p class="card-text">maximum number of patients: @appointmentInformation.DoctorInformation.NumberPatientAccepted</p>
             <div class="d-flex">
-                <a  class="btn btn-danger" @onclick="()=>OnDeleteMedicalAppoiment(appointmentInformation.Id)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                    </svg>  Rejected
-                    @if (Index == appointmentInformation.Id)
-                    {
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span class="sr-only">Loading...</span>
-                    }
-                </a><button @onclick="()=>OnUpdateAdressMap(appointmentInformation.CabinetInformation.AdressMap)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                @if (appointmentInformation.DateAppoiment.Date >= DateTime.Now.Date )
+                {
+                    <a class="btn btn-danger" @onclick="()=>OnDeleteMedicalAppoiment(appointmentInformation.Id)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                        </svg>  Cancellation of Reservation
+                        @if (Index == appointmentInformation.Id)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                    </a>
+                }
+             <button @onclick="()=>OnUpdateAdressMap(appointmentInformation.CabinetInformation.AdressMap)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     View Adress Map
                 </button>
             </div>
@@ -40,7 +44,7 @@
 
 
 
-<!-- Modal -->
+<!-- Modal Maps-->
 
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">

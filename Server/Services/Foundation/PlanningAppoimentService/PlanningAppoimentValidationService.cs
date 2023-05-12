@@ -192,6 +192,14 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             }
         }
 
+        public void ValidatePlanning(MedicalPlanning medicalPlanning)
+        {
+            ValidatePlanningIsNull(medicalPlanning);
+            if(medicalPlanning.AppointmentDate.Date <= DateTime.Now.Date )
+            {
+                throw new InvalidException(nameof(medicalPlanning),medicalPlanning,"Patient");
+            }
+        }
         public void ValidatePlanningIsNull(MedicalPlanning medicalPlanning)
         {
             if (medicalPlanning == null)
@@ -199,6 +207,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 throw new NullException(nameof(medicalPlanning));
             }
         }
+
         public static bool IsInvalid(string input) => String.IsNullOrWhiteSpace(input);
     }
 }

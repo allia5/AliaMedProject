@@ -200,9 +200,6 @@ namespace Server.Controllers
             TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
-               // IdMedicalAppoiment =  System.Web.HttpUtility.UrlDecode(IdMedicalAppoiment);
-                
-                
                 var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.planningAppoimentService.DeleteMedicalPlanningAppoiment(email, IdMedicalAppoiment);
                 transaction.Complete();
