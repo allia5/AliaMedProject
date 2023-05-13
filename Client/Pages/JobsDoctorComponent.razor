@@ -12,11 +12,25 @@
     <WaitComponent></WaitComponent>
 }
 
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <img src="/JobDoctor.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+            </div>
+            <div class="text-center mx-auto">
+                <h3>
+                    Doctor Work Clinics
+                </h3>
+            </div>
+        </div>
 
+    </div>
+</div>
 
 @foreach(var item in jobs){
     <div class="shadow-lg p-3 mb-5 bg-light rounded">
-    <div class="card mb-3" style="max-width: 540px;">
+    <div class="card mb-3" >
         <div class="row g-0">
             <div class="col-md-4">
                     @if(item.Image != null)
@@ -36,7 +50,7 @@
                 </div>
             </div>
         </div>
-            <div class="align-self-end ml-auto ">
+            <div class="align-self-end ml-auto">
                 @if(item.StatusServiceDoctor == DTO.StatusWorkDoctor.accepted){
                     <button @onclick="()=>OnInAcceptJob(item.IdJob)" class="btn btn-warning">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-slash-circle" viewBox="0 0 16 16">
@@ -66,7 +80,7 @@
                         }
                     </button>
                 }
-
+                <span class="empty-space"></span>
                 <a href="/JobSetting/@item.IdJob.Replace("/","*")">
                     <button class="btn btn-success">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders2" viewBox="0 0 16 16">

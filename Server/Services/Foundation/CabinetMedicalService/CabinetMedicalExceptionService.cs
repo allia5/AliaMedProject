@@ -22,6 +22,10 @@ namespace Server.Services.Foundation.CabinetMedicalService
             {
                 throw new StorageValidationException(Ex);
             }
+            catch (ArgumentNullException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
             catch (Exception Ex)
             {
                 throw new Exception(Ex.Message);

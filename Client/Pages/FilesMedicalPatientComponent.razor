@@ -17,31 +17,8 @@
 
 
 
-@if (IsLoading == true)
-{
-    <WaitComponent />
-}
-<div class="d-flex justify-content-center">
-    <div class="input-group w-75">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="">Medical identification number</span>
-        </div>
-        <input type="text" @bind="MedicalIdentificationNumber" placeholder="Medical identification number" style="border-radius:25px;" class="form-control">
-      
-            <button @onclick="TransferFileMedical" class="btn btn-success " style="border-radius:25px;">
-                Move
-                @if (ButtonOnMove == true)
-                {
 
 
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    <span class="sr-only">Loading...</span>
-                }
-            </button>
-        
-     
-    </div>
-</div>
 @if (FilesMainPatient != null)
 {
     
@@ -51,9 +28,13 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mx-auto">
-                <img src="/FileLogo.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+                <img src="/FileMedical.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
             </div>
+                <div class="text-center mx-auto">
+                    <h3>Patient Medical Files</h3>
+                </div>
         </div>
+            
         <div class="row mt-3">
             <div class="col-md-6 mx-auto">
                 <ul class="list-group list-group-flush ">
@@ -66,26 +47,51 @@
             </div>
         </div>
     </div>
+       
+    </div>
+    @if (IsLoading == true)
+    {
+        <WaitComponent />
+    }
+    <br />
+    <div class="d-flex justify-content-center">
+        <div class="input-group w-75">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="">Medical identification number</span>
+            </div>
+            <input type="text" @bind="MedicalIdentificationNumber" placeholder="Medical identification number" style="border-radius:25px;" class="form-control">
+
+            <button @onclick="TransferFileMedical" class="btn btn-success " style="border-radius:25px;">
+                Move
+                @if (ButtonOnMove == true)
+                {
+
+
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span>
+                }
+            </button>
+
+
+        </div>
     </div>
     <br />
     <br />
-
-
 
     @foreach (var item in FilesMainPatient.fileMedicals.ToList())
     {
         <div class="shadow-lg p-3 mb-5 bg-light rounded">
         <div class="card">
-            <h5 class="card-header">Partial File</h5>
+            <h5 class="card-header">File Medical</h5>
             <div class="card-body">
-                <h5 class="card-title">FullName :@item.FirstName,@item.LastName</h5>
-                <p class="card-text">Date of Birth :@item.DateOfBirth</p>
+                    <h5 class="card-title">full name :@item.FirstName,@item.LastName</h5>
+                    <p class="card-text">Date of Birth :@item.DateOfBirth.ToString("yyyy-MM-dd")</p>
                 <p class="card-text">Sexe :@item.Sexe</p>
-                <p class="card-text">count Order Medical : @item.CountOrderMedical</p>
-                <p class="card-text">Date Of Create :@item.DateOfCreate</p>
+                    <p class="card-text">The number of medical orders : @item.CountOrderMedical</p>
+                    <p class="card-text">File Medical Release Date :@item.DateOfCreate</p>
                 @if (@item.Doctor != null)
                 {
-                      <p class="card-text">Doctor Create File Medical :@item.Doctor.FirstName @item.Doctor.LastName  </p>
+                        <p class="card-text">The doctor who created the file : Dr.@item.Doctor.FirstName @item.Doctor.LastName  </p>
                 }
                     <div class="container">
                         <div class="row">
@@ -100,7 +106,7 @@
                                 <button class=" btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" @onclick="()=>ShowchronicDiseases(item.Id)">chronic diseases</button>
                         </div>
                             <div class="col">
-                                <button class=" btn btn-dark w-100" @onclick="()=>OnNavigateToOrdreMedical(item.Id)" >Order Medical</button>
+                                <button class=" btn btn-dark w-100" @onclick="()=>OnNavigateToOrdreMedical(item.Id)" >View Order Medical</button>
                             </div>
                         </div>
                         </div>
@@ -116,7 +122,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">chronic diseases</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Modify the file</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

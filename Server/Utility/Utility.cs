@@ -7,6 +7,7 @@ using ZXing.Common;
 using ZXing.QrCode;
 using FileMagic;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Server.Utility
 {
@@ -21,7 +22,7 @@ namespace Server.Utility
 
 
 
-
+      
 
         public static string GetFileType(byte[] byteArray)
         {

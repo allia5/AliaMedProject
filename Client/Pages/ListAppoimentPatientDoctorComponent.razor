@@ -1,15 +1,29 @@
 ﻿@page "/ListAppoimentPaientDoctor/{CabinetId}"
 @inherits ListAppoimentPatientDoctorComponentBase
 
+
+
+
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <img src="/ListDoctorReservation.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+            </div>
+            <div class="text-center mx-auto">
+                <h3>
+                    Patient reservation list
+                </h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 @if (IsLoading == true)
 {
     <WaitComponent />
 }
-
-
-
-
-
 <div class="container d-flex">
     <input @bind="DateAppoiment" type="date" class="form-control" /><button @onclick="OnSearch" class="btn btn-dark">
         Search
@@ -22,8 +36,9 @@
         }
     </button>
 </div>
+<br />
 <div class="shadow-lg p-3 mb-5 alert-warning rounded">
-    <p class="text-center">List Patient Treadted</p>
+    <p class="text-center">List of patients in case of treatment.</p>
     <table class="table">
         <thead>
             <tr>
@@ -32,7 +47,7 @@
                 <th scope="col">NN</th>
                 <th scope="col">Number Phone</th>
                 <th scope="col">Delay an appointment</th>
-                <th scope="col">pass the appointment</th>
+                <th scope="col">Done  appointment</th>
                 <th scope="col">medical file</th>
                
 
@@ -50,7 +65,7 @@
                         <button class="btn btn-success" @onclick="()=>OnDelyed(item.PatientAppoimentInformation.Id)" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             Delay
                         </button></td>
-                    <td><button @onclick="()=>OnPassed(item.PatientAppoimentInformation.Id)" class="btn btn-primary">Passed
+                    <td><button @onclick="()=>OnPassed(item.PatientAppoimentInformation.Id)" class="btn btn-primary">Done
                             @if (IndexBtnthree == item.PatientAppoimentInformation.Id)
                             {
 
@@ -79,7 +94,7 @@
 <br />
 
 <div class="shadow-lg p-3 mb-5 alert-primary rounded">
-    <p class="text-center">List Patient Still await.</p>
+    <p class="text-center">The list of patients is waiting</p>
     <table class="table">
         <thead>
             <tr>
@@ -136,7 +151,7 @@
 <br />
 <br />
 <div class="shadow-lg p-3 mb-5 alert-danger rounded">
-    <p class="text-center">list Patient Absent</p>
+    <p class="text-center">List of absent patients</p>
     <table class="table">
         <thead>
             <tr>

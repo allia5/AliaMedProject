@@ -1,4 +1,6 @@
 ﻿using DTO;
+using iTextSharp.text.pdf.qrcode;
+using Microsoft.AspNetCore.Components.Forms;
 using Server.Models.CabinetMedicals;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
@@ -36,8 +38,41 @@ namespace Server.Services.Foundation.CabinetMedicalService
                 throw new NullException(nameof(cabinetMedicalDto));
             }
         }
+      
+        public bool ValidateImage(byte[] image)
+        {
+            Dictionary<string, string> fileSignatures = new Dictionary<string, string>
+    {
+         { ".jpg", "FFD8FF" },
+    { ".png", "89504E47" },
+    { ".gif", "47494638" },
+    { ".bmp", "424D" },
+
+    };
+
+            // Get the file signature from the byte array
+            string fileSignature = BitConverter.ToString(image.Take(4).ToArray()).Replace("-", "");
+
+            // Determine the file type based on the file signature
+            foreach (KeyValuePair<string, string> entry in fileSignatures)
+            {
+                if (fileSignature.StartsWith(entry.Value))
+                {
+                    return true;
+                }
+            }
+            return false;
+          
+        }
         public void ValidateEntryOnUpdate(string Email, CabinetMedicalDto cabinetMedicalDto)
         {
+            if(cabinetMedicalDto.Image != null)
+            {
+               if(!ValidateImage(cabinetMedicalDto.Image))
+                {
+                    throw new ArgumentNullException();
+                }
+            }
             ValidateEntryString(Email);
             ValidateCabinetMedicalDtoIsNull(cabinetMedicalDto);
             ValidateEntryString(cabinetMedicalDto.phoneNumber);

@@ -45,6 +45,7 @@ namespace Client.Pages
             catch (Exception e)
             {
                 this.ErrorMessage = e.Message;
+                this.IsLoading = false;
             }
         }
 

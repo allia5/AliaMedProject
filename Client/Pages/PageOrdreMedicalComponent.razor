@@ -11,10 +11,7 @@
     <CorrectRoutingMessage></CorrectRoutingMessage>
 }
 
-@if (isLoading == true)
-{
-    <WaitComponent />
-}
+
 
 
 @if(MedicalFileArchive != null)
@@ -23,22 +20,30 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mx-auto">
-                    <img src="/OrdreFile.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+                    <img src="/OrdreMedical.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+                </div>
+                <div class="text-center mx-auto">
+                    <h3>Patient Ordre Medicals List </h3>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-md-6 mx-auto">
                     <ul class="list-group list-group-flush ">
-                        <li class="list-group-item border-bottom">FirstName: @MedicalFileArchive?.informationFileMedical?.FirstName </li>
+                        <li class="list-group-item border-bottom">First Name: @MedicalFileArchive?.informationFileMedical?.FirstName </li>
                         <li class="list-group-item border-bottom">Last Name:@MedicalFileArchive?.informationFileMedical?.LastName </li>
                         <li class="list-group-item border-bottom">Sexe : @MedicalFileArchive?.informationFileMedical?.sexe  </li>
-                        <li class="list-group-item border-bottom">Date of Birth : @MedicalFileArchive?.informationFileMedical?.DateBirth  </li>
+                        <li class="list-group-item border-bottom">Date of Birth : @MedicalFileArchive?.informationFileMedical?.DateBirth.ToString("yyyy-MM-dd")  </li>
                         
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+    @if (isLoading == true)
+{
+    <WaitComponent />
+}
+    <br />
 
     @foreach (var OrdreMedicalItem in ListmedicalOrdre)
     {
@@ -47,22 +52,28 @@
                Ordre Medical Information
             </div>
             <div class="card-body">
-                <h5 class="card-title">By Doctor  :  @OrdreMedicalItem.doctorInformation.FirstName , @OrdreMedicalItem.doctorInformation.LastName</h5>
-                 <h6 class="card-title">
+                <h5 class="card-title">Created by a doctor  :  @OrdreMedicalItem.doctorInformation.FirstName , @OrdreMedicalItem.doctorInformation.LastName</h5>
+                <h6 class="card-title">
+                    Doctor specialty :
                 @foreach (var Specialitie in @OrdreMedicalItem.doctorInformation.Specialities)
                 {
                    @Specialitie <a>,</a>
                 }
                 </h6>
-                <p class="card-text"> @OrdreMedicalItem?.medicalOrdreDetails?.Summary</p>
+                <p class="card-text">Summary : @OrdreMedicalItem?.medicalOrdreDetails?.Summary</p>
                 @if(OrdreMedicalItem != null)
                 {
-                    <button @onclick="()=>OnSelectOrdreMedical(OrdreMedicalItem.medicalOrdreDetails.Id)" class="btn btn-primary" data-bs-target="#exampleModalToggleChoix" data-bs-toggle="modal" data-bs-dismiss="modal">Detail</button>
+                    <button @onclick="()=>OnSelectOrdreMedical(OrdreMedicalItem.medicalOrdreDetails.Id)" class="btn btn-primary" data-bs-target="#exampleModalToggleChoix" data-bs-toggle="modal" data-bs-dismiss="modal">Details</button>
                 }
                
             </div>
             <div class="card-footer text-muted">
-               Validated Date : @OrdreMedicalItem?.medicalOrdreDetails?.DateValidation
+                Validated Date :@if (@OrdreMedicalItem?.medicalOrdreDetails?.DateValidation !=null) {@OrdreMedicalItem?.medicalOrdreDetails?.DateValidation
+                }
+                else
+                {
+                    <p>It has not been validated yet</p>
+                }
             </div>
         </div>
         <br /> 
@@ -262,11 +273,11 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                            </svg>Add New Line Prescription
+                            </svg>add medicine
                         </button>
                 </div>
                 <div class="mb-3">
-                    <label for="formFile" class="form-label">File Docx</label>
+                        <label for="formFile" class="form-label">upload pdf file</label>
                     <InputFile class="form-control" type="file" OnChange="HandleFilePrescriptionSelected" />
                 </div>
             </div>
@@ -316,11 +327,11 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                            </svg> Add New Line Radio
+                            </svg> Add Line Radio
                         </button>
                 </div>
                 <div class="mb-3">
-                    <label for="formFile" class="form-label">File Docx</label>
+                        <label for="formFile" class="form-label">upload pdf file</label>
                     <InputFile class="form-control" type="file" OnChange="HandleFileRadioSelected" />
                 </div>
         </div>
@@ -367,11 +378,11 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                            </svg>Add new Line Analyse
+                            </svg>Add Line Analyse
                         </button>
                     </div>
                     <div class="mb-3">
-                        <label for="formFile" class="form-label">File Docx</label>
+                        <label for="formFile" class="form-label">upload pdf file</label>
                         <InputFile class="form-control" type="file" OnChange="HandleFileAnalyseSelected" />
                     </div>
                 </div>
@@ -406,7 +417,7 @@
                             <option value="1"> Public </option>
 
                         </InputSelect>
-                        <label for="floatingPassword">Visibility Ordre Medical</label>
+                        <label for="floatingPassword">Visibility:</label>
                     </div>
                 <div class="mb-3">
                     <label for="message-text" class="col-form-label">Summary:</label>

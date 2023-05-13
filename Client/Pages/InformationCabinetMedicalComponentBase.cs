@@ -13,6 +13,7 @@ namespace Client.Pages
         public string ErrorMessage = null;
         public string SuccessMessage = null;
         public bool IsLoding = true;
+        public bool Index = false;
 
         public CabinetMedicalDto CabinetMedicalInformation = new CabinetMedicalDto();
         [Inject]
@@ -59,47 +60,33 @@ namespace Client.Pages
         }
         protected async Task HandleFileSelected(InputFileChangeEventArgs e)
         {
-            var file = e.File;
-            using (var stream = file.OpenReadStream())
-            {
-                var buffer = new byte[file.Size];
-                await stream.ReadAsync(buffer, 0, (int)file.Size);
-                CabinetMedicalInformation.Image = buffer;
-            }
+           
+                var file = e.File;
+              
+                    using (var stream = file.OpenReadStream())
+                    {
+                        var buffer = new byte[file.Size];
+                        await stream.ReadAsync(buffer, 0, (int)file.Size);
+                        CabinetMedicalInformation.Image = buffer;
+                        this.ErrorMessage = null;
+                    }
+            
         }
+      
         public async Task Update()
         {
             try
             {
+                this.Index = true;
                 var result = await this.CabinetMedicalService.UpdateInformationCabinetMedical(CabinetMedicalInformation);
-                if (result != null)
-                {
-                    SuccessMessage = "Update Success";
-                }
-                else
-                {
-                    ErrorMessage = "Update Failed";
-                }
-            }
-            catch (BadRequestException Ex)
-            {
-                this.ErrorMessage = Ex.Message;
-            }
-            catch (NoContentException Ex)
-            {
-                this.ErrorMessage = Ex.Message;
-            }
-            catch (UnauthorizedException Ex)
-            {
-                this.ErrorMessage = Ex.Message;
-            }
-            catch (ProblemException Ex)
-            {
-                this.ErrorMessage = Ex.Message;
+                SuccessMessage = "Update Success";
+                this.Index = false;
+                
             }
             catch (Exception Ex)
             {
                 this.ErrorMessage = "Intern Error";
+                this.Index= false;
             }
 
         }

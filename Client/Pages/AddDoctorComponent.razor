@@ -1,9 +1,31 @@
 ﻿@page "/AddDoctor"
 @inherits AddDoctorComponentBase
 
+
+
+
+
+
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <img src="/ListDoctor.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+            </div>
+            <div class="text-center mx-auto">
+                <h3>
+                    List of available doctors
+                </h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 <div class="shadow-lg p-3 mb-5 bg-light rounded">
 <table class="table caption-top">
-    <caption>List of Doctor</caption>
+    <caption class="text-center">List of Doctor</caption>
     <thead>
         <tr>
             <th scope="col">first Name</th>
@@ -12,11 +34,15 @@
             <th scope="col">Sexe</th>
             <th scope="col">Date Of Birth</th>
             <th scope="col">Number Phone</th>
-            <th scope="col">Specialities</th>
+            <th scope="col">Speciality</th>
             <th scope="col">Send Invitation</th>
 
         </tr>
     </thead>
+        @if (IsLoading == true)
+        {
+            <WaitComponent />
+        }
    
     <tbody>
         
@@ -29,7 +55,7 @@
                 <td>@item.LastName</td>
                 <td>@item.Email</td>
                 <td>@item.Sexe</td>
-                <td>@item.DateOfBirth</td>
+                <td>@item.DateOfBirth.ToString("yyyy/MM/dd")</td>
                 <td>@item.NumberPhone</td>
                 <td>@foreach (var Sp in @item.Specialities)
                     {

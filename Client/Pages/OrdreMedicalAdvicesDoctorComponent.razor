@@ -14,6 +14,21 @@
 {
     <CorrectRoutingMessage></CorrectRoutingMessage>
 }
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <img src="/Advice.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+            </div>
+            <div class="text-center mx-auto">
+                <h3>
+                    Medical advice section
+                </h3>
+            </div>
+        </div>
+
+    </div>
+</div><br /><br />
 
 @if (isLoading == true)
 {
@@ -31,11 +46,14 @@
                 Ordre Medical Information
             </div>
             <div class="card-body">
-                <h5 class="card-title">By Doctor  :  @ItemmedicalAdviceDoctorDtos.FileMedicalInformation.FirstName , @ItemmedicalAdviceDoctorDtos.FileMedicalInformation.LastName</h5>
+                <h5 class="card-title">Patient Name  :  @ItemmedicalAdviceDoctorDtos.FileMedicalInformation.FirstName , @ItemmedicalAdviceDoctorDtos.FileMedicalInformation.LastName</h5>
                 <h6 class="card-title">
 
                 </h6>
-                <p class="card-text"> @ItemmedicalAdviceDoctorDtos?.MedicalOrdreDetails?.Summary</p>
+            @if (@ItemmedicalAdviceDoctorDtos?.MedicalOrdreDetails?.Summary != null)
+            {
+                <p class="card-text">Summary Ordre Medical : @ItemmedicalAdviceDoctorDtos?.MedicalOrdreDetails?.Summary</p>
+            }
                 @if (ItemmedicalAdviceDoctorDtos != null)
                 {
                 <button @onclick="()=>OnSelectOrdreMedical(ItemmedicalAdviceDoctorDtos.MedicalOrdreDetails.Id)" class="btn btn-primary" data-bs-target="#exampleModalToggleChoix" data-bs-toggle="modal" data-bs-dismiss="modal">
@@ -52,7 +70,10 @@
 
             </div>
             <div class="card-footer text-muted">
-                @ItemmedicalAdviceDoctorDtos?.MedicalOrdreDetails?.DateValidation
+            @if (@ItemmedicalAdviceDoctorDtos?.MedicalOrdreDetails?.DateValidation != null)
+            {
+                <p>Date Validation :</p>  @ItemmedicalAdviceDoctorDtos?.MedicalOrdreDetails?.DateValidation
+            }
             </div>
         </div>
         <br />

@@ -11,6 +11,28 @@
 
 
 
+
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <img src="/DoctorClinic.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+            </div>
+            <div class="text-center mx-auto">
+                <h3>
+                    List of clinic doctors
+                </h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+@if (IsLoading == true)
+{
+    <WaitComponent />
+}
+<br />
+<br />
 <div class="shadow-lg p-3 mb-5 bg-light rounded">
 <table class="table">
     <thead>
