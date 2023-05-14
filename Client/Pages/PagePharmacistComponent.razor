@@ -8,13 +8,29 @@
 {
     <CorrectRoutingMessage></CorrectRoutingMessage>
 }
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <img src="/Pharmacien.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+            </div>
+            <div class="text-center mx-auto">
+                <h3>
+                    Prescription medications
+                </h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+<br />
 
 <div class="d-flex justify-content-center">
     <div class="input-group w-75">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="">CodeQr Prescription</span>
+        <div class="input-group-prepend" style="border-radius:25px;">
+            <span class="input-group-text" id="">Prescription CodeQr</span>
         </div>
-        <input type="text" @bind="CodeQr" placeholder="CodeQr" style="border-radius:25px;" class="form-control">
+        <input type="text" @bind="CodeQr" placeholder="Prescription CodeQr" style="border-radius:25px;" class="form-control">
         <button @onclick="()=>OnAddCodeQr(CodeQr)" class="btn btn-success " style="border-radius:25px;">
             research
             @if (ButtonAddIsLoding == true)
@@ -33,24 +49,23 @@
 {
     <div class="d-block justify-content-center">
         <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
-            <div class="card-header">Information File Medical</div>
+            <div class="card-header">patient information</div>
             <div class="card-body text-secondary">
-                <p class="card-text">@prescriptionResultDto.FileMedicalInformation.FirstName</p>
-                <p class="card-text">@prescriptionResultDto.FileMedicalInformation.LastName</p>
-                <p class="card-text">@prescriptionResultDto.FileMedicalInformation.DateOfBirth</p>
-                <p class="card-text">@prescriptionResultDto.FileMedicalInformation.Sexe</p>
+                <p class="card-text">First Name : @prescriptionResultDto.FileMedicalInformation.FirstName</p>
+                <p class="card-text">Last Name : @prescriptionResultDto.FileMedicalInformation.LastName</p>
+                <p class="card-text">Date Of Birth : @prescriptionResultDto.FileMedicalInformation.DateOfBirth.ToString("yyyy-MM-dd")</p>
+                <p class="card-text">Sexe : @prescriptionResultDto.FileMedicalInformation.Sexe</p>
             </div>
         </div>
 
         <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
-            <div class="card-header">Infourmation Account File Medical</div>
+            <div class="card-header">Infourmation Account</div>
             <div class="card-body text-secondary">
 
-                <p class="card-text">@prescriptionResultDto.PatientInformation.FirstName</p>
-                <p class="card-text">@prescriptionResultDto.PatientInformation.LastName</p>
-                <p class="card-text">@prescriptionResultDto.PatientInformation.NationalNumber</p>
-                <p class="card-text">@prescriptionResultDto.PatientInformation.DateOfBirth</p>
-                <p class="card-text">@prescriptionResultDto.PatientInformation.Sexe</p>
+                <p class="card-text">UserName:@prescriptionResultDto.PatientInformation.FirstName , @prescriptionResultDto.PatientInformation.LastName</p>
+                <p class="card-text">Nationel Number : @prescriptionResultDto.PatientInformation.NationalNumber</p>
+                <p class="card-text">Date Of Birth : @prescriptionResultDto.PatientInformation.DateOfBirth.ToString("yyyy-MM-dd")</p>
+                <p class="card-text">Sexe : @prescriptionResultDto.PatientInformation.Sexe</p>
             </div>
         </div>
 
@@ -58,11 +73,10 @@
         <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
             <div class="card-header">Information Doctor</div>
             <div class="card-body text-secondary">
-                <p class="card-text">@prescriptionResultDto.DoctorInformation.FirstName</p>
-                <p class="card-text">@prescriptionResultDto.DoctorInformation.LastName</p>
-                <p class="card-text">@prescriptionResultDto.DoctorInformation.Email</p>
-                <p class="card-text">@prescriptionResultDto.prescriptionInfromationDto.DateRelease</p>
-
+                <p class="card-text">First Name : @prescriptionResultDto.DoctorInformation.FirstName</p>
+                <p class="card-text">Last Name : @prescriptionResultDto.DoctorInformation.LastName</p>
+                <p class="card-text">Email : @prescriptionResultDto.DoctorInformation.Email</p>
+                <p class="card-text"> Release Date : @prescriptionResultDto.prescriptionInfromationDto.DateRelease</p>
             </div>
         </div>
     </div>

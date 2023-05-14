@@ -4,15 +4,6 @@
 {
     <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
 }
-
-
-<div class="container d-flex">
-    <input @bind="DateAppoiment" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" /><button @onclick="OnSearch" class="btn btn-dark">
-        Search
-      
-    </button>
-</div>
-<br />
 <div class="shadow-lg p-3 mb-5 bg-light rounded">
     <div class="container">
         <div class="row">
@@ -27,6 +18,13 @@
         </div>
         
     </div>
+</div>
+<br />
+<div class="container d-flex">
+    <input @bind="DateAppoiment" min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" /><button @onclick="OnSearch" class="btn btn-dark">
+        Search
+
+    </button>
 </div>
 @foreach (var appointmentInformation in ListappointmentInformationTemp)
 {

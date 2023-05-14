@@ -12,13 +12,29 @@
 {
     <CorrectRoutingMessage></CorrectRoutingMessage>
 }
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <img src="/Radiologie.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
+            </div>
+            <div class="text-center mx-auto">
+                <h3>
+                    radio commands
+                </h3>
+            </div>
+        </div>
 
+    </div>
+</div>
+<br />
+<br />
 <div class="d-flex justify-content-center">
     <div class="input-group w-75">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="">CodeQr Radio</span>
+        <div class="input-group-prepend" style="border-radius:25px;">
+            <span class="input-group-text" id="">Radio CodeQr</span>
         </div>
-        <input type="text" @bind="CodeQr" placeholder="CodeQr" style="border-radius:25px;" class="form-control">
+        <input type="text" @bind="CodeQr" placeholder="Radio CodeQr" style="border-radius:25px;" class="form-control">
         <button @onclick="()=>OnAddCodeQr(CodeQr)" class="btn btn-success " style="border-radius:25px;">
             research
             @if (ButtonAddIsLoding == true)
@@ -31,7 +47,8 @@
         </button>
     </div>
 </div>
-
+<br />
+<br />
 @if(IsLoading == true)
 {
     <WaitComponent></WaitComponent>
@@ -57,24 +74,24 @@
 @if(this.InformationRadioResultDto != null){
     <div class="d-block justify-content-center">
         <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
-        <div class="card-header">Information File Medical</div>
+        <div class="card-header">Patient Information </div>
         <div class="card-body text-secondary">
-            <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.FirstName</p>
-            <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.LastName</p>
-            <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.DateOfBirth</p>
-            <p class="card-text">@InformationRadioResultDto.FileMedicalInformation.Sexe</p>
+            <p class="card-text">First Name : @InformationRadioResultDto.FileMedicalInformation.FirstName</p>
+            <p class="card-text">Last Name : @InformationRadioResultDto.FileMedicalInformation.LastName</p>
+            <p class="card-text">Date Of Birth : @InformationRadioResultDto.FileMedicalInformation.DateOfBirth.ToString("yyyy-MM-dd")</p>
+            <p class="card-text">Sexe : @InformationRadioResultDto.FileMedicalInformation.Sexe</p>
         </div>
     </div>
 
         <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
-        <div class="card-header">Infourmation Account File Medical</div>
+        <div class="card-header">Infourmation Account</div>
         <div class="card-body text-secondary">
 
-            <p class="card-text">@InformationRadioResultDto.PatientInformation.FirstName</p>
-            <p class="card-text">@InformationRadioResultDto.PatientInformation.LastName</p>
-            <p class="card-text">@InformationRadioResultDto.PatientInformation.NationalNumber</p>
-            <p class="card-text">@InformationRadioResultDto.PatientInformation.DateOfBirth</p>
-            <p class="card-text">@InformationRadioResultDto.PatientInformation.Sexe</p>
+                <p class="card-text">UserName : @InformationRadioResultDto.PatientInformation.FirstName , @InformationRadioResultDto.PatientInformation.LastName</p>
+         
+                <p class="card-text">National Number : @InformationRadioResultDto.PatientInformation.NationalNumber</p>
+                <p class="card-text">DateOfBirth : @InformationRadioResultDto.PatientInformation.DateOfBirth.ToString("yyyy-MM-dd")</p>
+            <p class="card-text">Sexe : @InformationRadioResultDto.PatientInformation.Sexe</p>
         </div>
     </div>
 
@@ -82,10 +99,10 @@
         <div class="card border-secondary mb-3 w-100" style="   border-radius:30px;">
         <div class="card-header">Information Doctor</div>
         <div class="card-body text-secondary">
-            <p class="card-text">@InformationRadioResultDto.DoctorInformation.FirstName</p>
-            <p class="card-text">@InformationRadioResultDto.DoctorInformation.LastName</p>
-            <p class="card-text">@InformationRadioResultDto.DoctorInformation.Email</p>
-                <p class="card-text">@InformationRadioResultDto.RadioInformation.DateRelease</p>
+                <p class="card-text">First Name : @InformationRadioResultDto.DoctorInformation.FirstName</p>
+                <p class="card-text">Last Name : @InformationRadioResultDto.DoctorInformation.LastName</p>
+                <p class="card-text">Email : @InformationRadioResultDto.DoctorInformation.Email</p>
+                <p class="card-text">Release Date : @InformationRadioResultDto.RadioInformation.DateRelease</p>
             
         </div>
     </div>

@@ -22,7 +22,11 @@
     </div>
 </div>
 
-
+@if (IsLoading == true)
+{
+    <WaitComponent />
+}
+<br />
 <div class="shadow-lg p-3 mb-5 bg-light rounded">
 <table class="table caption-top">
     <caption class="text-center">List of Doctor</caption>
@@ -39,10 +43,7 @@
 
         </tr>
     </thead>
-        @if (IsLoading == true)
-        {
-            <WaitComponent />
-        }
+      
    
     <tbody>
         
