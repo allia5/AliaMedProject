@@ -126,7 +126,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
         }
         public void ValidatePrescriptionOnAdd(PrescriptionDto prescriptionDto)
         {
-            if (prescriptionDto.prescriptionLines.Count() == 0 && prescriptionDto.PrescriptionFile != null)
+
+            if (prescriptionDto.prescriptionLines.Count() == 0 && prescriptionDto.PrescriptionFile != null && !ValidateFileIsPdf(prescriptionDto.PrescriptionFile))
             {
                 throw new InvalidException(nameof(prescriptionDto), prescriptionDto, "Prescripion");
             }
@@ -145,7 +146,18 @@ namespace Server.Services.Foundation.OrdreMedicalService
                 throw new NullException(nameof(workDoctors));
             }
         }
+        public bool ValidateFileIsPdf(byte[] image)
+        {
+            string fileSignature = BitConverter.ToString(image.Take(4).ToArray()).Replace("-", "");
 
+                if (fileSignature.StartsWith("25504446"))
+                {
+                    return true;
+                }
+            return false;
+       
+
+        }
         public void ValidateOrdreMedicalOnAdd(OrderMedicalToAddDro orderMedicalToAddDro)
         {
             if (orderMedicalToAddDro == null)
