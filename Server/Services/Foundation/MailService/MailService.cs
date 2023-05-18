@@ -76,7 +76,7 @@ namespace Server.Services.Foundation.MailService
             await SendEmail(mailRequest);
         }
 
-        private async Task SendEmail(MailRequest userEmailOptions)
+        private async Task SendEmail(MailRequest userOptions)
         {
             try
             {
@@ -87,12 +87,12 @@ namespace Server.Services.Foundation.MailService
                     // To = userEmailOptions.ToEmail,
 
 
-                    Subject = userEmailOptions.Subject,
-                    Body = userEmailOptions.Body,
+                    Subject = userOptions.Subject,
+                    Body = userOptions.Body,
                     From = new MailAddress(mailSeetting.Value.Mail, mailSeetting.Value.DisplayName),
                     IsBodyHtml = true
                 };
-                mail.To.Add(userEmailOptions.ToEmail);
+                mail.To.Add(userOptions.ToEmail);
 
                 NetworkCredential networkCredential = new NetworkCredential(mailSeetting.Value.Mail, mailSeetting.Value.Password);
 

@@ -85,6 +85,7 @@ namespace Server.Services.UserService
             try
             {
                 return await this._userManager.ConfirmEmailAsync(user, Token);
+
             }
             catch (Exception e)
             {
