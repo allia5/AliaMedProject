@@ -9,6 +9,7 @@ namespace Server.Services.Foundation.MailService
 
         public Task<MessageResultDto> SendValidationMailToClient(User user);
         public Task SendEmailNotification(MailRequest mailRequest);
+        public Task SendEmailResetPasswordUserAccount(User user);
 
 
     }

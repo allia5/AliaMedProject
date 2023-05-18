@@ -26,6 +26,43 @@ namespace Server.Controllers
             this.userService = userService;
             this.jwtService = jwtService;
         }
+        [HttpPatch("ResetPasswordUserAccount")]
+        public async Task<ActionResult> ResetPasswordUserAccount(ResetPasswordUserAccountDto resetPasswordUserAccountDto)
+        {
+            try
+            {
+                resetPasswordUserAccountDto.Token = resetPasswordUserAccountDto.Token.Replace("-", "/");
+                resetPasswordUserAccountDto.UserId = resetPasswordUserAccountDto.UserId.Replace("-", "/");
+                await this.userService.ResetPasswordUserAccount(resetPasswordUserAccountDto);
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest();
+            }
+            catch(Exception ex)
+            {
+                return Problem();
+            }
+        }
+        [HttpGet("ForgotPasswordUserAccount/{Email}")]
+        public async Task<ActionResult> ForgotPasswordUserAccount(string Email)
+        {
+            try
+            {
+
+                await this.userService.ForgotPasswordUserAccount(Email);
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest();
+            }
+            catch (Exception Ex)
+            {
+                return Problem();
+            }
+        }
         [HttpPost("CreateUserAccount")]
         public async Task<ActionResult<MessageResultDto>> CreateUserAccount([FromBody] RegistreAccountDto registreAccountDto)
         {

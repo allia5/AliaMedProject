@@ -1,6 +1,9 @@
 ﻿using Client.Services.Exceptions;
 using DTO;
+
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 
 namespace Client.Services.Foundations.UserService
 {
@@ -32,6 +35,37 @@ namespace Client.Services.Foundations.UserService
                 throw new BadRequestException("Was Error");
             }
 
+
+        }
+
+        public async Task ForgotPasswordUserAccount(string Email)
+        {
+            if(string.IsNullOrEmpty(Email))
+            {
+                throw new BadRequestException("Bad Request");
+            }
+           var result = await this.HttpClient.GetAsync($"/api/UserAccount/ForgotPasswordUserAccount/{Email}");
+            if(result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Bad Request");
+            }else if (result.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+
+        public async Task ResetPasswordUserAccount(ResetPasswordUserAccountDto ResetPasswordUserAccountDto)
+        {
+            
+            var requesHttp = new HttpRequestMessage(HttpMethod.Patch, "/api/UserAccount/ResetPasswordUserAccount");
+            var Json = JsonSerializer.Serialize(ResetPasswordUserAccountDto);
+           requesHttp.Content = new StringContent(Json, Encoding.UTF8, "application/json");
+            var result = await this.HttpClient.SendAsync(requesHttp);
+            if(result.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+             
+                throw new BadRequestException("Bad Request");
+            }
 
         }
     }

@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using Server.Models.UserAccount;
 using Microsoft.Extensions.Options;
+using static Server.Utility.Utility;
 
 namespace Server.Services.Foundation.MailService
 {
@@ -38,6 +39,44 @@ namespace Server.Services.Foundation.MailService
             };
 
         }
+        public async Task SendEmailResetPasswordUserAccount(User user)
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            token = token.Replace('/', '-');
+            if (!string.IsNullOrEmpty(token))
+            {
+                await SendEmailResetPassword(user, token);
+            }
+        }
+        private async Task SendEmailResetPassword(User user, string token)
+        {
+            string appDomain = configuration.GetSection("ApplicationResetPassword:AppDomain").Value;
+            string confirmationLink = configuration.GetSection("ApplicationResetPassword:DataConfirmation").Value;
+            string LoginPath = configuration.GetSection("ApplicationResetPassword:ResetPasswordPath").Value;
+            confirmationLink = string.Format(confirmationLink, EncryptGuid(Guid.Parse(user.Id)).Replace("/","-"), token);
+            string Link = appDomain + LoginPath + confirmationLink;
+
+            MailRequest mailRequest = new MailRequest
+            {
+                ToEmail = user.Email,
+                Subject = "Reset Password Your account",
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", user.Email),
+                    new KeyValuePair<string, string>("{{Link}}",
+                        string.Format(appDomain + confirmationLink,user.Id, token))
+                },
+                Body = " <h3> AliaMed </h3> " +
+                               "Click here " + $"<a  href=\"{Link}\"> to reset your password  P</a>" + "<br/>"
+
+
+
+
+
+            };
+            await SendEmail(mailRequest);
+        }
+
         private async Task GenerateTokenValidationEmailAsync(User user)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);

@@ -10,10 +10,31 @@ namespace Server.Services.UserService
 {
     public partial class UserService
     {
+        private delegate Task ResetPasswordUserAccountFunction();
         private delegate ValueTask<MessageResultDto> ReturningUserFunction();
         private delegate ValueTask<JwtDto> ReturningAuthenticationFunction();
 
-
+        private async Task TryCatch(ResetPasswordUserAccountFunction resetPasswordUserAccountFunction)
+        {
+            try
+            {
+                await resetPasswordUserAccountFunction();
+            }catch(InvalidException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch(ArgumentNullException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch(NullException Ex)
+            {
+                throw new ValidationException(Ex);
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         private async ValueTask<MessageResultDto> TryCatch(ReturningUserFunction returningUserFunction)
         {
             try

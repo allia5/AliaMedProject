@@ -16,6 +16,7 @@ using Server.Models.UserRoles;
 using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
 using static Server.Services.UserService.UserMapperService;
+using static Server.Utility.Utility;
 
 namespace Server.Services.UserService
 {
@@ -194,7 +195,25 @@ namespace Server.Services.UserService
             return ListdoctorSearchDtos;
         }
 
+        public async Task ForgotPasswordUserAccount(string Email) =>
+            await TryCatch(async () =>
+            {
+                ValidateOnForgotPassword(Email);
+                var UserAccount = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserAccount);
+                ValidateUserAccount(UserAccount);
+                await this.mailService.SendEmailResetPasswordUserAccount(UserAccount);
+            });
 
+        public async Task ResetPasswordUserAccount(ResetPasswordUserAccountDto ResetPasswordUserAccountDto) =>
+       await TryCatch(async () =>
+       {
+           ValidateEntryResetPassword(ResetPasswordUserAccountDto);
+           var UserAccount = await this._userManager.FindByIdAsync(DecryptGuid(ResetPasswordUserAccountDto.UserId).ToString());
+           ValidateUserIsNull(UserAccount);
+           ValidateUserAccount(UserAccount);
+           await this._userManager.ResetPasswordAsync(UserAccount, ResetPasswordUserAccountDto.Token, ResetPasswordUserAccountDto.Password);
+       });
     }
 
 

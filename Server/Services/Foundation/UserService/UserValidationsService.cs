@@ -14,6 +14,34 @@ namespace Server.Services.UserService
 {
     public partial class UserService
     {
+        public static bool ArePropertiesNull(object obj)
+        {
+            if (obj == null)
+                return true;
+
+            foreach (var prop in obj.GetType().GetProperties())
+            {
+                if (prop.GetValue(obj) == null)
+                    return true;
+            }
+
+            return false;
+        }
+        public void ValidateEntryResetPassword(ResetPasswordUserAccountDto resetPasswordUserAccountDto)
+        {
+            if(resetPasswordUserAccountDto.Password != resetPasswordUserAccountDto.ConfirmePassword)
+            {
+                throw new InvalidException(nameof(resetPasswordUserAccountDto.Password), resetPasswordUserAccountDto.Password,"User");
+            }
+            if (ArePropertiesNull(resetPasswordUserAccountDto))
+            {
+                throw new ArgumentNullException();
+            }
+        }
+        public void ValidateOnForgotPassword(string Email)
+        {
+            if(string.IsNullOrEmpty(Email)) {  throw new ArgumentNullException(nameof(Email)); }
+        }
         public async Task ValidateUsenOnCreate(RegistreAccountDto registreAccountDto)
         {
             await ValidateUserAccountIsNotInSystem(registreAccountDto.Email);
@@ -193,6 +221,15 @@ namespace Server.Services.UserService
             if (cabinetMedical == null)
             {
                 throw new NullException(nameof(cabinetMedical));
+            }
+        }
+        public void ValidateUserAccount(User UserAccount)
+        {
+            if (UserAccount.EmailConfirmed == false)
+            { throw new NullException(nameof(UserAccount)); }
+            else if(UserAccount.Status == UserStatus.Deactivated)
+            {
+                throw new NullException(nameof(UserAccount));
             }
         }
 
