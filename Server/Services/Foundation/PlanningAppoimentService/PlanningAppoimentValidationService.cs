@@ -195,7 +195,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
         public void ValidatePlanning(MedicalPlanning medicalPlanning)
         {
             ValidatePlanningIsNull(medicalPlanning);
-            if(medicalPlanning.AppointmentDate.Date <= DateTime.Now.Date )
+            if(medicalPlanning.AppointmentDate.Date < DateTime.Now.Date )
             {
                 throw new InvalidException(nameof(medicalPlanning),medicalPlanning,"Patient");
             }
