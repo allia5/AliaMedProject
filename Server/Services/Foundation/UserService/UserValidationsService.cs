@@ -38,6 +38,13 @@ namespace Server.Services.UserService
                 throw new ArgumentNullException();
             }
         }
+        public void ValidateIdentityResult(IdentityResult identityResult,string Token)
+        {
+            if (!identityResult.Succeeded)
+            {
+                throw new InvalidException("Token",Token, "User");
+            }
+        }
         public void ValidateOnForgotPassword(string Email)
         {
             if(string.IsNullOrEmpty(Email)) {  throw new ArgumentNullException(nameof(Email)); }

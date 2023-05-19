@@ -67,7 +67,7 @@ namespace Server.Services.Foundation.MailService
                         string.Format(appDomain + confirmationLink,user.Id, token))
                 },
                 Body = " <h3> AliaMed </h3> " +
-                               "Click here " + $"<a  href=\"{Link}\"> to reset your password  P</a>" + "<br/>"
+                               "Click here " + $"<a  href=\"{Link}\"> to reset your password</a>" + "<br/>"
 
 
 

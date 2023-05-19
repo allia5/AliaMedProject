@@ -11,6 +11,8 @@ namespace DTO
     {
         [Required(ErrorMessage = " password is required.")]
         [DataType(DataType.Password)]
+        [MaxLength(25)]
+        [MinLength(5)]
         public string Password { get; set; }
         [Required(ErrorMessage = "Confirm password is required.")]
         [DataType(DataType.Password)]

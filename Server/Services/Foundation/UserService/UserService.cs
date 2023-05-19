@@ -212,7 +212,9 @@ namespace Server.Services.UserService
            var UserAccount = await this._userManager.FindByIdAsync(DecryptGuid(ResetPasswordUserAccountDto.UserId).ToString());
            ValidateUserIsNull(UserAccount);
            ValidateUserAccount(UserAccount);
-           await this._userManager.ResetPasswordAsync(UserAccount, ResetPasswordUserAccountDto.Token, ResetPasswordUserAccountDto.Password);
+           var result = await this._userManager.ResetPasswordAsync(UserAccount, ResetPasswordUserAccountDto.Token, ResetPasswordUserAccountDto.Password);
+           ValidateIdentityResult(result,ResetPasswordUserAccountDto.Token);
+
        });
     }
 
