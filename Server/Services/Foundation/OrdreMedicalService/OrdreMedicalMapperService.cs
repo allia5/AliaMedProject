@@ -116,7 +116,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
             {
                 ToEmail = UserAccountPatient.Email,
                 Subject = "Notification",
-                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> AliaMed.Com </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> Ordre Medical status notification  </h5>\r\n        <p class=card-text>Ordre Medical Has been Validate {DateTime.Now }  <br/> by Doctor :{UserAccountDoctor.Firstname} ,{UserAccountDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
+                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> Dawi.dz </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> Ordre Medical status notification  </h5>\r\n        <p class=card-text>Ordre Medical Has been Validate {DateTime.Now }  <br/> by Doctor :{UserAccountDoctor.Firstname} ,{UserAccountDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
 
             };
         }
@@ -348,7 +348,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
             {
                 ToEmail = userAccountPatient.Email,
                 Subject = "Notification",
-                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> AliaMed.Com </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> You are recive Ordrere Medical  <br/> <h1 class=\"display-1\"></h1><br/> by Doctor :{UserAccountDoctor.Firstname} ,{UserAccountDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
+                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> Dawi.dz </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> You are recive Ordrere Medical  <br/> <h1 class=\"display-1\"></h1><br/> by Doctor :{UserAccountDoctor.Firstname} ,{UserAccountDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
 
             };
         }

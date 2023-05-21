@@ -66,7 +66,7 @@ namespace Server.Services.Foundation.MailService
                     new KeyValuePair<string, string>("{{Link}}",
                         string.Format(appDomain + confirmationLink,user.Id, token))
                 },
-                Body = " <h3> AliaMed </h3> " +
+                Body = " <h3> Dawi.Dz </h3> " +
                                "Click here " + $"<a  href=\"{Link}\"> to reset your password</a>" + "<br/>"
 
 
@@ -104,7 +104,7 @@ namespace Server.Services.Foundation.MailService
                     new KeyValuePair<string, string>("{{Link}}",
                         string.Format(appDomain + confirmationLink, user.Id, token))
                 },
-                Body = " <h3> AliaMed </h3> " +
+                Body = " <h3> Dawi.dz </h3> " +
                                "Cliquez sur le lien pour " + $"<a  href=\"{Link}\">confirmer votre inscription</a>" + "<br/>"
 
 

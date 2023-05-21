@@ -45,7 +45,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
                 ToEmail = UserAccountPatient.Email,
                 Subject = "Result Radio Notification ",
                 Body = $"<div class=card>\r\n    <div class=card-header>\r\n      " +
-                $" <h3> AliaMed.Com </h3>\r\n  " +
+                $" <h3> Dawi.dz </h3>\r\n  " +
                 $"  </div>\r\n    <div class=card-body>\r\n  " +
                 $"    <h5 class=card-title> The Analyse results {lineAnalyseMedicals.description}  are ready  <br/>" +
                 $" <h1 class=\"display-1\"></h1><br/> by Clinic Analyse : {medicalAnalysisClinic.MedicalAnalysisName}  </p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"

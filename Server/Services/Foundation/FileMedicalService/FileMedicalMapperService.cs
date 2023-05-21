@@ -19,7 +19,7 @@ namespace Server.Services.Foundation.FileMedicalService
             {
                 ToEmail = OldUserAccount.Email,
                 Subject = "Notification",
-                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> AliaMed.Com </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> File Medical notification  </h5>\r\n        <p class=card-text>Your File Medical {FileMedical.Lastname},{FileMedical.firstname} Is Moved To User Account {NewUserAccount.LastName},{NewUserAccount.Firstname}   {DateTime.Now}  <br/> by Doctor :{UserAccountDoctor.Firstname} ,{UserAccountDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
+                Body = $"<div class=card>\r\n    <div class=card-header>\r\n       <h3> Dawi.dz </h3>\r\n    </div>\r\n    <div class=card-body>\r\n      <h5 class=card-title> File Medical notification  </h5>\r\n        <p class=card-text>Your File Medical {FileMedical.Lastname},{FileMedical.firstname} Is Moved To User Account {NewUserAccount.LastName},{NewUserAccount.Firstname}   {DateTime.Now}  <br/> by Doctor :{UserAccountDoctor.Firstname} ,{UserAccountDoctor.LastName}</p>\r\n        <a href=\"#\" class=btn-primary>Go somewhere</a>\r\n    </div>\r\n</div>"
 
             };
         }

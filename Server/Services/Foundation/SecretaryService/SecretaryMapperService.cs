@@ -75,7 +75,7 @@ namespace Server.Services.Foundation.SecretaryService
             {
                 ToEmail = SecretaryUser.Email,
                 Subject = "Notification",
-                Body = " <h3> AliaMed.Com </h3> " +
+                Body = " <h3> Dawi.dz </h3> " +
                                            $"<a> You Are {secretarys.Status} to the role Secretary In Cabinet:{cabinetMedical.NameCabinet}</a>" + "<br/>"
             };
         }

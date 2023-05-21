@@ -21,7 +21,7 @@ namespace Server.Services.Foundation.WorkDoctorService
             {
                 ToEmail = userAdmin.Email,
                 Subject = "Notification",
-                Body = " <h3> AliaMed.Com </h3> " +
+                Body = " <h3> Dawi.dz </h3> " +
                                            $"<a> {userDoctor.Email} rejected Invitation </a>" + "<br/>"
             };
         }
@@ -48,7 +48,7 @@ namespace Server.Services.Foundation.WorkDoctorService
             {
                 ToEmail = user.Email,
                 Subject = "Notification",
-                Body = " <h3> AliaMed.Com </h3> " +
+                Body = " <h3> Dawi.dz </h3> " +
                                 $"<a>Your Job Delete from cabinet :{cabinetMedical.NameCabinet}</a>" + "<br/>"
             };
         }
@@ -58,7 +58,7 @@ namespace Server.Services.Foundation.WorkDoctorService
             {
                 ToEmail = user.Email,
                 Subject = "Notification",
-                Body = " <h3> AliaMed.Com </h3> " +
+                Body = " <h3> Dawi.dz </h3> " +
                                 $"<a>you are recived Invitation from Cabine {cabinetMedical.NameCabinet}</a>" + "<br/>"
             };
         }
@@ -68,7 +68,7 @@ namespace Server.Services.Foundation.WorkDoctorService
             {
                 ToEmail = user.Email,
                 Subject = "Notification",
-                Body = " <h3> AliaMed.Com </h3> " +
+                Body = " <h3> Dawi.dz </h3> " +
                                 $"<a>{user.Email}   he is {workDoctors.StatusWork.ToString()} Work </a>" + "<br/>"
             };
         }
