@@ -206,7 +206,25 @@ namespace Server.Services.Foundation.OrdreMedicalService
             }
         }
 
+        private static string[] SplitTextIntoLines(string text, int maxCharactersPerLine)
+        {
+            List<string> lines = new List<string>();
 
+            while (text.Length > maxCharactersPerLine)
+            {
+                int splitIndex = text.LastIndexOf(' ', maxCharactersPerLine);
+                if (splitIndex == -1)
+                    splitIndex = maxCharactersPerLine;
+
+                lines.Add(text.Substring(0, splitIndex).Trim());
+                text = text.Substring(splitIndex).Trim();
+            }
+
+            if (!string.IsNullOrEmpty(text))
+                lines.Add(text);
+
+            return lines.ToArray();
+        }
 
 
         public static byte[] SetTypeOrdreMedical(string TypeOrdreMedical, byte[] pdfBytes)
