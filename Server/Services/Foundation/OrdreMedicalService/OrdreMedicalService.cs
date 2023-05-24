@@ -185,6 +185,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     var Prescription =MapperToPrescription(orderMedicalToAdd, OrdreMedicalInsertResult);
                     Prescription.qrCode = GenerateQRCodeStringFromGuid(Prescription.Id);
                     var PrescriptionInsert = await this.prescriptionManager.InsertPrescriptionAsync(Prescription);
+                    PrescriptionInsert.FilePrescription = SetTypeOrdreMedical("Prescription", PrescriptionInsert.FilePrescription);
                     PrescriptionInsert.FilePrescription = AddInfromationCabinetMedicalToToPdf(PrescriptionInsert.FilePrescription ,Cabinet);
                   PrescriptionInsert.FilePrescription = AddInfromationFileToToPdf(PrescriptionInsert.FilePrescription, FileMedical);
                    var stringToAddFile = "";
@@ -213,7 +214,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                    var Radio = MapperToRadio(orderMedicalToAdd.RadioToAdd, OrdreMedicalInsertResult.Id);
                     Radio.QrCode = GenerateQRCodeStringFromGuid(Radio.Id);
                     var RadioInser = await this.radioManager.InsertRadioAsync(Radio);
-                    Radio.FileRadio = AddInfromationCabinetMedicalToToPdf(Radio.FileRadio, Cabinet);
+                    Radio.FileRadio = SetTypeOrdreMedical("Medical Radio", Radio.FileRadio);
+                   Radio.FileRadio = AddInfromationCabinetMedicalToToPdf(Radio.FileRadio, Cabinet);
                     Radio.FileRadio = AddInfromationFileToToPdf(Radio.FileRadio, FileMedical);
                     float k = (float)0.02;
                     foreach (var item in orderMedicalToAdd.RadioToAdd.LineRadioMedicals)
@@ -239,6 +241,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     var Analyse =MapperToAnalyse(orderMedicalToAdd.AnalyseToAdd, OrdreMedicalInsertResult.Id);
                     Analyse.QrCode = GenerateQRCodeStringFromGuid(Analyse.Id);
                     var AnalyseInsert = await this.analyseManager.InsertAnalyseAsync(Analyse);
+                    Analyse.FileAnalyse = SetTypeOrdreMedical("Medical Analysis", Analyse.FileAnalyse);
                     Analyse.FileAnalyse = AddInfromationCabinetMedicalToToPdf(Analyse.FileAnalyse, Cabinet);
                     Analyse.FileAnalyse = AddInfromationFileToToPdf(Analyse.FileAnalyse, FileMedical);
                     float k = (float)0.02;

@@ -209,7 +209,27 @@ namespace Server.Services.Foundation.OrdreMedicalService
 
 
 
+        public static byte[] SetTypeOrdreMedical(string TypeOrdreMedical, byte[] pdfBytes)
+        {
+            using (MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
+            {
+                using (MemoryStream outputPdfStream = new MemoryStream())
+                {
+                    PdfReader pdfReader = new PdfReader(inputPdfStream);
+                    PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
+                    PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
+                    var text = "--"+TypeOrdreMedical+"--";
+                    BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                    pdfContentByte.BeginText();
+                    pdfContentByte.SetFontAndSize(baseFont, 16);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (1.37)), 0);
 
+                    pdfContentByte.EndText();
+                    pdfStamper.Close();
+                    return outputPdfStream.ToArray();
+                }
+            }
+        }
 
 
 
@@ -222,7 +242,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     PdfReader pdfReader = new PdfReader(inputPdfStream);
                     PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
                     PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
-                    var text = "Cabinet Medical name:  " + cabinetMedical.NameCabinet + "   Adress:" + cabinetMedical.Adress + "   Number Phone:" + cabinetMedical.numberPhone;
+                    var text = "Clinic Medical name:  " + cabinetMedical.NameCabinet + "   Adress:" + cabinetMedical.Adress + "   Number Phone:" + cabinetMedical.numberPhone;
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
@@ -254,7 +274,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     PdfReader pdfReader = new PdfReader(inputPdfStream);
                     PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
                     PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
-                    var text = "First name:  " + fileMedicals.firstname + "   Last Name:" + fileMedicals.Lastname + "   date Birth:" + fileMedicals.DateOfBirth + "   Sexe:" + fileMedicals.Sexe;
+                    var text = "First name:  " + fileMedicals.firstname + "   Last Name:" + fileMedicals.Lastname + "   date Birth:" + fileMedicals.DateOfBirth.ToString("dd-MM-yyyy") + "   Sexe:" + fileMedicals.Sexe;
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
