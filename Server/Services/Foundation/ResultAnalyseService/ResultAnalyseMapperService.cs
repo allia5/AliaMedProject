@@ -43,7 +43,7 @@ namespace Server.Services.Foundation.ResultAnalyseService
             return new MailRequest
             {
                 ToEmail = UserAccountPatient.Email,
-                Subject = "Result Radio Notification ",
+                Subject = "Result Analyse Notification ",
                 Body = $"<div class=card>\r\n    <div class=card-header>\r\n      " +
                 $" <h3> Dawi.dz </h3>\r\n  " +
                 $"  </div>\r\n    <div class=card-body>\r\n  " +

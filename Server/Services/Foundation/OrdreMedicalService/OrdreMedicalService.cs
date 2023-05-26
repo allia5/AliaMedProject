@@ -195,8 +195,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                         ValidatePrecriptionLineOnAdd(item);
                        var prescriptionLineInsert = MapperToPrescriptionLine(PrescriptionInsert.Id, item);
                         await this.PrescriptionLineManager.InsertPrescriptionLineAsync(prescriptionLineInsert);
-                        stringToAddFile = "medicament name:" + item.MedicamentName + " Quatity:" + item.Quantity;
-                        PrescriptionInsert.FilePrescription = AddTextToPdf(PrescriptionInsert.FilePrescription, stringToAddFile,k);
+                        stringToAddFile = "-medicament name:" + item.MedicamentName + ", Quatity:" + item.Quantity;
+                        PrescriptionInsert.FilePrescription = AddTextToPdf(PrescriptionInsert.FilePrescription, stringToAddFile, k);
                         k = (float)(k + 0.02);
                     }
 
@@ -218,17 +218,16 @@ namespace Server.Services.Foundation.OrdreMedicalService
                    Radio.FileRadio = AddInfromationCabinetMedicalToToPdf(Radio.FileRadio, Cabinet);
                     Radio.FileRadio = AddInfromationFileToToPdf(Radio.FileRadio, FileMedical);
                     float k = (float)0.02;
+                    var stringToAddFile = "";
                     foreach (var item in orderMedicalToAdd.RadioToAdd.LineRadioMedicals)
                     {
                         ValidateRadioLineOnAdd(item);
                         var RadioLineInsert = MapperToRadioLine(Radio.Id, item);
                         await this.lineRadioMedicalManager.InsertLineRadioMedical(RadioLineInsert);
-                       var stringToAddFile = "Description: "+item.Description + " Instruction: " + item.Instruction + Environment.NewLine;
-                        Radio.FileRadio = AddTextToPdf(Radio.FileRadio, stringToAddFile, k);
-                        k = (float)(k + 0.02);
+                        stringToAddFile = stringToAddFile + "/ Description: " +item.Description + ",Instruction: " + item.Instruction;
                     }
-                   
-                    Radio.FileRadio = AddInfromationDoctorToToPdf(Radio.FileRadio, UserAccountDoctor, (float)k);
+                    Radio.FileRadio = AddTextToPdf(Radio.FileRadio, stringToAddFile, k);
+                    Radio.FileRadio = AddInfromationDoctorToToPdf(Radio.FileRadio, UserAccountDoctor, (float)0.35);
                     Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString( FileMedical.MedicalIdentification, configuration["KeysQrCod:KeyIdMedical"]), 100, 0);
                     Radio.FileRadio = InsertCodeQrIntoPdf(Radio.FileRadio,EncryptString(Radio.QrCode, configuration["KeysQrCod:KeyOrdreMedical"]), 0, 0);
                     Radio.FileRadio = EncryptFile(Radio.FileRadio);
@@ -245,17 +244,17 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     Analyse.FileAnalyse = AddInfromationCabinetMedicalToToPdf(Analyse.FileAnalyse, Cabinet);
                     Analyse.FileAnalyse = AddInfromationFileToToPdf(Analyse.FileAnalyse, FileMedical);
                     float k = (float)0.02;
+
+                    var stringToAddFile = " ";
                     foreach (var item in orderMedicalToAdd.AnalyseToAdd.LineAnalyseMedicals)
                     {
                         ValidateAnalyseLineOnAdd(item);
                         var AnalyseLine = MapperToAnalyseLine(Analyse.Id, item);
                         await this.lineAnalyseMedicalManager.InsertLineAnalyseMedical(AnalyseLine);
-                        var stringToAddFile = "Description: " + item.Description +" Instruction:"+ item.Instruction + Environment.NewLine;
-                        Analyse.FileAnalyse = AddTextToPdf(Analyse.FileAnalyse, stringToAddFile, k);
-                        k = (float)(k + 0.02);
+                         stringToAddFile =  stringToAddFile+ "/ Description: " + item.Description + " , Instruction:" + item.Instruction;
                     }
-                
-                    Analyse.FileAnalyse = AddInfromationDoctorToToPdf(Analyse.FileAnalyse, UserAccountDoctor, (float)k);
+                    Analyse.FileAnalyse = AddTextToPdf(Analyse.FileAnalyse, stringToAddFile, k);
+                    Analyse.FileAnalyse = AddInfromationDoctorToToPdf(Analyse.FileAnalyse, UserAccountDoctor, (float)0.35);
                     Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( FileMedical.MedicalIdentification, configuration["KeysQrCod:KeyIdMedical"]), 100, 0);
                     Analyse.FileAnalyse = InsertCodeQrIntoPdf(Analyse.FileAnalyse,EncryptString( Analyse.QrCode, configuration["KeysQrCod:KeyOrdreMedical"]), 0, 0);
                     Analyse.FileAnalyse = EncryptFile(Analyse.FileAnalyse);

@@ -160,14 +160,12 @@ namespace Server.Services.UserService
             {
 
                 var Doctor = await this.doctorManager.SelectDoctorByIdUser(userDoctor.Id);
-                //  ValidationDoctorIsNull(Doctor);
                 if (Doctor != null)
                 {
                     var ListJobsUser = await this.workDoctorManager.SelectWorksDoctorByIdDoctorActive(Doctor.Id);
                     foreach (var job in ListJobsUser)
                     {
                         var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(job.IdCabinet);
-                        // ValidateCabinetMedicalIsNull(Cabinet);
                         if (Cabinet != null)
                         {
                             var JobSearchDto = MapperToJobSearchDto(job);

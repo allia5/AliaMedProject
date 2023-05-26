@@ -105,7 +105,7 @@ namespace Server.Services.Foundation.MailService
                         string.Format(appDomain + confirmationLink, user.Id, token))
                 },
                 Body = " <h3> Dawi.dz </h3> " +
-                               "Cliquez sur le lien pour " + $"<a  href=\"{Link}\">confirmer votre inscription</a>" + "<br/>"
+                               "Click on this link " + $"<a  href=\"{Link}\">to confirm the account</a>" + "<br/>"
 
 
 

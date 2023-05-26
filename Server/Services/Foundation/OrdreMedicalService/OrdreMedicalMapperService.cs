@@ -21,6 +21,7 @@ using Server.Models.LineRadioMedical;
 using Server.Models.LineAnalyseMedical;
 using Server.Models.AdviceMedicals;
 using Server.Models.CabinetMedicals;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace Server.Services.Foundation.OrdreMedicalService
 {
@@ -206,7 +207,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
             }
         }
 
-        private static string[] SplitTextIntoLines(string text, int maxCharactersPerLine)
+        public static string[] SplitTextIntoLines(string text, int maxCharactersPerLine)
         {
             List<string> lines = new List<string>();
 
@@ -236,11 +237,11 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     PdfReader pdfReader = new PdfReader(inputPdfStream);
                     PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
                     PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
-                    var text = "--"+TypeOrdreMedical+"--";
+                    var text = TypeOrdreMedical;
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
-                    pdfContentByte.SetFontAndSize(baseFont, 16);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (1.37)), 0);
+                    pdfContentByte.SetFontAndSize(baseFont, 20);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (1.18)), 0);
 
                     pdfContentByte.EndText();
                     pdfStamper.Close();
@@ -260,11 +261,20 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     PdfReader pdfReader = new PdfReader(inputPdfStream);
                     PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
                     PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
-                    var text = "Clinic Medical name:  " + cabinetMedical.NameCabinet + "   Adress:" + cabinetMedical.Adress + "   Number Phone:" + cabinetMedical.numberPhone;
+                    var text = "Clinic Medical name:  " + cabinetMedical.NameCabinet + " ,  Adress:" + cabinetMedical.Adress + "  , Number Phone:" + cabinetMedical.numberPhone;
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (1.45)), 0);
+
+                    int maxCharactersPerLine = 70;
+                    string[] lines = SplitTextIntoLines(text, maxCharactersPerLine);
+                    var Taux = (1.45);
+                    for (int i = lines.Length-1; i >= 0; i--)
+                    {
+                        pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, lines[i], pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height / (Taux)), 0);
+                        Taux = Taux - 0.05;
+                    }
+                    
 
                     pdfContentByte.EndText();
                     pdfStamper.Close();
@@ -292,7 +302,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     PdfReader pdfReader = new PdfReader(inputPdfStream);
                     PdfStamper pdfStamper = new PdfStamper(pdfReader, outputPdfStream);
                     PdfContentByte pdfContentByte = pdfStamper.GetOverContent(1);
-                    var text = "First name:  " + fileMedicals.firstname + "   Last Name:" + fileMedicals.Lastname + "   date Birth:" + fileMedicals.DateOfBirth.ToString("dd-MM-yyyy") + "   Sexe:" + fileMedicals.Sexe;
+                    var text = "First name:  " + fileMedicals.firstname + " ,  Last Name:" + fileMedicals.Lastname + " ,  date Birth:" + fileMedicals.DateOfBirth.ToString("dd-MM-yyyy") + " ,  Sexe:" + fileMedicals.Sexe;
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
@@ -318,8 +328,8 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, "By Doctor :", pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (0.5 - k)), 0);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (float)(0.5 - k-0.02)), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_LEFT, "By Doctor :", pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (0.5 - k)), 0);
+                    pdfContentByte.ShowTextAligned(Element.ALIGN_LEFT, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (float)(0.5 - k-0.02)), 0);
 
                     pdfContentByte.EndText();
                     pdfStamper.Close();
@@ -328,7 +338,7 @@ namespace Server.Services.Foundation.OrdreMedicalService
             }
         }
 
-        public static byte[] AddTextToPdf(byte[] pdfBytes, string text,float k)
+        public static byte[] AddTextToPdf(byte[] pdfBytes, string text, float k)
         {
             using (MemoryStream inputPdfStream = new MemoryStream(pdfBytes))
             {
@@ -341,7 +351,24 @@ namespace Server.Services.Foundation.OrdreMedicalService
                     BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
                     pdfContentByte.BeginText();
                     pdfContentByte.SetFontAndSize(baseFont, 12);
-                    pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (0.5-k)) /*/(2+k)*/, 0);
+                    int maxCharactersPerLine = 60;
+                    string[] Lines = text.Split("/");
+                    var Tauxprincipal = .0;
+                    foreach (string lineItem in Lines)
+                    {
+                        string[] lineList = SplitTextIntoLines(lineItem, maxCharactersPerLine);
+                         Tauxprincipal += (k * (lineList.Length+1));
+                        var Taux = Tauxprincipal;
+                        for (int i = lineList.Length - 1; i >= 0; i--)
+                        {
+                            
+                            pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, lineList[i], pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (0.65 - (Taux))), 0);
+                            Taux = (float)(Taux - 0.02);
+                        }
+                    }
+                   
+
+                  //  pdfContentByte.ShowTextAligned(Element.ALIGN_CENTER, text, pdfReader.GetPageSize(1).Width / 2, (float)(pdfReader.GetPageSize(1).Height * (0.5-k)) /*/(2+k)*/, 0);
 
                     pdfContentByte.EndText();
                     pdfStamper.Close();
