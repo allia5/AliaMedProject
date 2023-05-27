@@ -149,7 +149,7 @@ namespace Server.Services.UserService
            }
            );
 
-        public async Task<List<DoctorSearchDto>> GetDoctorsAvailble()
+        public async Task<List<DoctorSearchDto>> GetDoctorsAvailble(int CityId)
         {
 
             List<DoctorSearchDto> ListdoctorSearchDtos = new List<DoctorSearchDto>();
@@ -166,10 +166,10 @@ namespace Server.Services.UserService
                     foreach (var job in ListJobsUser)
                     {
                         var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(job.IdCabinet);
-                        if (Cabinet != null)
+                        if (Cabinet != null && Cabinet.CityId == CityId )
                         {
                             var JobSearchDto = MapperToJobSearchDto(job);
-                            var CabinetSearchDto = MapperToCabinetSearch(JobSearchDto, Cabinet);
+                            var CabinetSearchDto = MapperToCabinetSearch(JobSearchDto,Cabinet);
                             ListcabinetSearchDtos.Add(CabinetSearchDto);
                         }
 

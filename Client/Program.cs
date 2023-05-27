@@ -5,6 +5,7 @@ using Client.Services.Foundations.AnalyseMedicalService;
 using Client.Services.Foundations.AuthentificationStatService;
 using Client.Services.Foundations.CabinetMedicalService;
 using Client.Services.Foundations.ChronicDiseasesService;
+using Client.Services.Foundations.CityService;
 using Client.Services.Foundations.DoctorService;
 using Client.Services.Foundations.FileMedicalService;
 using Client.Services.Foundations.LineAnalyseResultService;
@@ -61,7 +62,7 @@ builder.Services.AddScoped<IRadioMedicalService, RadioMedicalService>();
 builder.Services.AddScoped<IAnalyseMedicalService , AnalyseMedicalService>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IAdviceMedicalService, AdviceMedicalService>();
-
+builder.Services.AddScoped<ICityService,CityService>();
 
 builder.Services.AddScoped<AuthenticationStateProvider>((provider => provider.GetRequiredService<AuthentificationStatService>()));
 builder.Services.AddBlazoredLocalStorage();

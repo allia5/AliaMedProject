@@ -1,4 +1,5 @@
 ﻿using Client.Services.Exceptions;
+using Client.Services.Foundations.CityService;
 using Client.Services.Foundations.LocalStorageService;
 using Client.Services.Foundations.UserService;
 using DTO;
@@ -9,17 +10,19 @@ namespace Client.Pages
 {
     public class HomeComponentBase : ComponentBase
     {
+        protected int CityIdSelected = 7;
         protected string Entry = null;
         protected string ErrorMessage = null;
         protected bool IsLoading = true;
         protected string Index = null;
+        protected List<CityDto> CityList = new List<CityDto>(); 
         protected List<DoctorSearchDto> ListDoctorsAvailbleTest = null;
         protected List<DoctorSearchDto> ListDoctorsAvailble = new List<DoctorSearchDto>();
-        // protected List<CabinetSearchDto> ListCabinetSearch = new List<CabinetSearchDto>();
         public DoctorSearchDto DoctorsAvailble = null;
         [Inject]
         public NavigationManager navigationManager { get; set; }
-
+        [Inject]
+        public ICityService cityService { get; set; }   
         [Inject]
         public IUserService userService { get; set; }
         [Inject]
@@ -29,7 +32,9 @@ namespace Client.Pages
         {
             try
             {
-                this.ListDoctorsAvailble = await this.userService.GetListDoctorAvailble();
+                this.IsLoading = true;
+                this.CityList = await this.cityService.GetAllCities();
+                this.ListDoctorsAvailble = await this.userService.GetListDoctorAvailble(CityIdSelected);
                 this.ListDoctorsAvailbleTest = this.ListDoctorsAvailble;
                 this.IsLoading = false;
 
@@ -38,6 +43,15 @@ namespace Client.Pages
             {
                 this.ErrorMessage = e.Message;
             }
+        }
+        protected async Task  OnSelectCity(ChangeEventArgs e)
+        {
+            int cityId = 0;
+            int.TryParse(e.Value.ToString(), out CityIdSelected);
+            this.IsLoading = true;
+            this.ListDoctorsAvailble = await this.userService.GetListDoctorAvailble(CityIdSelected);
+            this.ListDoctorsAvailbleTest = this.ListDoctorsAvailble;
+            this.IsLoading = false;
         }
         public async Task OnOpenInformation(string IdUser)
         {

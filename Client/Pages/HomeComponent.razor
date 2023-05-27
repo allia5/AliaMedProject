@@ -14,6 +14,15 @@
             </p>
             <br>
             <div class="d-flex justify-content-center">
+                <select @onchange="OnSelectCity"  class="form-select" aria-label="Default select example">
+                    <option selected>Select City</option>
+                    @foreach(var CityItem in this.CityList)
+                    {
+                        <option  value=@CityItem.Id>@CityItem.Name</option>
+                    }
+                   
+                    
+                </select>
                 <input @bind="@Entry" @oninput="OnSearch" class="form-control me-2" style="border-radius: 25px;" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-success" style="border-radius: 25px;">Search</button>
             </div>

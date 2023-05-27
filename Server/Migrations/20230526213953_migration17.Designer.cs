@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -11,9 +12,11 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    partial class ServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230526213953_migration17")]
+    partial class migration17
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,248 +241,6 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("City");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Adrar"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Chlef"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Laghouat"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Oum El Bouaghi"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Batna"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Béjaïa"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Biskra"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Béchar"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Blida"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Bouira"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Tamanrasset"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Tébessa"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Tlemcen"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "Tiaret"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "Tizi Ouzou"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "Alger"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "Djelfa"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Jijel"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Sétif"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Saïda"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Name = "Skikda"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Name = "Sidi Bel Abbès"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Name = "Annaba"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Name = "Guelma"
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Name = "Constantine"
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Name = "Médéa"
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Name = "Mostaganem"
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Name = "M'Sila"
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Name = "Mascara"
-                        },
-                        new
-                        {
-                            Id = 30,
-                            Name = "Ouargla"
-                        },
-                        new
-                        {
-                            Id = 31,
-                            Name = "Oran"
-                        },
-                        new
-                        {
-                            Id = 32,
-                            Name = "El Bayadh"
-                        },
-                        new
-                        {
-                            Id = 33,
-                            Name = "Illizi"
-                        },
-                        new
-                        {
-                            Id = 34,
-                            Name = "Bordj Bou Arréridj"
-                        },
-                        new
-                        {
-                            Id = 35,
-                            Name = "Boumerdès"
-                        },
-                        new
-                        {
-                            Id = 36,
-                            Name = "El Tarf"
-                        },
-                        new
-                        {
-                            Id = 37,
-                            Name = "Tindouf"
-                        },
-                        new
-                        {
-                            Id = 38,
-                            Name = "Tissemsilt"
-                        },
-                        new
-                        {
-                            Id = 39,
-                            Name = "El Oued"
-                        },
-                        new
-                        {
-                            Id = 40,
-                            Name = "Khenchela"
-                        },
-                        new
-                        {
-                            Id = 41,
-                            Name = "Souk Ahras"
-                        },
-                        new
-                        {
-                            Id = 42,
-                            Name = "Tipaza"
-                        },
-                        new
-                        {
-                            Id = 43,
-                            Name = "Mila"
-                        },
-                        new
-                        {
-                            Id = 44,
-                            Name = "Aïn Defla"
-                        },
-                        new
-                        {
-                            Id = 45,
-                            Name = "Naâma"
-                        },
-                        new
-                        {
-                            Id = 46,
-                            Name = "Aïn Témouchent"
-                        },
-                        new
-                        {
-                            Id = 47,
-                            Name = "Ghardaïa"
-                        },
-                        new
-                        {
-                            Id = 48,
-                            Name = "Relizane"
-                        });
                 });
 
             modelBuilder.Entity("Server.Models.Doctor.Doctors", b =>
@@ -1152,43 +913,43 @@ namespace Server.Migrations
                         new
                         {
                             Id = new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"),
-                            ConcurrencyStamp = "0dd7886c-c910-4370-a42b-3af5cd1d7b9b",
+                            ConcurrencyStamp = "570bc720-e286-4af6-bdfa-2e982fc942fd",
                             Name = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"),
-                            ConcurrencyStamp = "948ef93f-feeb-48ce-80d3-656501a3c092",
+                            ConcurrencyStamp = "a7bc2ebe-7561-48ea-a6e3-7c0e79ece7e6",
                             Name = "PATIENT"
                         },
                         new
                         {
                             Id = new Guid("0d518584-64a4-424b-b011-7283083394b8"),
-                            ConcurrencyStamp = "ba2cba45-b476-4743-b229-83d2210ab8c1",
+                            ConcurrencyStamp = "363feac1-8f22-45bc-8043-91b02f4cb5b2",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
                             Id = new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"),
-                            ConcurrencyStamp = "2bc04d1a-117b-4503-9218-437865fb37ff",
+                            ConcurrencyStamp = "cbf243da-9139-4480-a28b-3a86d594f4d1",
                             Name = "MEDECIN"
                         },
                         new
                         {
                             Id = new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"),
-                            ConcurrencyStamp = "b6f8baca-1001-4ccb-90d4-23c33a40f3a9",
+                            ConcurrencyStamp = "5d8651b3-713d-4068-b6a7-4cd141c266b2",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
                             Id = new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"),
-                            ConcurrencyStamp = "39af03d9-1d9c-4c0d-af70-f262ba3d815a",
+                            ConcurrencyStamp = "7c44fb9f-4d01-454f-98b0-18b8eda1b36d",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
                             Id = new Guid("232d07c5-711e-4802-a048-f2f73804ea40"),
-                            ConcurrencyStamp = "e6694a5c-b0c4-445e-9448-b90d0af745f1",
+                            ConcurrencyStamp = "0d362873-0b5a-4595-a667-83acd634205e",
                             Name = "ANALYSE"
                         });
                 });

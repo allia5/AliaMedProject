@@ -14,12 +14,12 @@ namespace Server.Controllers
         {
             this.userService = userService;
         }
-        [HttpGet("GetDoctorsAvailble")]
-        public async Task<ActionResult<List<DoctorSearchDto>>> GetDoctorsAvailble()
+        [HttpGet("GetDoctorsAvailble/{CityId}")]
+        public async Task<ActionResult<List<DoctorSearchDto>>> GetDoctorsAvailble(int CityId)
         {
             try
             {
-                return await this.userService.GetDoctorsAvailble();
+                return await this.userService.GetDoctorsAvailble(CityId);
             }
             catch (Exception e)
             {

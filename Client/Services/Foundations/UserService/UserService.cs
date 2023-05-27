@@ -14,10 +14,10 @@ namespace Client.Services.Foundations.UserService
         {
             this.HttpClient = HttpClient;
         }
-        public async Task<List<DoctorSearchDto>> GetListDoctorAvailble()
+        public async Task<List<DoctorSearchDto>> GetListDoctorAvailble(int CityId)
         {
 
-            var result = await this.HttpClient.GetAsync("/api/Patient/GetDoctorsAvailble");
+            var result = await this.HttpClient.GetAsync($"/api/Patient/GetDoctorsAvailble/{CityId}");
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 if (result.Content.Headers.ContentLength != 0)

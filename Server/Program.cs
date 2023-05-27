@@ -12,6 +12,7 @@ using Server.Managers.Storages.AnalyseManager;
 using Server.Managers.Storages.AnalyseResultManager;
 using Server.Managers.Storages.CabinetMedicalManager;
 using Server.Managers.Storages.ChronicDiseasesManager;
+using Server.Managers.Storages.CityManager;
 using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.FileChronicDiseasesManager;
 using Server.Managers.Storages.FileMedicalManager;
@@ -39,6 +40,7 @@ using Server.Services.Foundation.AdviceMedicalService;
 using Server.Services.Foundation.AnalyseMedicalService;
 using Server.Services.Foundation.CabinetMedicalService;
 using Server.Services.Foundation.ChronicDiseasesService;
+using Server.Services.Foundation.cityService;
 using Server.Services.Foundation.DoctorService;
 using Server.Services.Foundation.FileMedicalService;
 using Server.Services.Foundation.JwtService;
@@ -151,6 +153,8 @@ builder.Services.AddScoped<IMedicalAnalyseClinicManager, MedicalAnalyseClinicMan
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IAdviceManager, AdviceManager>();
 builder.Services.AddScoped<IAdviceMedicalService, AdviceMedicalService>();
+builder.Services.AddScoped<ICityManager, CityManager>();
+builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers();

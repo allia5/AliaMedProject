@@ -7,6 +7,7 @@ using Server.Models.AdviceMedicals;
 using Server.Models.Analyse;
 using Server.Models.CabinetMedicals;
 using Server.Models.ChronicDiseases;
+using Server.Models.Cities;
 using Server.Models.Doctor;
 using Server.Models.FileChronicDisease;
 using Server.Models.fileMedical;
@@ -360,7 +361,293 @@ namespace Server.Data
 
 
 
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 1,
+                Name = "Adrar"
+            });
 
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 2,
+                Name = "Chlef"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 3,
+                Name = "Laghouat"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 4,
+                Name = "Oum El Bouaghi"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 5,
+                Name = "Batna"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 6,
+                Name = "Béjaïa"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 7,
+                Name = "Biskra"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 8,
+                Name = "Béchar"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 9,
+                Name = "Blida"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 10,
+                Name = "Bouira"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 11,
+                Name = "Tamanrasset"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 12,
+                Name = "Tébessa"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 13,
+                Name = "Tlemcen"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 14,
+                Name = "Tiaret"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 15,
+                Name = "Tizi Ouzou"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 16,
+                Name = "Alger"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 17,
+                Name = "Djelfa"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 18,
+                Name = "Jijel"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 19,
+                Name = "Sétif"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 20,
+                Name = "Saïda"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 21,
+                Name = "Skikda"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 22,
+                Name = "Sidi Bel Abbès"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 23,
+                Name = "Annaba"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 24,
+                Name = "Guelma"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 25,
+                Name = "Constantine"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 26,
+                Name = "Médéa"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 27,
+                Name = "Mostaganem"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 28,
+                Name = "M'Sila"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 29,
+                Name = "Mascara"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 30,
+                Name = "Ouargla"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 31,
+                Name = "Oran"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 32,
+                Name = "El Bayadh"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 33,
+                Name = "Illizi"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 34,
+                Name = "Bordj Bou Arréridj"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 35,
+                Name = "Boumerdès"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 36,
+                Name = "El Tarf"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 37,
+                Name = "Tindouf"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 38,
+                Name = "Tissemsilt"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 39,
+                Name = "El Oued"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 40,
+                Name = "Khenchela"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 41,
+                Name = "Souk Ahras"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 42,
+                Name = "Tipaza"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 43,
+                Name = "Mila"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 44,
+                Name = "Aïn Defla"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 45,
+                Name = "Naâma"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 46,
+                Name = "Aïn Témouchent"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 47,
+                Name = "Ghardaïa"
+            });
+
+            modelBuilder.Entity<City>().HasData(new City
+            {
+                Id = 48,
+                Name = "Relizane"
+            });
 
 
 
@@ -406,6 +693,7 @@ namespace Server.Data
         public DbSet<LineRadioMedicals> LineRadioMedicals { get; set; }
         public DbSet<LineAnalyseMedicals> LineAnalyseMedicals { get; set; }
         public DbSet<AdviceMedical> adviceMedicals { get; set; }
-        
+        public DbSet<City> City { get; set; }
+
     }
 }

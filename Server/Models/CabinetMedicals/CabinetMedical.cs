@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Server.Models.Admin;
+using Server.Models.Cities;
 using Server.Models.MedicalOrder;
 using Server.Models.MedicalPlannings;
 using Server.Models.secretary;
@@ -37,6 +39,9 @@ namespace Server.Models.CabinetMedicals
         public string JobTime { get; set; }
         [Required]
         public string Services { get; set; }
+
+        public int? CityId { get; set; }
+        public City City { get; set; }
         [JsonIgnore]
         public IEnumerable<WorkDoctors> WorkDoctors { get; set; }
         [JsonIgnore]

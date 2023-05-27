@@ -11,7 +11,7 @@ namespace Server.Services.UserService
         public Task<MessageResultDto> ValidateAccountUserAsync(string Id, string Token);
 
         public Task<JwtDto> AuthenticationAccountAsync(LoginAccountDto loginAccountDto);
-        public Task<List<DoctorSearchDto>> GetDoctorsAvailble();
+        public Task<List<DoctorSearchDto>> GetDoctorsAvailble(int CityId);
 
 
     }

@@ -1,8 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Server.Models.CabinetMedicals;
+using System.ComponentModel.DataAnnotations;
 
 namespace Server.Models.Cities
 {
+
     public class City
     {
         [Key]
