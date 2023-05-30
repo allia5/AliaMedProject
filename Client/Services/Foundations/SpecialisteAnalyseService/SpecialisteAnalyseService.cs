@@ -50,7 +50,7 @@ namespace Client.Services.Foundations.SpecialisteAnalyseService
             }
             else if (result.StatusCode == HttpStatusCode.NoContent)
             {
-                throw new NoContentException("Data Has Been Canfirmed By Auther Radiology");
+                throw new NoContentException("Error requesting the document");
             }
             else
             {

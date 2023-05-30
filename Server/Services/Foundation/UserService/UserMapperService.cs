@@ -61,7 +61,8 @@ namespace Server.Services.UserService
                 NationalNumber = registreAccountDto.NationalNumber,
                 PhoneNumber = registreAccountDto.PhoneNumber,
                 DateOfBirth = registreAccountDto.DateOfBirth,
-                Status = UserStatus.Deactivated
+                Status = UserStatus.Deactivated,
+                DateCreateAccount = DateTime.Now
 
 
 
