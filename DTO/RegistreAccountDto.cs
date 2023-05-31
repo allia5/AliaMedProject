@@ -25,9 +25,10 @@ namespace DTO
         public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "NationalNumber Is Required")]
-        [StringLength(18)]
+        [StringLength(18,MinimumLength =18)]
         public string NationalNumber { get; set; }
         [Required(ErrorMessage = "PhoneNumber Is Required")]
+        [StringLength (10,MinimumLength =10)]
         public string PhoneNumber { get; set; }
 
     }

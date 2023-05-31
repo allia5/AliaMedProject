@@ -184,7 +184,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseRouting();
 app.UseCors(policy =>
-    policy.WithOrigins("https://localhost:7286", "https://localhost:7286")
+    policy.WithOrigins("https://localhost:7286")
     .AllowAnyMethod()
     .WithHeaders(HeaderNames.ContentType)
 .AllowAnyHeader()

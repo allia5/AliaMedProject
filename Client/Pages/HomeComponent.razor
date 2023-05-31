@@ -14,11 +14,21 @@
             </p>
             <br>
             <div class="d-flex justify-content-center">
-                <select @onchange="OnSelectCity"  class="form-select" aria-label="Default select example">
-                    <option selected>Select City</option>
+                <select @onchange="OnSelectCity"  class="form-select" aria-label="Default select example" >
                     @foreach(var CityItem in this.CityList)
                     {
-                        <option  value=@CityItem.Id>@CityItem.Name</option>
+                     
+                        @if (CityItem.Id == 7)
+                        {
+                            <option value=@CityItem.Id selected>@CityItem.Name</option>
+                        }
+                        else
+
+                            {
+                            <option value=@CityItem.Id>@CityItem.Name</option>
+
+                            }
+                   
                     }
                    
                     

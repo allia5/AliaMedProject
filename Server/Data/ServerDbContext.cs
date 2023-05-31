@@ -648,6 +648,18 @@ namespace Server.Data
                 Id = 48,
                 Name = "Relizane"
             });
+            modelBuilder.Entity<City>().HasData(
+    new City { Id = 49, Name = "In Guezzam" },
+    new City { Id = 50, Name = "El M'Ghair" },
+    new City { Id = 51, Name = "El Meniaa" },
+    new City { Id = 52, Name = "Ouled Djellal" },
+    new City { Id = 53, Name = "Bordj Baji Mokhtar" },
+    new City { Id = 54, Name = "Beni Abbes" },
+    new City { Id = 55, Name = "Timimoun" },
+    new City { Id = 56, Name = "Touggourt" },
+    new City { Id = 57, Name = "Djanet" },
+    new City { Id = 58, Name = "In Salah" }
+);
 
 
 

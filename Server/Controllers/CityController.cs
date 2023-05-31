@@ -1,4 +1,6 @@
 ﻿using DTO;
+using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Services.Foundation.cityService;
@@ -10,6 +12,7 @@ namespace Server.Controllers
     public class CityController : ControllerBase
     {
         public readonly ICityService cityService;
+
         public CityController(ICityService cityService)
         {
             this.cityService = cityService;
