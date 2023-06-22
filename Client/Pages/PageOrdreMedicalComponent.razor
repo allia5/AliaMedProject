@@ -23,7 +23,7 @@
                     <img src="/OrdreMedical.jpg" class="img-fluid rounded-circle" alt="Photo du propriétaire">
                 </div>
                 <div class="text-center mx-auto">
-                    <h3>Patient Ordre Medicals List </h3>
+                    <h3>Patient Medical Order List </h3>
                 </div>
             </div>
             <div class="row mt-3">
@@ -49,7 +49,7 @@
     {
         <div class="card text-center">
             <div class="card-header">
-               Ordre Medical Information
+               Information Medical Order
             </div>
             <div class="card-body">
                 <h5 class="card-title">Created by a doctor  :  @OrdreMedicalItem.doctorInformation.FirstName , @OrdreMedicalItem.doctorInformation.LastName</h5>
@@ -104,7 +104,7 @@
                 }   
                 @if (medicalOrdreDetails.analyseLinesInformation != null)
                 {
-                    <button data-bs-target="#exampleModalToggleAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-primary">Analyse</button>
+                    <button data-bs-target="#exampleModalToggleAnalyse" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-primary">Analysis</button>
                 }  
                 @if (medicalOrdreDetails.radioLinesInformation != null)
                 {
@@ -200,7 +200,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel">Information About Analyse</h5>
+                <h5 class="modal-title" id="exampleModalToggleLabel">Information About Analysis</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -349,7 +349,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel2">Analyse</h5>
+                <h5 class="modal-title" id="exampleModalToggleLabel2">Analysis</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <EditForm Model="LineAnalyseMedicalDto">
@@ -360,7 +360,7 @@
                     {
 
                         <div class="form-control d-flex">
-                            <input class="form-control w-50" @bind="AnalyseItem.Description" type="text" placeholder="Analyse Description">  <input class="form-control w-25" @bind="AnalyseItem.Instruction" type="text" placeholder="Analyse Instruction">   
+                            <input class="form-control w-50" @bind="AnalyseItem.Description" type="text" placeholder="Analysis Description">  <input class="form-control w-25" @bind="AnalyseItem.Instruction" type="text" placeholder="Analysis Instruction">   
                         </div>
 
 
@@ -368,7 +368,7 @@
 
 
                     <div class="form-control d-flex">
-                        <input class="form-control w-50" @bind="LineAnalyseMedicalDto.Description" type="text" placeholder="Analyse Description">  <input class="form-control w-25" @bind="LineAnalyseMedicalDto.Instruction" type="text" placeholder="Analyse Instruction">
+                        <input class="form-control w-50" @bind="LineAnalyseMedicalDto.Description" type="text" placeholder="Analysis Description">  <input class="form-control w-25" @bind="LineAnalyseMedicalDto.Instruction" type="text" placeholder="Analysis Instruction">
                     </div>
 
 
@@ -378,7 +378,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                            </svg>Add Line Analyse
+                            </svg>Add Line Analysis
                         </button>
                     </div>
                     <div class="mb-3">
@@ -400,7 +400,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel2">Ordre Medical</h5>
+                <h5 class="modal-title" id="exampleModalToggleLabel2"> Medical Order</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <EditForm Model="OrderMedicalToAddDro">
@@ -449,7 +449,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-            </svg> Add Ordre Medical
+            </svg> Add Medical Order
         </button>
     </div>
 </div>

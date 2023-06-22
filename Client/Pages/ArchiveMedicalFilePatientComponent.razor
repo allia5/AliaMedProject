@@ -43,7 +43,7 @@
     {
         <div class="card text-center">
             <div class="card-header">
-                Ordre Medical Information
+                 Information Medical Order
             </div>
             <div class="card-body">
                 <h5 class="card-title">By Doctor  :  @OrdreMedicalItem.doctorInformation.FirstName , @OrdreMedicalItem.doctorInformation.LastName</h5>
@@ -120,7 +120,7 @@
                                 <div class="card-footer">
                                     
                                         <div class="form-group">
-                                            <textarea @bind="MessageSend" class="form-control" placeholder="Votre message"></textarea>
+                                            <textarea @bind="MessageSend" class="form-control" placeholder="message"></textarea>
                                         </div>
                                   
                                         <button type="button" @onclick="()=>PostNewAdviceMedical(OrdreMedcialIdSelected)" class="btn btn-primary">Send</button>

@@ -262,7 +262,7 @@ namespace Client.Pages
                 if(OrderMedicalToAddDro.Prescription == null && OrderMedicalToAddDro.RadioToAdd == null && OrderMedicalToAddDro.AnalyseToAdd == null)
                 {
               
-                    throw new Exception("Error Save Ordre Medical");
+                    throw new Exception("Error Save  Medical Order");
                
                 }
 
