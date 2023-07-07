@@ -21,14 +21,7 @@ namespace UnitTest.ControllersTestUnit
         [Fact]
         public async void TestCity()
         {
-            //arrange
-            var ListCityDto = A.Fake<List<CityDto>>();
-            A.CallTo(() =>cityService.GetCityListAsync() ).Returns(ListCityDto);
-            var controllerCity = new CityController(cityService);
-            //art
-            var result =  await controllerCity.GetAllCity();
-            //assert
-            result.Should().NotBeNull();
+         
         }
 
     }

@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Server.Models.fileMedical
 {
     [Index(nameof(firstname), nameof(Lastname))]
+    [Index(nameof(MedicalIdentification), IsUnique = true)]
     public class fileMedicals
     {
         [Key]

@@ -121,7 +121,7 @@ namespace Server.Services.Foundation.AnalyseMedicalService
               ValidationDoctorIsNull(Doctor);
               var FileAnalyse = await this.AnalyseManager.SelectAnalyseByOrdreMedicalId(DecryptGuid(OrdreMedicalId));
               ValidateAnalyseIsNull(FileAnalyse);
-              return FileAnalyse.FileAnalyse;
+              return DecryptFile( FileAnalyse.FileAnalyse);
           });
 
         public async Task<byte[]> SecritaryGetFileAnalyseByIdOrdreMedical(string Email,string OrdreMedicalId,string CabinetId) =>
