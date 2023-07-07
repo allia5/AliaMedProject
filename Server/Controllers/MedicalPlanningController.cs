@@ -42,6 +42,7 @@ namespace Server.Controllers
                 this.hubContext.Clients.All.SendAsync("ReceiveUpdateStatusAppoitment", new UpdateStatusAppoimentDto { Id=delayeAppoiment.Id,statusPlaningDto=delayeAppoiment.statusPlaningDto}).Wait();
                 transaction.Complete();
                 return Ok();
+                
             }
             catch (ValidationException Ex)
             {
